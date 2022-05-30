@@ -15,10 +15,6 @@ import java.util.List;
  * Frequency: Rate as specified in menus
  */
 public class PacketCarStatusData extends Packet {
-
-    // 1058
-    public static final int SIZE = PacketHeader.SIZE
-                                    + CarStatusData.SIZE * PacketConstants.CARS;
     
     private List<CarStatusData> carStatusData = new ArrayList<>(PacketConstants.CARS);
 

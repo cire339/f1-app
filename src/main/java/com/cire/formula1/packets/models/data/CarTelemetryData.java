@@ -7,8 +7,6 @@ import java.util.Arrays;
 
 public class CarTelemetryData {
 
-    public static final int SIZE = 60;
-
     private int speed;
     private float throttle;
     private float steer;

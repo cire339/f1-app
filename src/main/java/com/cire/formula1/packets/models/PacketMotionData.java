@@ -15,11 +15,6 @@ import java.util.List;
  * Frequency: Rate as specified in menus
  */
 public class PacketMotionData extends Packet {
-
-    // 1464
-    public static final int SIZE = PacketHeader.SIZE + 
-                                    CarMotionData.SIZE * PacketConstants.CARS +
-                                    ExtraCarMotionData.SIZE;
     
     private List<CarMotionData> carMotionData = new ArrayList<>(PacketConstants.CARS);
     private ExtraCarMotionData extraCarMotionData = new ExtraCarMotionData();

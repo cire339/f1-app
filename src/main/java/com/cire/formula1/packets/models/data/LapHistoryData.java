@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 
 public class LapHistoryData {
 
-    public static final int SIZE = 11;
-
     private long lapTimeInMS;
     private int sector1TimeInMS;
     private int sector2TimeInMS;

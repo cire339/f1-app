@@ -15,9 +15,6 @@ import java.util.List;
  */
 public class PacketCarDamageData extends Packet {
 
-    public static final int SIZE = PacketHeader.SIZE +
-            CarDamageData.SIZE * PacketConstants.CARS ;
-
     private List<CarDamageData> carDamageData = new ArrayList<>(PacketConstants.CARS);
 
     /**

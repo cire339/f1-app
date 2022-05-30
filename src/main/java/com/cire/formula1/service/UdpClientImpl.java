@@ -1,4 +1,4 @@
-package com.cire.formula1.client;
+package com.cire.formula1.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +8,14 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UdpIntegrationClient implements UdpClient{
+public class UdpClientImpl implements UdpClient{
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(UdpIntegrationClient.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(UdpClientImpl.class);
 
     private final UnicastSendingMessageHandler udpSendingAdapter;
 
     @Autowired
-    public UdpIntegrationClient(UnicastSendingMessageHandler udpSendingAdapter) {
+    public UdpClientImpl(UnicastSendingMessageHandler udpSendingAdapter) {
         this.udpSendingAdapter = udpSendingAdapter;
     }
 

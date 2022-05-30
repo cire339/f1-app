@@ -1,7 +1,7 @@
 package com.cire.formula1.controller;
 
-import com.cire.formula1.client.UdpClient;
-import com.cire.formula1.client.UdpIntegrationClient;
+import com.cire.formula1.service.UdpClient;
+import com.cire.formula1.service.UdpClientImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,14 @@ class TestController {
     private final UdpClient udpClient;
 
     @Autowired
-    public TestController(UdpIntegrationClient udpClient) {
+    public TestController(UdpClientImpl udpClient) {
         this.udpClient = udpClient;
     }
 
     @PostMapping(value = {"/test"}, produces = {APPLICATION_JSON_VALUE})
     public void sendMessage(@RequestBody String message) {
         LOGGER.info("Received HTTP POST message: {}", message);
+        //Convert message to
         udpClient.sendMessage(message);
     }
 

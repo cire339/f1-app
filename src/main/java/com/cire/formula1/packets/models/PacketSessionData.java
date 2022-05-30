@@ -16,13 +16,6 @@ import java.util.List;
  */
 public class PacketSessionData extends Packet {
 
-    // 625
-    public static final int SIZE = PacketHeader.SIZE + 
-                                    19 + 
-                                    MarshalZone.SIZE * PacketConstants.MARSHAL_ZONES +
-                                    29 +
-                                    WeatherForecastSample.SIZE * PacketConstants.WEATHER_FORECAST_SAMPLES;
-
     private Weather weather;
     private short trackTemperature;
     private short airTemperature;

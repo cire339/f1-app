@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 public class ExtraCarMotionData {
 
-    public static final int SIZE = 120;
-
     // Wheels in order: RL, RR, FL, FR.
     private float[] suspensionPosition = new float[PacketConstants.WHEELS];
     private float[] suspensionVelocity = new float[PacketConstants.WHEELS];

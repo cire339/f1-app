@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 public class CarDamageData {
 
-    public static final int SIZE = 39;
-
     private short tyresWear[] = new short[PacketConstants.TYRES];
     private short tyresDamage[] = new short[PacketConstants.TYRES];
     private short brakeDamage[] = new short[PacketConstants.BRAKES];

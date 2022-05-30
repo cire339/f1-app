@@ -6,8 +6,6 @@ import com.cire.formula1.packets.models.constants.Team;
 
 public class ParticipantData {
 
-    public static final int SIZE = 56;
-
     public static final int NAME_LENGTH = 48;
 
     private short aiControlled;

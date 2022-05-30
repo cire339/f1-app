@@ -6,8 +6,6 @@ import io.netty.buffer.ByteBuf;
 
 public class CarStatusData {
 
-    public static final int SIZE = 47;
-
     private TractionControl tractionControl;
     private short antiLockBrakes;
     private FuelMix fuelMix;

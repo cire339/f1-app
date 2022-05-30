@@ -15,11 +15,6 @@ import java.util.List;
  * Frequency: Two every second when in the lobby
  */
 public class PacketLobbyInfoData extends Packet {
-
-    // 1169
-    public static final int SIZE = PacketHeader.SIZE +
-                                    1 +
-                                    LobbyInfoData.SIZE * PacketConstants.LOBBY_PLAYERS;
     
     private short numPlayers;
     private List<LobbyInfoData> lobbyInfoData = new ArrayList<>(PacketConstants.LOBBY_PLAYERS);

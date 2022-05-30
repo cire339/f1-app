@@ -23,12 +23,6 @@ import java.util.List;
  */
 public class PacketSessionHistoryData extends Packet {
 
-    // 1155
-    public static final int SIZE = PacketHeader.SIZE +
-            7 +
-            (LapHistoryData.SIZE * PacketConstants.LAPS) +
-            (TyreStintHistoryData.SIZE * PacketConstants.TYRE_STINTS) ;
-
     private short carIdx;
     private short numLaps;
     private short numTyreStints;

@@ -2,8 +2,6 @@ package com.cire.formula1.packets.models.data;
 
 public class CarSetupData {
 
-    public static final int SIZE = 49;
-
     private short frontWing;
     private short rearWing;
     private short onThrottle;

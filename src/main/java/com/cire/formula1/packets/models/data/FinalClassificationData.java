@@ -7,8 +7,6 @@ import java.util.Arrays;
 
 public class FinalClassificationData {
 
-    public static final int SIZE = 37;
-
     private short position;
     private short numLaps;
     private short gridPosition;

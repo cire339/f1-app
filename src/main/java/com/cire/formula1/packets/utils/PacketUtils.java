@@ -31,19 +31,6 @@ public class PacketUtils {
     }
 
     /**
-     * Write a String instance into the buffer padding with null
-     * if it is long less than the specified max length
-     * 
-     * @param s String instance to write
-     * @param buffer destination buffer
-     * @param maxLength max length of the String instance
-     */
-    public static void writeString(String s, ByteBuf buffer, int maxLength) {
-        byte[] sBytes = Arrays.copyOf(s.getBytes(), maxLength);
-        buffer.writeBytes(sBytes);
-    }
-
-    /**
      * Convert a normalized vector represented as 16-bit signed value to float
      * 
      * @param value normalized vector represented as 16-bit signed value
@@ -51,16 +38,6 @@ public class PacketUtils {
      */
     public static float normalizedVectorToFloat(short value) {
         return value / 32767.0f;
-    }
-
-    /**
-     * Convert a float to a normalized vector represented as 16-bit signed value
-     * 
-     * @param value float value
-     * @return normalized vector
-     */
-    public static short floatToNormalizedVector(float value) {
-        return (short) (value * 32767.0f);
     }
 
     /**

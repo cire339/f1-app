@@ -10,12 +10,6 @@ import com.cire.formula1.packets.models.constants.EventCode;
  * Frequency: When the event occurs
  */
 public class PacketEventData extends Packet {
-
-    // 36 //TODO: Is it really 36? (added the -3 to match as a hack)
-    public static final int SIZE = PacketHeader.SIZE + 
-                                    4 +
-                                    EventDataDetails.SIZE
-                                    - 3;
     
     private EventCode eventCode;
     private EventDataDetails eventDataDetails = new EventDataDetails();

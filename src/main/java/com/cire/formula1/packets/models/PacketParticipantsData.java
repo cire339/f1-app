@@ -15,11 +15,6 @@ import java.util.List;
  * Frequency: Every 5 seconds
  */
 public class PacketParticipantsData extends Packet {
-
-    // 1257
-    public static final int SIZE = PacketHeader.SIZE + 
-                                    1 + 
-                                    ParticipantData.SIZE * PacketConstants.CARS;
     
     private short numActiveCars;
     private List<ParticipantData> participants = new ArrayList<>(PacketConstants.CARS);

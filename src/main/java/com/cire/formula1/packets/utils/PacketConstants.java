@@ -5,7 +5,6 @@ package com.cire.formula1.packets.utils;
  * Constants used across all packets
  */
 public class PacketConstants {
-   
     // number of cars
     public static final int CARS = 22;
     // number of wheels

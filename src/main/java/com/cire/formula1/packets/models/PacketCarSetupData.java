@@ -15,11 +15,7 @@ import java.util.List;
  *
  * Frequency: 2 per second
  */
-public class PacketCarSetupData extends Packet {
-
-    // 1102
-    public static final int SIZE = PacketHeader.SIZE +
-                                    CarSetupData.SIZE * PacketConstants.CARS ;
+public class PacketCarSetupData extends Packet { ;
     
     private List<CarSetupData> carSetupData = new ArrayList<>(PacketConstants.CARS);
 

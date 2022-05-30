@@ -3,8 +3,6 @@ package com.cire.formula1.packets.models.data;
 
 public class EventDataDetails {
 
-    public static final int SIZE = 11;
-
     private FastestLap fastestLap;
     private Retirement retirement;
     private TeamMateInPits teamMateInPits;

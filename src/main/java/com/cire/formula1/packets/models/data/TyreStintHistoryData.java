@@ -2,8 +2,6 @@ package com.cire.formula1.packets.models.data;
 
 public class TyreStintHistoryData {
 
-    public static final int SIZE = 3;
-
     private short endLap;
     private short tyreActualCompound;
     private short tyreVisualCompound;

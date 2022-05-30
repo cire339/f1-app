@@ -7,8 +7,6 @@ import com.cire.formula1.packets.models.constants.Sector;
 
 public class LapData {
 
-    public static final int SIZE = 43;
-
     private long lastLapTimeInMS;
     private long currentLapTimeInMS;
     private int sector1TimeInMS;

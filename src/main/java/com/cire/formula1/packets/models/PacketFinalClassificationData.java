@@ -16,11 +16,6 @@ import java.util.List;
  * Frequency: Once at the end of a race
  */
 public class PacketFinalClassificationData extends Packet {
-
-    // 839
-    public static final int SIZE = PacketHeader.SIZE +
-                                    1 +
-                                    FinalClassificationData.SIZE * PacketConstants.CARS;
     
     private short numCars;
     private List<FinalClassificationData> finalClassificationData = new ArrayList<>(PacketConstants.CARS);

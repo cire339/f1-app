@@ -5,8 +5,6 @@ import com.cire.formula1.packets.models.constants.Weather;
 
 public class WeatherForecastSample {
 
-    public static final int SIZE = 8;
-
     private SessionType sessionType;
     private short timeOffset;
     private Weather weather;

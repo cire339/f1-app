@@ -2,8 +2,6 @@ package com.cire.formula1.packets.models.data;
 
 public class CarMotionData {
 
-    public static final int SIZE = 60;
-
     private float worldPositionX;
     private float worldPositionY;
     private float worldPositionZ;

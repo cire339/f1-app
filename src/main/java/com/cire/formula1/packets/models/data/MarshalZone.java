@@ -4,8 +4,6 @@ import com.cire.formula1.packets.models.constants.ZoneFlag;
 
 public class MarshalZone {
 
-    public static final int SIZE = 5;
-
     private float zoneStart;
     public ZoneFlag zoneFlag;
 
