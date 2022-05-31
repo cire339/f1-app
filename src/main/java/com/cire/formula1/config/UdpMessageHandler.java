@@ -1,13 +1,12 @@
 package com.cire.formula1.config;
 
-import com.cire.formula1.packets.utils.PacketDecoder;
-import com.cire.formula1.packets.models.Packet;
+import com.cire.formula1.packet.util.PacketDecoder;
+import com.cire.formula1.packet.model.Packet;
 import com.cire.formula1.service.DataProcessingService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
