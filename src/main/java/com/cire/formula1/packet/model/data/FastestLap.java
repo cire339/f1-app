@@ -2,18 +2,18 @@ package com.cire.formula1.packet.model.data;
 
 public class FastestLap {
 
-    private short vehicleIdx;
+    private short carIndex;
     private float lapTime;
 
     /**
-     * @return Vehicle index of car achieving fastest lap
+     * @return Car index of car achieving fastest lap
      */
-    public short getVehicleIdx() {
-        return vehicleIdx;
+    public short getCarIndex() {
+        return carIndex;
     }
 
-    public void setVehicleIdx(short vehicleIdx) {
-        this.vehicleIdx = vehicleIdx;
+    public void setCarIndex(short carIndex) {
+        this.carIndex = carIndex;
     }
 
     /**
@@ -29,7 +29,7 @@ public class FastestLap {
 
     @Override
     public String toString() {
-        return "FastestLap[vehicleIdx=" + this.vehicleIdx +
+        return "FastestLap[carIndex=" + this.carIndex +
                 ",lapTime=" + this.lapTime +
                 "]";
     }

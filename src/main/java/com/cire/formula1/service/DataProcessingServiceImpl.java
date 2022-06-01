@@ -3,6 +3,7 @@ package com.cire.formula1.service;
 import com.cire.formula1.model.RaceSession;
 import com.cire.formula1.packet.model.Packet;
 import com.cire.formula1.packet.model.PacketEventData;
+import com.cire.formula1.packet.model.PacketFinalClassificationData;
 import com.cire.formula1.packet.model.PacketParticipantsData;
 import com.cire.formula1.packet.model.constants.PacketId;
 import org.slf4j.Logger;
@@ -81,7 +82,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processFinalClassification(Packet packet) {
-        LOGGER.debug("This is a final classification packet!");
+        PacketFinalClassificationData finalClassificationDataPacket = (PacketFinalClassificationData) packet;
+        raceSession.setFinalClassification(finalClassificationDataPacket.getFinalClassificationData());
+
+        LOGGER.info("Fastest lap: " + raceSession.getFastestLapTime() + " by " + getDriverName(raceSession.getFastestLapCarIndex()));
+        LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
+        LOGGER.info("Race Session Info: " + raceSession.toString());
     }
 
     private void processEvent(Packet packet) {
@@ -99,22 +105,20 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 break;
             case SESSION_ENDED:
                 LOGGER.info("Session Ended.");
-                LOGGER.info("Fastest lap: " + raceSession.getFastestLapTime() + " by " + getDriverName(raceSession.getFastestLapCarIndex()));
-                LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + raceSession.getDrivers().get(raceSession.getFastestSpeedCarIndex()));
                 break;
             case FASTEST_LAP:
-                LOGGER.info("Fastest lap triggered for player: " +
-                        getDriverName(eventDataPacket.getEventDataDetails().getFastestLap().getVehicleIdx()) +
+                LOGGER.info("New Fastest lap by " +
+                        getDriverName(eventDataPacket.getEventDataDetails().getFastestLap().getCarIndex()) +
                         " with a lap time of: " +
                         eventDataPacket.getEventDataDetails().getFastestLap().getLapTime());
                 if(raceSession != null){
-                    raceSession.setFastestLapCarIndex(eventDataPacket.getEventDataDetails().getFastestLap().getVehicleIdx());
+                    raceSession.setFastestLapCarIndex(eventDataPacket.getEventDataDetails().getFastestLap().getCarIndex());
                     raceSession.setFastestLapTime(eventDataPacket.getEventDataDetails().getFastestLap().getLapTime());
                 }
                 break;
             case RETIREMENT:
                 LOGGER.info("Retirement triggered for player: " +
-                        getDriverName(eventDataPacket.getEventDataDetails().getRetirement().getVehicleIdx()));
+                        getDriverName(eventDataPacket.getEventDataDetails().getRetirement().getCarIndex()));
                 break;
             case DRS_ENABLED:
                 break;
@@ -129,18 +133,20 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             case PENALTY_ISSUED:
                 break;
             case SPEED_TRAP_TRIGGERED:
-                LOGGER.info("Speed trap triggered for player : " +
-                        getDriverName(eventDataPacket.getEventDataDetails().getSpeedTrap().getVehicleIdx()) +
-                        " with a speed of " +
-                        eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
+                //Set highest speed
                 if(eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed() > raceSession.getFastestSpeed()){
+                    LOGGER.info("New speed trap highest speed " +
+                            getDriverName(eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex()) +
+                            " with a speed of " +
+                            eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
                     raceSession.setFastestSpeed(eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
-                    raceSession.setFastestSpeedCarIndex(eventDataPacket.getEventDataDetails().getSpeedTrap().getVehicleIdx());
+                    raceSession.setFastestSpeedCarIndex(eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex());
                 }
                 break;
             case START_LIGHTS:
                 break;
             case LIGHTS_OUT:
+                LOGGER.info("Race " + raceSession.getSessionUid() + " has started!");
                 break;
             case DRIVE_THROUGH_SERVED:
                 break;

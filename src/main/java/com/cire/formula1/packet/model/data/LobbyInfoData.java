@@ -16,7 +16,7 @@ public class LobbyInfoData {
     private ReadyStatus readyStatus;
 
     /**
-     * @return Whether the vehicle is AI (1) or Human (0) controlled
+     * @return Whether the car is AI (1) or Human (0) controlled
      */
     public short getAiControlled() {
         return aiControlled;

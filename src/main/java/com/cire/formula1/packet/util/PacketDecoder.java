@@ -325,13 +325,13 @@ public class PacketDecoder {
                 break;
             case FASTEST_LAP:
                 FastestLap fl = new FastestLap();
-                fl.setVehicleIdx(packetBuffer.readUnsignedByte());
+                fl.setCarIndex(packetBuffer.readUnsignedByte());
                 fl.setLapTime(packetBuffer.readFloatLE());
                 edd.setFastestLap(fl);
                 break;
             case RETIREMENT:
                 Retirement r = new Retirement();
-                r.setVehicleIdx(packetBuffer.readUnsignedByte());
+                r.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setRetirement(r);
                 break;
             case DRS_ENABLED:
@@ -342,7 +342,7 @@ public class PacketDecoder {
                 break;
             case TEAM_MATE_IN_PITS:
                 TeamMateInPits tmip = new TeamMateInPits();
-                tmip.setVehicleIdx(packetBuffer.readUnsignedByte());
+                tmip.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setTeamMateInPits(tmip);
                 break;
             case CHEQUERED_FLAG:
@@ -350,15 +350,15 @@ public class PacketDecoder {
                 break;
             case RACE_WINNER:
                 RaceWinner rw = new RaceWinner();
-                rw.setVehicleIdx(packetBuffer.readUnsignedByte());
+                rw.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setRaceWinner(rw);
                 break;
             case PENALTY_ISSUED:
                 Penalty p = new Penalty();
                 p.setPenaltyType(PenaltyType.valueOf(packetBuffer.readUnsignedByte()));
                 p.setInfringementType(InfringementType.valueOf(packetBuffer.readUnsignedByte()));
-                p.setVehicleIdx(packetBuffer.readUnsignedByte());
-                p.setOtherVehicleIdx(packetBuffer.readUnsignedByte());
+                p.setCarIndex(packetBuffer.readUnsignedByte());
+                p.setOtherCarIndex(packetBuffer.readUnsignedByte());
                 p.setTime(packetBuffer.readUnsignedByte());
                 p.setLapNum(packetBuffer.readUnsignedByte());
                 p.setPlacesGained(packetBuffer.readUnsignedByte());
@@ -366,7 +366,7 @@ public class PacketDecoder {
                 break;
             case SPEED_TRAP_TRIGGERED:
                 SpeedTrap st = new SpeedTrap();
-                st.setVehicleIdx(packetBuffer.readUnsignedByte());
+                st.setCarIndex(packetBuffer.readUnsignedByte());
                 st.setSpeed(packetBuffer.readFloatLE());
                 st.setOverallFastestInSession(packetBuffer.readUnsignedByte());
                 st.setDriverFastestInSession(packetBuffer.readUnsignedByte());
@@ -382,12 +382,12 @@ public class PacketDecoder {
                 break;
             case DRIVE_THROUGH_SERVED:
                 DriveThroughPenaltyServed dtps = new DriveThroughPenaltyServed();
-                dtps.setVehicleIdx(packetBuffer.readUnsignedByte());
+                dtps.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setDriveThroughPenaltyServed(dtps);
                 break;
             case STOP_GO_SERVED:
                 StopGoPenaltyServed sgps = new StopGoPenaltyServed();
-                sgps.setVehicleIdx(packetBuffer.readUnsignedByte());
+                sgps.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setStopGoPenaltyServed(sgps);
                 break;
             case FLASHBACK:
@@ -473,7 +473,7 @@ public class PacketDecoder {
             csd.setActualTyreCompound(ActualTyreCompound.valueOf(packetBuffer.readUnsignedByte()));
             csd.setVisualTyreCompound(VisualTyreCompound.valueOf(packetBuffer.readUnsignedByte()));
             csd.setTyresAgeLaps(packetBuffer.readUnsignedByte());
-            csd.setVehicleFiaFlags(VehicleFiaFlag.valueOf(packetBuffer.readByte()));
+            csd.setCarFiaFlags(CarFiaFlag.valueOf(packetBuffer.readByte()));
             csd.setErsStoreEnergy(packetBuffer.readFloatLE());
             csd.setErsDeployMode(ErsDeployMode.valueOf(packetBuffer.readUnsignedByte()));
             csd.setErsHarvestedThisLapMGUK(packetBuffer.readFloatLE());

@@ -2,22 +2,22 @@ package com.cire.formula1.packet.model.data;
 
 public class Retirement {
 
-    private short vehicleIdx;
+    private short carIndex;
 
     /**
-     * @return Vehicle index of car retiring
+     * @return Car index of car retiring
      */
-    public short getVehicleIdx() {
-        return vehicleIdx;
+    public short getCarIndex() {
+        return carIndex;
     }
 
-    public void setVehicleIdx(short vehicleIdx) {
-        this.vehicleIdx = vehicleIdx;
+    public void setCarIndex(short carIndex) {
+        this.carIndex = carIndex;
     }
 
     @Override
     public String toString() {
-        return "Retirement[vehicleIdx=" + this.vehicleIdx +
+        return "Retirement[carIndex=" + this.carIndex +
                 "]";
     }
 }

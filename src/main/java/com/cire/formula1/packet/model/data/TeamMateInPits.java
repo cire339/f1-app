@@ -3,22 +3,22 @@ package com.cire.formula1.packet.model.data;
 
 public class TeamMateInPits {
 
-    private short vehicleIdx;
+    private short carIndex;
 
     /**
-     * @return Vehicle index of team mate
+     * @return Car index of team mate
      */
-    public short getVehicleIdx() {
-        return vehicleIdx;
+    public short getCarIndex() {
+        return carIndex;
     }
 
-    public void setVehicleIdx(short vehicleIdx) {
-        this.vehicleIdx = vehicleIdx;
+    public void setCarIndex(short carIndex) {
+        this.carIndex = carIndex;
     }
 
     @Override
     public String toString() {
-        return "TeamMateInPits[vehicleIdx=" + this.vehicleIdx +
+        return "TeamMateInPits[carIndex=" + this.carIndex +
                 "]";
     }
 }

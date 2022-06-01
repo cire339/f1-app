@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Participants Packet
  * 
- * This is a list of participants in the race. If the vehicle is controlled by
+ * This is a list of participants in the race. If the car is controlled by
  * AI, then the name will be the driver name. If this is a multiplayer game, the
  * names will be the Steam Id on PC, or the LAN name if appropriate.
  * Frequency: Every 5 seconds

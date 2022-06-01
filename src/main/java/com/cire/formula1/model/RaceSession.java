@@ -1,5 +1,6 @@
 package com.cire.formula1.model;
 
+import com.cire.formula1.packet.model.data.FinalClassificationData;
 import com.cire.formula1.packet.model.data.ParticipantData;
 
 import java.math.BigInteger;
@@ -17,6 +18,7 @@ public class RaceSession {
     private short fastestSpeedCarIndex;
     private Float fastestSpeed = 0F;
     private List<ParticipantData> drivers = new ArrayList<>();
+    private List<FinalClassificationData> finalClassification = new ArrayList<>();
 
     public BigInteger getSessionUid() {
         return sessionUid;
@@ -66,6 +68,14 @@ public class RaceSession {
         this.drivers = drivers;
     }
 
+    public List<FinalClassificationData> getFinalClassification() {
+        return finalClassification;
+    }
+
+    public void setFinalClassification(List<FinalClassificationData> finalClassification) {
+        this.finalClassification = finalClassification;
+    }
+
     @Override
     public String toString() {
         return "RaceSession{" +
@@ -74,6 +84,8 @@ public class RaceSession {
                 ", fastestLapTime=" + fastestLapTime +
                 ", fastestSpeedCarIndex=" + fastestSpeedCarIndex +
                 ", fastestSpeed=" + fastestSpeed +
+                ", drivers=" + drivers +
+                ", finalClassification=" + finalClassification +
                 '}';
     }
 }

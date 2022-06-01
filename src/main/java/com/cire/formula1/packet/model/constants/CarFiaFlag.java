@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Vehicle FIA flag
+ * Car FIA flag
  */
-public enum VehicleFiaFlag {
+public enum CarFiaFlag {
     INVALID_UNKNOWN(-1),
     NONE(0),
     GREEN(1),
@@ -15,21 +15,21 @@ public enum VehicleFiaFlag {
     YELLOW(3),
     RED(4);
     
-    private static Map<Integer, VehicleFiaFlag> map = new HashMap<>();
+    private static Map<Integer, CarFiaFlag> map = new HashMap<>();
 
     static {
-        for (VehicleFiaFlag vehicleFiaFlag : VehicleFiaFlag.values()) {
-            map.put(vehicleFiaFlag.value, vehicleFiaFlag);
+        for (CarFiaFlag carFiaFlag : CarFiaFlag.values()) {
+            map.put(carFiaFlag.value, carFiaFlag);
         }
     }
 
     private int value;
     
-    VehicleFiaFlag(int value) {
+    CarFiaFlag(int value) {
         this.value = value;
     }
 
-    public static VehicleFiaFlag valueOf(int value) {
+    public static CarFiaFlag valueOf(int value) {
         return map.get(value);
     }
 

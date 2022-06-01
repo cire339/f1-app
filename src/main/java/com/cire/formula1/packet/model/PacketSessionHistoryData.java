@@ -12,12 +12,12 @@ import java.util.List;
  *
  * This packet contains lap times and tyre usage for the session.
  * This packet works slightly differently to other packets.
- * To reduce CPU and bandwidth, each packet relates to a specific vehicle and is sent every 1/20 s,
- * and the vehicle being sent is cycled through.
- * Therefore in a 20 car race you should receive an update for each vehicle at least once per second.
+ * To reduce CPU and bandwidth, each packet relates to a specific car and is sent every 1/20 s,
+ * and the car being sent is cycled through.
+ * Therefore in a 20 car race you should receive an update for each car at least once per second.
  *
  * Note that at the end of the race, after the final classification packet has been sent,
- * a final bulk update of all the session histories for the vehicles in that session will be sent.
+ * a final bulk update of all the session histories for the cars in that session will be sent.
  *
  * Frequency: 20 per second but cycling through cars
  */

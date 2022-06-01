@@ -21,7 +21,7 @@ public class CarStatusData {
     private ActualTyreCompound actualTyreCompound;
     private VisualTyreCompound visualTyreCompound;
     private short tyresAgeLaps;
-    private VehicleFiaFlag vehicleFiaFlags;
+    private CarFiaFlag carFiaFlags;
     private float ersStoreEnergy;
     private ErsDeployMode ersDeployMode;
     private float ersHarvestedThisLapMGUK;
@@ -218,16 +218,16 @@ public class CarStatusData {
     }
 
     /**
-     * @return Vehicle FIA flags
+     * @return Car FIA flags
      * -1 = invalid/unknown, 0 = none, 1 = green
      * 2 = blue, 3 = yellow, 4 = red
      */
-    public VehicleFiaFlag getVehicleFiaFlags() {
-        return vehicleFiaFlags;
+    public CarFiaFlag getCarFiaFlags() {
+        return carFiaFlags;
     }
 
-    public void setVehicleFiaFlags(VehicleFiaFlag vehicleFiaFlags) {
-        this.vehicleFiaFlags = vehicleFiaFlags;
+    public void setCarFiaFlags(CarFiaFlag carFiaFlags) {
+        this.carFiaFlags = carFiaFlags;
     }
 
     /**
@@ -315,7 +315,7 @@ public class CarStatusData {
                 ",actualTyreCompound=" + this.actualTyreCompound +
                 ",visualTyreCompound=" + this.visualTyreCompound +
                 ",tyresAgeLaps=" + this.tyresAgeLaps +
-                ",vehicleFiaFlags=" + this.vehicleFiaFlags +
+                ",carFiaFlags=" + this.carFiaFlags +
                 ",ersStoreEnergy=" + this.ersStoreEnergy +
                 ",ersDeployMode=" + this.ersDeployMode +
                 ",ersHarvestedThisLapMGUK=" + this.ersHarvestedThisLapMGUK +

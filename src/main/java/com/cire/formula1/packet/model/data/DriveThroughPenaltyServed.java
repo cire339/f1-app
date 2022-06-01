@@ -2,22 +2,22 @@ package com.cire.formula1.packet.model.data;
 
 public class DriveThroughPenaltyServed {
 
-    private short vehicleIdx;
+    private short carIndex;
 
     /**
-     * @return Vehicle index of the vehicle serving drive through
+     * @return Car index of the car serving drive through
      */
-    public short getVehicleIdx() {
-        return vehicleIdx;
+    public short getCarIndex() {
+        return carIndex;
     }
 
-    public void setVehicleIdx(short vehicleIdx) {
-        this.vehicleIdx = vehicleIdx;
+    public void setCarIndex(short carIndex) {
+        this.carIndex = carIndex;
     }
 
     @Override
     public String toString() {
-        return "DriveThroughPenaltyServed[vehicleIdx=" + this.vehicleIdx +
+        return "DriveThroughPenaltyServed[carIndex=" + this.carIndex +
                 "]";
     }
 }

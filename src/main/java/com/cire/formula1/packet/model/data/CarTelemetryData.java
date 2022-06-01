@@ -17,12 +17,12 @@ public class CarTelemetryData {
     private short drs;
     private short revLightsPercent;
     private int revLightsBitValue;
-    private int brakesTemperature[] = new int[PacketConstants.TYRES];
-    private short tyresSurfaceTemperature[] = new short[PacketConstants.TYRES];
-    private short tyresInnerTemperature[] = new short[PacketConstants.TYRES];
+    private int[] brakesTemperature = new int[PacketConstants.TYRES];
+    private short[] tyresSurfaceTemperature = new short[PacketConstants.TYRES];
+    private short[] tyresInnerTemperature = new short[PacketConstants.TYRES];
     private int engineTemperature;
-    private float tyresPressure[] = new float[PacketConstants.TYRES];
-    private SurfaceType surfaceType[] = new SurfaceType[PacketConstants.TYRES];
+    private float[] tyresPressure = new float[PacketConstants.TYRES];
+    private SurfaceType[] surfaceType = new SurfaceType[PacketConstants.TYRES];
 
     /**
      * @return Speed of car in kilometres per hour

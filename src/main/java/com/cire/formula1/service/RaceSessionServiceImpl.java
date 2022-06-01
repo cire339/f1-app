@@ -34,10 +34,9 @@ public class RaceSessionServiceImpl implements RaceSessionService {
         if(raceSessions.containsKey(sessionUid)){
             return raceSessions.get(sessionUid);
         }else{
-            LOGGER.info("RaceSession with UID=" + sessionUid + " does not exist.");
+            LOGGER.debug("RaceSession with UID=" + sessionUid + " does not exist.");
             return createRaceSession(sessionUid);
         }
     }
-
 
 }

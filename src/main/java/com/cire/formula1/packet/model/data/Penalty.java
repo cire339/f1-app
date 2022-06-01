@@ -7,8 +7,8 @@ public class Penalty {
 
     private PenaltyType penaltyType;
     private InfringementType infringementType;
-    private short vehicleIdx;
-    private short otherVehicleIdx;
+    private short carIndex;
+    private short otherCarIndex;
     private short time;
     private short lapNum;
     private short placesGained;
@@ -36,25 +36,25 @@ public class Penalty {
     }
 
     /**
-     * @return Vehicle index of the car the penalty is applied to
+     * @return Car index of the car the penalty is applied to
      */
-    public short getVehicleIdx() {
-        return vehicleIdx;
+    public short getCarIndex() {
+        return carIndex;
     }
 
-    public void setVehicleIdx(short vehicleIdx) {
-        this.vehicleIdx = vehicleIdx;
+    public void setCarIndex(short carIndex) {
+        this.carIndex = carIndex;
     }
 
     /**
-     * @return Vehicle index of the other car involved
+     * @return Car index of the other car involved
      */
-    public short getOtherVehicleIdx() {
-        return otherVehicleIdx;
+    public short getOtherCarIndex() {
+        return otherCarIndex;
     }
 
-    public void setOtherVehicleIdx(short otherVehicleIdx) {
-        this.otherVehicleIdx = otherVehicleIdx;
+    public void setOtherCarIndex(short otherCarIndex) {
+        this.otherCarIndex = otherCarIndex;
     }
 
     /**
@@ -94,8 +94,8 @@ public class Penalty {
     public String toString() {
         return "Penalty[penaltyType=" + this.penaltyType +
                 ",infringementType=" + this.infringementType +
-                ",vehicleIdx=" + this.vehicleIdx +
-                ",otherVehicleIdx=" + this.otherVehicleIdx +
+                ",carIndex=" + this.carIndex +
+                ",otherCarIndex=" + this.otherCarIndex +
                 ",time=" + this.time +
                 ",lapNum=" + this.lapNum +
                 ",placesGained=" + this.placesGained +

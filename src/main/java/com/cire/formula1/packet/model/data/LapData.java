@@ -77,7 +77,7 @@ public class LapData {
     }
 
     /**
-     * @return Distance vehicle is around current lap in metres
+     * @return Distance car is around current lap in metres
      * could be negative if line hasn’t been crossed yet
      */
     public float getLapDistance() {
@@ -225,7 +225,7 @@ public class LapData {
     }
 
     /**
-     * @return Grid position the vehicle started the race in
+     * @return Grid position the car started the race in
      */
     public short getGridPosition() {
         return gridPosition;

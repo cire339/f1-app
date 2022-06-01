@@ -2,20 +2,20 @@ package com.cire.formula1.packet.model.data;
 
 public class SpeedTrap {
 
-    private short vehicleIdx;
+    private short carIndex;
     private float speed;
     private short overallFastestInSession;
     private short driverFastestInSession;
 
     /**
-     * @return Vehicle index of the vehicle triggering speed trap
+     * @return Car index of the car triggering speed trap
      */
-    public short getVehicleIdx() {
-        return vehicleIdx;
+    public short getCarIndex() {
+        return carIndex;
     }
 
-    public void setVehicleIdx(short vehicleIdx) {
-        this.vehicleIdx = vehicleIdx;
+    public void setCarIndex(short carIndex) {
+        this.carIndex = carIndex;
     }
 
     /**
@@ -53,7 +53,7 @@ public class SpeedTrap {
 
     @Override
     public String toString() {
-        return "SpeedTrap[vehicleIdx=" + this.vehicleIdx +
+        return "SpeedTrap[carIndex=" + this.carIndex +
                 ",speed=" + this.speed +
                 ",overallFastestInSession=" + this.overallFastestInSession +
                 ",driverFastestInSession=" + this.driverFastestInSession +
