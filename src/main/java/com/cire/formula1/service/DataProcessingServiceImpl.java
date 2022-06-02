@@ -1,10 +1,7 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.model.RaceSession;
-import com.cire.formula1.packet.model.Packet;
-import com.cire.formula1.packet.model.PacketEventData;
-import com.cire.formula1.packet.model.PacketFinalClassificationData;
-import com.cire.formula1.packet.model.PacketParticipantsData;
+import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +63,6 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private void processParticipants(Packet packet) {
         PacketParticipantsData participantsDataPacket = (PacketParticipantsData) packet;
         raceSession.setDrivers(participantsDataPacket.getParticipants());
-        LOGGER.debug("This is a participant packet!");
     }
 
     private void processMotion(Packet packet) {
@@ -74,7 +70,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processLobbyInfo(Packet packet) {
-        LOGGER.debug("This is a lobby info packet!");
+        PacketLobbyInfoData lobbyInfoDataPacket = (PacketLobbyInfoData) packet;
+        raceSession.setLobby(lobbyInfoDataPacket.getLobbyInfoData());
     }
 
     private void processLapData(Packet packet) {
@@ -94,17 +91,14 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         LOGGER.debug("This is an event packet!");
         PacketEventData eventDataPacket = (PacketEventData) packet;
 
-        //LOGGER.info(eventDataPacket.getEventCode().toString());
         switch (eventDataPacket.getEventCode()) {
             //TODO: implement this
             case SESSION_STARTED:
-                //TODO: Is this where the session should be created?
-                //Create new race session when race starts.
                 LOGGER.info("Session Started.");
-                raceSessionService.createRaceSession(packet.getHeader().getSessionUid());
                 break;
             case SESSION_ENDED:
                 LOGGER.info("Session Ended.");
+                raceSession.setRaceEnded(true);
                 break;
             case FASTEST_LAP:
                 LOGGER.info("New Fastest lap by " +
@@ -147,6 +141,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 break;
             case LIGHTS_OUT:
                 LOGGER.info("Race " + raceSession.getSessionUid() + " has started!");
+                raceSession.setRaceStarted(true);
                 break;
             case DRIVE_THROUGH_SERVED:
                 break;
@@ -182,6 +177,11 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 raceSession.getDrivers() != null &&
                 !raceSession.getDrivers().isEmpty() &&
                 raceSession.getDrivers().size() >= carIndex) {
+            String driverName = raceSession.getDrivers().get(carIndex).getName();
+            if(driverName == null || driverName.equalsIgnoreCase("Player")){
+                //In multiplayer, the player names are hidden... TODO: Figure out a workaround.
+                return driverName + " " + carIndex;
+            }
             return raceSession.getDrivers().get(carIndex).getName();
         }else{
             return null;

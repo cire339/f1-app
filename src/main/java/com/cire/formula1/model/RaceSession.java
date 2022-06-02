@@ -1,6 +1,7 @@
 package com.cire.formula1.model;
 
 import com.cire.formula1.packet.model.data.FinalClassificationData;
+import com.cire.formula1.packet.model.data.LobbyInfoData;
 import com.cire.formula1.packet.model.data.ParticipantData;
 
 import java.math.BigInteger;
@@ -17,7 +18,10 @@ public class RaceSession {
     private Float fastestLapTime = 0F;
     private short fastestSpeedCarIndex;
     private Float fastestSpeed = 0F;
+    private boolean raceStarted = false;
+    private boolean raceEnded = false;
     private List<ParticipantData> drivers = new ArrayList<>();
+    private List<LobbyInfoData> lobby = new ArrayList<>();
     private List<FinalClassificationData> finalClassification = new ArrayList<>();
 
     public BigInteger getSessionUid() {
@@ -60,12 +64,36 @@ public class RaceSession {
         this.fastestSpeed = fastestSpeed;
     }
 
+    public boolean isRaceStarted() {
+        return raceStarted;
+    }
+
+    public void setRaceStarted(boolean raceStarted) {
+        this.raceStarted = raceStarted;
+    }
+
+    public boolean isRaceEnded() {
+        return raceEnded;
+    }
+
+    public void setRaceEnded(boolean raceEnded) {
+        this.raceEnded = raceEnded;
+    }
+
     public List<ParticipantData> getDrivers() {
         return drivers;
     }
 
     public void setDrivers(List<ParticipantData> drivers) {
         this.drivers = drivers;
+    }
+
+    public List<LobbyInfoData> getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(List<LobbyInfoData> lobby) {
+        this.lobby = lobby;
     }
 
     public List<FinalClassificationData> getFinalClassification() {
