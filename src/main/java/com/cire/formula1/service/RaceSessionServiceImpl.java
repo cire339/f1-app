@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -37,6 +38,11 @@ public class RaceSessionServiceImpl implements RaceSessionService {
             LOGGER.debug("RaceSession with UID=" + sessionUid + " does not exist.");
             return createRaceSession(sessionUid);
         }
+    }
+
+    @Override
+    public List<BigInteger> getRaceAllSessions() {
+        return raceSessions.keySet().stream().toList();
     }
 
 }

@@ -3,6 +3,8 @@ package com.cire.formula1.service;
 import com.cire.formula1.model.RaceSession;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
+import com.cire.formula1.packet.model.data.Penalty;
+import com.cire.formula1.packet.model.data.RaceWinner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DataProcessingServiceImpl.class);
 
-    private RaceSessionService raceSessionService;
+    private final RaceSessionService raceSessionService;
 
     private RaceSession raceSession = null;
 
@@ -28,7 +30,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     public void processData(Packet packet) {
 
         BigInteger sessionUid = packet.getHeader().getSessionUid();
-        if(sessionUid != BigInteger.ZERO){
+        if(!sessionUid.equals(BigInteger.ZERO)){
             raceSession = raceSessionService.getRaceSessionByUid(sessionUid);
         }
 
@@ -53,10 +55,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processSessionHistory(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a session history packet!");
     }
 
     private void processSession(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a session packet!");
     }
 
@@ -66,6 +70,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processMotion(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a motion packet!");
     }
 
@@ -75,6 +80,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processLapData(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a lap data packet!");
     }
 
@@ -92,7 +98,6 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketEventData eventDataPacket = (PacketEventData) packet;
 
         switch (eventDataPacket.getEventCode()) {
-            //TODO: implement this
             case SESSION_STARTED:
                 LOGGER.info("Session Started.");
                 break;
@@ -123,8 +128,14 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             case CHEQUERED_FLAG:
                 break;
             case RACE_WINNER:
+                RaceWinner raceWinner = eventDataPacket.getEventDataDetails().getRaceWinner();
+                LOGGER.info("Race winner is " + getDriverName(raceWinner.getCarIndex()));
+                raceSession.setRaceWinner(raceWinner);
                 break;
             case PENALTY_ISSUED:
+                Penalty penalty = eventDataPacket.getEventDataDetails().getPenalty();
+                LOGGER.info("Penalty issued for " + getDriverName(penalty.getCarIndex()) + ": " + penalty.getInfringementType().name() + " " + penalty.getPenaltyType().name());
+                raceSession.getPenalties().add(eventDataPacket.getEventDataDetails().getPenalty());
                 break;
             case SPEED_TRAP_TRIGGERED:
                 //Set highest speed
@@ -157,18 +168,22 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processCarTelemetry(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a car telemetry packet!");
     }
 
     private void processCarStatus(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a car status packet!");
     }
 
     private void processCarSetups(Packet packet) {
-        LOGGER.debug("This is a car setup packet!");
+        PacketCarSetupData carSetupDataPacket = (PacketCarSetupData) packet;
+        raceSession.setCarSetups(carSetupDataPacket.getCarSetupData());
     }
 
     private void processCarDamage(Packet packet) {
+        //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a car damage packet!");
     }
 

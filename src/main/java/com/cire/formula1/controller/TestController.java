@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/f1app")
+@RequestMapping(value = "/test")
 class TestController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TestController.class);
@@ -25,7 +25,7 @@ class TestController {
         this.udpClient = udpClient;
     }
 
-    @PostMapping(value = {"/test"}, produces = {APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/packet"}, produces = {APPLICATION_JSON_VALUE})
     public void sendMessage(@RequestBody String message) {
         LOGGER.info("Received HTTP POST message: {}", message);
         //Convert message to

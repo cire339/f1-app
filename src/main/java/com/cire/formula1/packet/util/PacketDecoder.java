@@ -3,13 +3,11 @@ package com.cire.formula1.packet.util;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.*;
 import com.cire.formula1.packet.model.data.*;
-import com.cire.formula1.service.DataProcessingServiceImpl;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
