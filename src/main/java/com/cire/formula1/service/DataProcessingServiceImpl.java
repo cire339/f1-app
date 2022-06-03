@@ -1,16 +1,19 @@
 package com.cire.formula1.service;
 
+import com.cire.formula1.model.Player;
 import com.cire.formula1.model.RaceSession;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
-import com.cire.formula1.packet.model.data.Penalty;
-import com.cire.formula1.packet.model.data.RaceWinner;
+import com.cire.formula1.packet.model.data.*;
+import com.cire.formula1.packet.util.PacketConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DataProcessingServiceImpl implements DataProcessingService {
@@ -66,7 +69,11 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private void processParticipants(Packet packet) {
         PacketParticipantsData participantsDataPacket = (PacketParticipantsData) packet;
-        raceSession.setDrivers(participantsDataPacket.getParticipants());
+        List<Player> players = new ArrayList<>();
+        for(ParticipantData participantData: participantsDataPacket.getParticipants()){
+            players.add(new Player(participantData));
+        }
+        raceSession.setPlayers(players);
     }
 
     private void processMotion(Packet packet) {
@@ -75,8 +82,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processLobbyInfo(Packet packet) {
-        PacketLobbyInfoData lobbyInfoDataPacket = (PacketLobbyInfoData) packet;
-        raceSession.setLobby(lobbyInfoDataPacket.getLobbyInfoData());
+        //If race has not started, yet - ignore.
+        if(packet.getHeader().getSessionUid() != BigInteger.ZERO) {
+            PacketLobbyInfoData lobbyInfoDataPacket = (PacketLobbyInfoData) packet;
+            raceSession.setLobby(lobbyInfoDataPacket.getLobbyInfoData());
+        }else{
+            LOGGER.debug("Players are in the lobby.. Waiting for session to start.");
+        }
     }
 
     private void processLapData(Packet packet) {
@@ -86,7 +98,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private void processFinalClassification(Packet packet) {
         PacketFinalClassificationData finalClassificationDataPacket = (PacketFinalClassificationData) packet;
-        raceSession.setFinalClassification(finalClassificationDataPacket.getFinalClassificationData());
+
+        //Set final classification for each player.
+        for(int i = 0; i< PacketConstants.CARS; i++){
+            FinalClassificationData classificationData = finalClassificationDataPacket.getFinalClassificationData().get(i);
+            raceSession.getPlayers().get(i).setClassificationDetails(classificationData);
+        }
 
         LOGGER.info("Fastest lap: " + raceSession.getFastestLapTime() + " by " + getDriverName(raceSession.getFastestLapCarIndex()));
         LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
@@ -130,12 +147,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             case RACE_WINNER:
                 RaceWinner raceWinner = eventDataPacket.getEventDataDetails().getRaceWinner();
                 LOGGER.info("Race winner is " + getDriverName(raceWinner.getCarIndex()));
-                raceSession.setRaceWinner(raceWinner);
+                raceSession.setRaceWinnerCarIndex(raceWinner.getCarIndex());
                 break;
             case PENALTY_ISSUED:
                 Penalty penalty = eventDataPacket.getEventDataDetails().getPenalty();
                 LOGGER.info("Penalty issued for " + getDriverName(penalty.getCarIndex()) + ": " + penalty.getInfringementType().name() + " " + penalty.getPenaltyType().name());
-                raceSession.getPenalties().add(eventDataPacket.getEventDataDetails().getPenalty());
+                //Add penalty to the player.
+                raceSession.getPlayers().get(penalty.getCarIndex()).getPenalties().add(penalty);
                 break;
             case SPEED_TRAP_TRIGGERED:
                 //Set highest speed
@@ -178,8 +196,14 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processCarSetups(Packet packet) {
+        //TODO: What to do with blank ones?
         PacketCarSetupData carSetupDataPacket = (PacketCarSetupData) packet;
-        raceSession.setCarSetups(carSetupDataPacket.getCarSetupData());
+
+        //Set car setup for each player.
+        for(int i = 0; i<PacketConstants.CARS; i++){
+            CarSetupData carSetupData = carSetupDataPacket.getCarSetupData().get(i);
+            raceSession.getPlayers().get(i).setCarSetup(carSetupData);
+        }
     }
 
     private void processCarDamage(Packet packet) {
@@ -189,15 +213,15 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private String getDriverName(short carIndex){
         if(raceSession != null &&
-                raceSession.getDrivers() != null &&
-                !raceSession.getDrivers().isEmpty() &&
-                raceSession.getDrivers().size() >= carIndex) {
-            String driverName = raceSession.getDrivers().get(carIndex).getName();
+                raceSession.getPlayers() != null &&
+                !raceSession.getPlayers().isEmpty() &&
+                raceSession.getPlayers().size() >= carIndex) {
+            String driverName = raceSession.getPlayers().get(carIndex).getPlayerInfo().getName();
             if(driverName == null || driverName.equalsIgnoreCase("Player")){
                 //In multiplayer, the player names are hidden... TODO: Figure out a workaround.
                 return driverName + " " + carIndex;
             }
-            return raceSession.getDrivers().get(carIndex).getName();
+            return raceSession.getPlayers().get(carIndex).getPlayerInfo().getName();
         }else{
             return null;
         }

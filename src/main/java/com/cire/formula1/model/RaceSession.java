@@ -17,7 +17,7 @@ public class RaceSession {
     @JsonProperty
     private BigInteger sessionUid;
     @JsonProperty
-    private RaceWinner raceWinner;
+    private short raceWinnerCarIndex;
     @JsonProperty
     private short fastestLapCarIndex;
     @JsonProperty
@@ -31,26 +31,20 @@ public class RaceSession {
     @JsonProperty
     private boolean raceEnded = false;
     @JsonProperty
-    private List<ParticipantData> drivers = new ArrayList<>();
-    @JsonProperty
-    private List<CarSetupData> carSetups = new ArrayList<>();
-    @JsonProperty
     private List<LobbyInfoData> lobby = new ArrayList<>();
     @JsonProperty
-    private List<Penalty> penalties = new ArrayList<>();
-    @JsonProperty
-    private List<FinalClassificationData> finalClassification = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
 
     public BigInteger getSessionUid() {
         return sessionUid;
     }
 
-    public RaceWinner getRaceWinner() {
-        return raceWinner;
+    public short getRaceWinnerCarIndex() {
+        return raceWinnerCarIndex;
     }
 
-    public void setRaceWinner(RaceWinner raceWinner) {
-        this.raceWinner = raceWinner;
+    public void setRaceWinnerCarIndex(short raceWinnerCarIndex) {
+        this.raceWinnerCarIndex = raceWinnerCarIndex;
     }
 
     public void setSessionUid(BigInteger sessionUid) {
@@ -105,22 +99,6 @@ public class RaceSession {
         this.raceEnded = raceEnded;
     }
 
-    public List<ParticipantData> getDrivers() {
-        return drivers;
-    }
-
-    public void setDrivers(List<ParticipantData> drivers) {
-        this.drivers = drivers;
-    }
-
-    public List<CarSetupData> getCarSetups() {
-        return carSetups;
-    }
-
-    public void setCarSetups(List<CarSetupData> carSetups) {
-        this.carSetups = carSetups;
-    }
-
     public List<LobbyInfoData> getLobby() {
         return lobby;
     }
@@ -129,32 +107,27 @@ public class RaceSession {
         this.lobby = lobby;
     }
 
-    public List<Penalty> getPenalties() {
-        return penalties;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setPenalties(List<Penalty> penalties) {
-        this.penalties = penalties;
-    }
-
-    public List<FinalClassificationData> getFinalClassification() {
-        return finalClassification;
-    }
-
-    public void setFinalClassification(List<FinalClassificationData> finalClassification) {
-        this.finalClassification = finalClassification;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     @Override
     public String toString() {
         return "RaceSession{" +
                 "sessionUid=" + sessionUid +
+                ", raceWinnerCarIndex=" + raceWinnerCarIndex +
                 ", fastestLapCarIndex=" + fastestLapCarIndex +
                 ", fastestLapTime=" + fastestLapTime +
                 ", fastestSpeedCarIndex=" + fastestSpeedCarIndex +
                 ", fastestSpeed=" + fastestSpeed +
-                ", drivers=" + drivers +
-                ", finalClassification=" + finalClassification +
+                ", raceStarted=" + raceStarted +
+                ", raceEnded=" + raceEnded +
+                ", lobby=" + lobby +
+                ", players=" + players +
                 '}';
     }
 }
