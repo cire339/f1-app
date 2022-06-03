@@ -1,6 +1,8 @@
 package com.cire.formula1.model;
 
+import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.packet.model.data.*;
+import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,6 +36,14 @@ public class RaceSession {
     private List<LobbyInfoData> lobby = new ArrayList<>();
     @JsonProperty
     private List<Player> players = new ArrayList<>();
+
+    public RaceSession(){
+
+    }
+
+    public RaceSession(RaceSessionEntity entity){
+        this.sessionUid = new BigInteger(entity.getSessionUid());
+    }
 
     public BigInteger getSessionUid() {
         return sessionUid;

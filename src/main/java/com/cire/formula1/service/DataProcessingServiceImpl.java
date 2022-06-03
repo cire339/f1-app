@@ -100,7 +100,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketFinalClassificationData finalClassificationDataPacket = (PacketFinalClassificationData) packet;
 
         //Set final classification for each player.
-        for(int i = 0; i< PacketConstants.CARS; i++){
+        for(int i = 0; i<raceSession.getPlayers().size(); i++){
             FinalClassificationData classificationData = finalClassificationDataPacket.getFinalClassificationData().get(i);
             raceSession.getPlayers().get(i).setClassificationDetails(classificationData);
         }
@@ -200,7 +200,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketCarSetupData carSetupDataPacket = (PacketCarSetupData) packet;
 
         //Set car setup for each player.
-        for(int i = 0; i<PacketConstants.CARS; i++){
+        for(int i = 0; i<raceSession.getPlayers().size(); i++){
             CarSetupData carSetupData = carSetupDataPacket.getCarSetupData().get(i);
             raceSession.getPlayers().get(i).setCarSetup(carSetupData);
         }

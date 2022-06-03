@@ -4,6 +4,7 @@ import com.cire.formula1.packet.model.data.CarSetupData;
 import com.cire.formula1.packet.model.data.FinalClassificationData;
 import com.cire.formula1.packet.model.data.ParticipantData;
 import com.cire.formula1.packet.model.data.Penalty;
+import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
