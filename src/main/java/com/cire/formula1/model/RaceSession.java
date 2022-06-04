@@ -1,8 +1,7 @@
 package com.cire.formula1.model;
 
 import com.cire.formula1.database.entity.RaceSessionEntity;
-import com.cire.formula1.packet.model.data.*;
-import com.cire.formula1.packet.util.PacketConstants;
+import com.cire.formula1.packet.model.data.FastestLap;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -21,9 +20,7 @@ public class RaceSession {
     @JsonProperty
     private short raceWinnerCarIndex;
     @JsonProperty
-    private short fastestLapCarIndex;
-    @JsonProperty
-    private Float fastestLapTime = 0F;
+    private FastestLap fastestLap;
     @JsonProperty
     private short fastestSpeedCarIndex;
     @JsonProperty
@@ -59,20 +56,12 @@ public class RaceSession {
         this.sessionUid = sessionUid;
     }
 
-    public short getFastestLapCarIndex() {
-        return fastestLapCarIndex;
+    public FastestLap getFastestLap() {
+        return fastestLap;
     }
 
-    public void setFastestLapCarIndex(short fastestLapCarIndex) {
-        this.fastestLapCarIndex = fastestLapCarIndex;
-    }
-
-    public Float getFastestLapTime() {
-        return fastestLapTime;
-    }
-
-    public void setFastestLapTime(Float fastestLapTime) {
-        this.fastestLapTime = fastestLapTime;
+    public void setFastestLap(FastestLap fastestLap) {
+        this.fastestLap = fastestLap;
     }
 
     public short getFastestSpeedCarIndex() {
@@ -120,8 +109,7 @@ public class RaceSession {
         return "RaceSession{" +
                 "sessionUid=" + sessionUid +
                 ", raceWinnerCarIndex=" + raceWinnerCarIndex +
-                ", fastestLapCarIndex=" + fastestLapCarIndex +
-                ", fastestLapTime=" + fastestLapTime +
+                ", fastestLap=" + fastestLap +
                 ", fastestSpeedCarIndex=" + fastestSpeedCarIndex +
                 ", fastestSpeed=" + fastestSpeed +
                 ", raceStarted=" + raceStarted +

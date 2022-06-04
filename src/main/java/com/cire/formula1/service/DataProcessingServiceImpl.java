@@ -100,7 +100,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             raceSession.getPlayers().get(i).setClassificationDetails(classificationData);
         }
 
-        LOGGER.info("Fastest lap: " + raceSession.getFastestLapTime() + " by " + getDriverName(raceSession.getFastestLapCarIndex()));
+        LOGGER.info("Fastest lap: " + raceSession.getFastestLap().getLapTime() + " by " + getDriverName(raceSession.getFastestLap().getCarIndex()));
         LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
         LOGGER.info("Race Session Info: " + raceSession.toString());
     }
@@ -123,8 +123,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                         " with a lap time of: " +
                         eventDataPacket.getEventDataDetails().getFastestLap().getLapTime());
                 if(raceSession != null){
-                    raceSession.setFastestLapCarIndex(eventDataPacket.getEventDataDetails().getFastestLap().getCarIndex());
-                    raceSession.setFastestLapTime(eventDataPacket.getEventDataDetails().getFastestLap().getLapTime());
+                    raceSession.setFastestLap(eventDataPacket.getEventDataDetails().getFastestLap());
                 }
                 break;
             case RETIREMENT:
