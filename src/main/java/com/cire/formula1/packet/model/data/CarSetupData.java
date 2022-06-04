@@ -293,4 +293,29 @@ public class CarSetupData {
                 ",fuelLoad=" + this.fuelLoad +
                 "]";
     }
+
+    public boolean isBlank(){
+        return this.frontWing == 0 &&
+                this.rearWing == 0 &&
+                this.onThrottle == 0 &&
+                this.offThrottle == 0 &&
+                this.frontCamber == 0 &&
+                this.rearCamber == 0 &&
+                this.frontToe == 0 &&
+                this.rearToe == 0 &&
+                this.frontSuspension == 0 &&
+                this.rearSuspension == 0 &&
+                this.frontAntiRollBar == 0 &&
+                this.rearAntiRollBar == 0 &&
+                this.frontSuspensionHeight == 0 &&
+                this.rearSuspensionHeight == 0 &&
+                this.brakePressure == 0 &&
+                this.brakeBias == 0 &&
+                this.rearLeftTyrePressure == 0 &&
+                this.rearRightTyrePressure == 0 &&
+                this.frontLeftTyrePressure == 0 &&
+                this.frontRightTyrePressure == 0 &&
+                this.ballast == 0 &&
+                this.fuelLoad == 0;
+    }
 }

@@ -82,13 +82,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processLobbyInfo(Packet packet) {
-        //If race has not started, yet - ignore.
-        if(packet.getHeader().getSessionUid() != BigInteger.ZERO) {
-            PacketLobbyInfoData lobbyInfoDataPacket = (PacketLobbyInfoData) packet;
-            raceSession.setLobby(lobbyInfoDataPacket.getLobbyInfoData());
-        }else{
-            LOGGER.debug("Players are in the lobby.. Waiting for session to start.");
-        }
+        //This is only sent while in the lobby - not session ID yet..
+        LOGGER.debug("Players are in the lobby.. Waiting for session to start.");
     }
 
     private void processLapData(Packet packet) {
@@ -196,13 +191,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processCarSetups(Packet packet) {
-        //TODO: What to do with blank ones?
         PacketCarSetupData carSetupDataPacket = (PacketCarSetupData) packet;
-
         //Set car setup for each player.
         for(int i = 0; i<raceSession.getPlayers().size(); i++){
             CarSetupData carSetupData = carSetupDataPacket.getCarSetupData().get(i);
-            raceSession.getPlayers().get(i).setCarSetup(carSetupData);
+            if(!carSetupData.isBlank()) {
+                raceSession.getPlayers().get(i).setCarSetup(carSetupData);
+            }
         }
     }
 

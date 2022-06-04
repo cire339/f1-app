@@ -33,8 +33,6 @@ public class RaceSession {
     @JsonProperty
     private boolean raceEnded = false;
     @JsonProperty
-    private List<LobbyInfoData> lobby = new ArrayList<>();
-    @JsonProperty
     private List<Player> players = new ArrayList<>();
 
     public RaceSession(){
@@ -109,14 +107,6 @@ public class RaceSession {
         this.raceEnded = raceEnded;
     }
 
-    public List<LobbyInfoData> getLobby() {
-        return lobby;
-    }
-
-    public void setLobby(List<LobbyInfoData> lobby) {
-        this.lobby = lobby;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
@@ -136,7 +126,6 @@ public class RaceSession {
                 ", fastestSpeed=" + fastestSpeed +
                 ", raceStarted=" + raceStarted +
                 ", raceEnded=" + raceEnded +
-                ", lobby=" + lobby +
                 ", players=" + players +
                 '}';
     }
