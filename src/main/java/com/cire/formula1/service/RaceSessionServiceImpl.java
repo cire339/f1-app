@@ -1,5 +1,6 @@
 package com.cire.formula1.service;
 
+import com.cire.formula1.database.FormulaOneDao;
 import com.cire.formula1.model.RaceSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +16,28 @@ public class RaceSessionServiceImpl implements RaceSessionService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RaceSessionServiceImpl.class);
 
+    private final FormulaOneDao formulaOneDao;
+
     Map<BigInteger, RaceSession> raceSessions = new HashMap<>();
+
+    public RaceSessionServiceImpl(FormulaOneDao formulaOneDao) {
+        this.formulaOneDao = formulaOneDao;
+    }
 
     @Override
     public synchronized RaceSession createRaceSession(BigInteger sessionUid) {
         if(raceSessions.containsKey(sessionUid)){
             LOGGER.info("RaceSession with UID=" + sessionUid + " already exists.");
         }else{
-            //Create new session and add it to the array.
+            //Create new session and add it to the array. This will go away at some point..
             RaceSession raceSession = new RaceSession();
             raceSession.setSessionUid(sessionUid);
             raceSessions.put(sessionUid, raceSession);
+
+            //Save session to DB.
+            LOGGER.info("Creating session in database..");
+            formulaOneDao.createRaceSession(raceSession);
+            LOGGER.info("Session created successfully!");
         }
         return raceSessions.get(sessionUid);
     }

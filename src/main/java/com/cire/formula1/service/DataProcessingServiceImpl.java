@@ -1,5 +1,7 @@
 package com.cire.formula1.service;
 
+import com.cire.formula1.database.FormulaOneDao;
+import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.Player;
 import com.cire.formula1.model.RaceSession;
 import com.cire.formula1.packet.model.*;
@@ -21,12 +23,14 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private final static Logger LOGGER = LoggerFactory.getLogger(DataProcessingServiceImpl.class);
 
     private final RaceSessionService raceSessionService;
+    private final FormulaOneDao formulaOneDao;
 
     private RaceSession raceSession = null;
 
     @Autowired
-    public DataProcessingServiceImpl(RaceSessionService raceSessionService) {
+    public DataProcessingServiceImpl(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao) {
         this.raceSessionService = raceSessionService;
+        this.formulaOneDao = formulaOneDao;
     }
 
     @Override
@@ -68,6 +72,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processParticipants(Packet packet) {
+        //TODO: Does the number change if a player quits?
         PacketParticipantsData participantsDataPacket = (PacketParticipantsData) packet;
         List<Player> players = new ArrayList<>();
         for(ParticipantData participantData: participantsDataPacket.getParticipants()){
@@ -103,6 +108,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         LOGGER.info("Fastest lap: " + raceSession.getFastestLap().getLapTime() + " by " + getDriverName(raceSession.getFastestLap().getCarIndex()));
         LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
         LOGGER.info("Race Session Info: " + raceSession.toString());
+
     }
 
     private void processEvent(Packet packet) {

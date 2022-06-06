@@ -21,9 +21,7 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
 
     @Override
     public RaceSessionEntity createRaceSession(RaceSession session) {
-        RaceSessionEntity sessionEntity = new RaceSessionEntity();
-        sessionEntity.setSessionUid(String.valueOf(session.getSessionUid()));
-        return raceSessionRepo.save(sessionEntity);
+        return raceSessionRepo.save(new RaceSessionEntity(session));
     }
 
     @Override
