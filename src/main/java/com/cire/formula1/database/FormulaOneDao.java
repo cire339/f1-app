@@ -12,4 +12,6 @@ public interface FormulaOneDao {
 
     Optional<RaceSessionEntity> getRaceSessionByUid(BigInteger sessionUid);
 
+    void deleteRaceSession(RaceSessionEntity sessionUid);
+
 }

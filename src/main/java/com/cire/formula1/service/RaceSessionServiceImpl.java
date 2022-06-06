@@ -29,13 +29,13 @@ public class RaceSessionServiceImpl implements RaceSessionService {
         if(raceSessions.containsKey(sessionUid)){
             LOGGER.info("RaceSession with UID=" + sessionUid + " already exists.");
         }else{
-            //Create new session and add it to the array. This will go away at some point..
+            //Create new session and add it to the array. This will go away at some point.
             RaceSession raceSession = new RaceSession();
             raceSession.setSessionUid(sessionUid);
             raceSessions.put(sessionUid, raceSession);
 
             //Save session to DB.
-            LOGGER.info("Creating session in database..");
+            LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
             formulaOneDao.createRaceSession(raceSession);
             LOGGER.info("Session created successfully!");
         }

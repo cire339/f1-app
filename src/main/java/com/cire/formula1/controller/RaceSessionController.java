@@ -72,4 +72,14 @@ public class RaceSessionController {
         return new ResponseEntity<>(new RaceSession(raceSession.get()), HttpStatus.OK);
     }
 
+    @DeleteMapping(value = {"/db/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> deleteSessionFromDb(@PathVariable BigInteger sessionUid) {
+
+        Optional<RaceSessionEntity> session = formulaOneDao.getRaceSessionByUid(sessionUid);
+        if(session.isPresent()) {
+            formulaOneDao.deleteRaceSession(session.get());
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.cire.formula1.database.FormulaOneDao;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.Player;
 import com.cire.formula1.model.RaceSession;
+import com.cire.formula1.model.SessionHistoryData;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import com.cire.formula1.packet.model.data.*;
@@ -63,7 +64,11 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private void processSessionHistory(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
-        LOGGER.debug("This is a session history packet!");
+        //For now, I will only use the final one sent after the session has ended.
+        if(raceSession.isRaceEnded()){
+            PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
+            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistoryData(new SessionHistoryData(data));
+        }
     }
 
     private void processSession(Packet packet) {
@@ -72,13 +77,10 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processParticipants(Packet packet) {
-        //TODO: Does the number change if a player quits?
-        PacketParticipantsData participantsDataPacket = (PacketParticipantsData) packet;
-        List<Player> players = new ArrayList<>();
-        for(ParticipantData participantData: participantsDataPacket.getParticipants()){
-            players.add(new Player(participantData));
-        }
-        raceSession.setPlayers(players);
+        //TODO: Number changes if a player quits (retires). How should I handle this data?
+        //TODO: Data that evolves over time. How to handle this?
+        LOGGER.debug("This is a participant data packet!");
+        //PacketParticipantsData participantsDataPacket = (PacketParticipantsData) packet;
     }
 
     private void processMotion(Packet packet) {
@@ -100,15 +102,16 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketFinalClassificationData finalClassificationDataPacket = (PacketFinalClassificationData) packet;
 
         //Set final classification for each player.
-        for(int i = 0; i<raceSession.getPlayers().size(); i++){
+        for(int i = 0; i<finalClassificationDataPacket.getNumCars(); i++){
             FinalClassificationData classificationData = finalClassificationDataPacket.getFinalClassificationData().get(i);
             raceSession.getPlayers().get(i).setClassificationDetails(classificationData);
         }
 
-        LOGGER.info("Fastest lap: " + raceSession.getFastestLap().getLapTime() + " by " + getDriverName(raceSession.getFastestLap().getCarIndex()));
-        LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
+        if(raceSession.getFastestLap() != null) {
+            LOGGER.info("Fastest lap: " + raceSession.getFastestLap().getLapTime() + " by Player " + raceSession.getFastestLap().getCarIndex());
+        }
+        LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by Player " + raceSession.getFastestSpeedCarIndex());
         LOGGER.info("Race Session Info: " + raceSession.toString());
-
     }
 
     private void processEvent(Packet packet) {
@@ -124,8 +127,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 raceSession.setRaceEnded(true);
                 break;
             case FASTEST_LAP:
-                LOGGER.info("New Fastest lap by " +
-                        getDriverName(eventDataPacket.getEventDataDetails().getFastestLap().getCarIndex()) +
+                LOGGER.info("New Fastest lap by Player " +
+                        eventDataPacket.getEventDataDetails().getFastestLap().getCarIndex() +
                         " with a lap time of: " +
                         eventDataPacket.getEventDataDetails().getFastestLap().getLapTime());
                 if(raceSession != null){
@@ -133,12 +136,14 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 }
                 break;
             case RETIREMENT:
-                LOGGER.info("Retirement triggered for player: " +
-                        getDriverName(eventDataPacket.getEventDataDetails().getRetirement().getCarIndex()));
+                LOGGER.info("Retirement triggered for Player " +
+                        eventDataPacket.getEventDataDetails().getRetirement().getCarIndex());
                 break;
             case DRS_ENABLED:
+                LOGGER.info("DRS is now enabled.");
                 break;
             case DRS_DISABLED:
+                LOGGER.info("DRS is now disabled.");
                 break;
             case TEAM_MATE_IN_PITS:
                 break;
@@ -146,20 +151,20 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 break;
             case RACE_WINNER:
                 RaceWinner raceWinner = eventDataPacket.getEventDataDetails().getRaceWinner();
-                LOGGER.info("Race winner is " + getDriverName(raceWinner.getCarIndex()));
+                LOGGER.info("Race winner is Player " + raceWinner.getCarIndex());
                 raceSession.setRaceWinnerCarIndex(raceWinner.getCarIndex());
                 break;
             case PENALTY_ISSUED:
                 Penalty penalty = eventDataPacket.getEventDataDetails().getPenalty();
-                LOGGER.info("Penalty issued for " + getDriverName(penalty.getCarIndex()) + ": " + penalty.getInfringementType().name() + " " + penalty.getPenaltyType().name());
+                LOGGER.info("Penalty issued for Player " + penalty.getCarIndex() + ": " + penalty.getInfringementType().name() + " " + penalty.getPenaltyType().name());
                 //Add penalty to the player.
                 raceSession.getPlayers().get(penalty.getCarIndex()).getPenalties().add(penalty);
                 break;
             case SPEED_TRAP_TRIGGERED:
                 //Set highest speed
                 if(eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed() > raceSession.getFastestSpeed()){
-                    LOGGER.info("New speed trap highest speed " +
-                            getDriverName(eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex()) +
+                    LOGGER.info("New speed trap highest speed by Player " +
+                            eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex() +
                             " with a speed of " +
                             eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
                     raceSession.setFastestSpeed(eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
@@ -173,8 +178,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 raceSession.setRaceStarted(true);
                 break;
             case DRIVE_THROUGH_SERVED:
+                DriveThroughPenaltyServed dtPenServed = eventDataPacket.getEventDataDetails().getDriveThroughPenaltyServed();
+                LOGGER.info("Player " + dtPenServed.getCarIndex() + " has served his drive through penalty.");
                 break;
             case STOP_GO_SERVED:
+                StopGoPenaltyServed sgPenServed = eventDataPacket.getEventDataDetails().getStopGoPenaltyServed();
+                LOGGER.info("Player " + sgPenServed.getCarIndex() + " has served his stop go penalty.");
                 break;
             case FLASHBACK:
                 break;
@@ -209,21 +218,5 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private void processCarDamage(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a car damage packet!");
-    }
-
-    private String getDriverName(short carIndex){
-        if(raceSession != null &&
-                raceSession.getPlayers() != null &&
-                !raceSession.getPlayers().isEmpty() &&
-                raceSession.getPlayers().size() >= carIndex) {
-            String driverName = raceSession.getPlayers().get(carIndex).getPlayerInfo().getName();
-            if(driverName == null || driverName.equalsIgnoreCase("Player")){
-                //In multiplayer, the player names are hidden... TODO: Figure out a workaround.
-                return driverName + " " + carIndex;
-            }
-            return raceSession.getPlayers().get(carIndex).getPlayerInfo().getName();
-        }else{
-            return null;
-        }
     }
 }

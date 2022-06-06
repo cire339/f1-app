@@ -2,6 +2,7 @@ package com.cire.formula1.model;
 
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.packet.model.data.FastestLap;
+import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,10 +31,12 @@ public class RaceSession {
     @JsonProperty
     private boolean raceEnded = false;
     @JsonProperty
-    private List<Player> players = new ArrayList<>();
+    private List<Player> players = new ArrayList<>(PacketConstants.CARS);
 
     public RaceSession(){
-
+        for(int i=0;i<PacketConstants.CARS;i++){
+            this.players.add(new Player());
+        }
     }
 
     public RaceSession(RaceSessionEntity entity){

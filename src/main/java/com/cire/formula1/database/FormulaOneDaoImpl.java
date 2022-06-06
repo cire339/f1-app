@@ -26,6 +26,13 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
 
     @Override
     public Optional<RaceSessionEntity> getRaceSessionByUid(BigInteger sessionUid) {
-        return raceSessionRepo.findById(sessionUid.longValue());
+        return raceSessionRepo.findBySessionUid(sessionUid.toString());
     }
+
+    @Override
+    public void deleteRaceSession(RaceSessionEntity session) {
+        raceSessionRepo.delete(session);
+    }
+
+
 }

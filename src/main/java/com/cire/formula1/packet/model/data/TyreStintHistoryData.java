@@ -41,7 +41,7 @@ public class TyreStintHistoryData {
 
     @Override
     public String toString() {
-        return "Retirement[endLap=" + this.endLap +
+        return "TyreStintHistoryData[endLap=" + this.endLap +
                 "tyreActualCompound=" + this.tyreActualCompound +
                 "tyreVisualCompound=" + this.tyreVisualCompound +
                 "]";

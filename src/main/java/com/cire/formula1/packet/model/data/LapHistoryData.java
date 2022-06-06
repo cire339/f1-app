@@ -67,7 +67,7 @@ public class LapHistoryData {
 
     @Override
     public String toString() {
-        return "Retirement[lapTimeInMS=" + this.lapTimeInMS +
+        return "LapHistoryData[lapTimeInMS=" + this.lapTimeInMS +
                 ",sector1TimeInMS=" + this.sector1TimeInMS +
                 ",sector2TimeInMS=" + this.sector2TimeInMS +
                 ",sector3TimeInMS=" + this.sector3TimeInMS +

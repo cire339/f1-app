@@ -3,6 +3,7 @@ package com.cire.formula1.database.entity;
 import com.cire.formula1.model.RaceSession;
 import jakarta.persistence.*;
 
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +19,10 @@ public class RaceSessionEntity {
 
     public RaceSessionEntity(RaceSession raceSession){
         this.sessionUid = String.valueOf(raceSession.getSessionUid());
+    }
+
+    public RaceSessionEntity(BigInteger sessionUid) {
+        this.sessionUid = String.valueOf(sessionUid);
     }
 
     public RaceSessionEntity() {

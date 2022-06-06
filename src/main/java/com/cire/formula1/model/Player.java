@@ -1,10 +1,9 @@
 package com.cire.formula1.model;
 
+import com.cire.formula1.packet.model.PacketSessionHistoryData;
 import com.cire.formula1.packet.model.data.CarSetupData;
 import com.cire.formula1.packet.model.data.FinalClassificationData;
-import com.cire.formula1.packet.model.data.ParticipantData;
 import com.cire.formula1.packet.model.data.Penalty;
-import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,25 +14,13 @@ import java.util.List;
 public class Player {
 
     @JsonProperty
-    private ParticipantData playerInfo;
-    @JsonProperty
     private CarSetupData carSetup;
     @JsonProperty
     private List<Penalty> penalties = new ArrayList<>();
     @JsonProperty
     private FinalClassificationData classificationDetails;
-
-    public Player(ParticipantData data){
-        this.playerInfo = data;
-    }
-
-    public ParticipantData getPlayerInfo() {
-        return playerInfo;
-    }
-
-    public void setPlayerInfo(ParticipantData playerInfo) {
-        this.playerInfo = playerInfo;
-    }
+    @JsonProperty
+    private SessionHistoryData sessionHistoryData;
 
     public CarSetupData getCarSetup() {
         return carSetup;
@@ -51,11 +38,29 @@ public class Player {
         this.penalties = penalties;
     }
 
+    public SessionHistoryData getSessionHistoryData() {
+        return sessionHistoryData;
+    }
+
+    public void setSessionHistoryData(SessionHistoryData sessionHistoryData) {
+        this.sessionHistoryData = sessionHistoryData;
+    }
+
     public FinalClassificationData getClassificationDetails() {
         return classificationDetails;
     }
 
     public void setClassificationDetails(FinalClassificationData classificationDetails) {
         this.classificationDetails = classificationDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "carSetup=" + carSetup +
+                ", penalties=" + penalties +
+                ", classificationDetails=" + classificationDetails +
+                ", sessionHistoryData=" + sessionHistoryData +
+                '}';
     }
 }
