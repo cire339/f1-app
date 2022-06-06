@@ -1,5 +1,6 @@
 package com.cire.formula1.database.entity;
 
+import com.cire.formula1.model.RaceSession;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -7,19 +8,27 @@ import java.util.Objects;
 @Entity
 @Table(name = "race_session", schema = "public", catalog = "FormulaOne")
 public class RaceSessionEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
     @Basic
     @Column(name = "session_uid")
     private String sessionUid;
 
-    public Long getId() {
+    public RaceSessionEntity(RaceSession raceSession){
+        this.sessionUid = String.valueOf(raceSession.getSessionUid());
+    }
+
+    public RaceSessionEntity() {
+
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
