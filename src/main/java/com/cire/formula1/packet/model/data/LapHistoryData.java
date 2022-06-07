@@ -1,5 +1,7 @@
 package com.cire.formula1.packet.model.data;
 
+import com.cire.formula1.database.entity.LapHistoryDataEntity;
+
 public class LapHistoryData {
 
     private long lapTimeInMS;
@@ -7,6 +9,18 @@ public class LapHistoryData {
     private int sector2TimeInMS;
     private int sector3TimeInMS;
     private short lapValidBitFlags;
+
+    public LapHistoryData(LapHistoryDataEntity lapHistoryDataEntity) {
+        this.lapTimeInMS = lapHistoryDataEntity.getLapTime();
+        this.sector1TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector1Time());
+        this.sector2TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector2Time());
+        this.sector2TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector3Time());
+        this.lapValidBitFlags = lapHistoryDataEntity.getLapValidFlag().shortValue();
+    }
+
+    public LapHistoryData() {
+
+    }
 
     /**
      * @return Lap time in milliseconds

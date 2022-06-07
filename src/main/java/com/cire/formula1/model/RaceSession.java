@@ -1,5 +1,6 @@
 package com.cire.formula1.model;
 
+import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.packet.model.data.FastestLap;
 import com.cire.formula1.packet.util.PacketConstants;
@@ -41,6 +42,11 @@ public class RaceSession {
 
     public RaceSession(RaceSessionEntity entity){
         this.sessionUid = new BigInteger(entity.getSessionUid());
+        this.players = new ArrayList<>();
+        for(PlayerEntity playerEntity: entity.getPlayers()){
+            Player player = new Player(playerEntity);
+            this.players.add(player);
+        }
     }
 
     public BigInteger getSessionUid() {

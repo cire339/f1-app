@@ -33,11 +33,6 @@ public class RaceSessionServiceImpl implements RaceSessionService {
             RaceSession raceSession = new RaceSession();
             raceSession.setSessionUid(sessionUid);
             raceSessions.put(sessionUid, raceSession);
-
-            //Save session to DB.
-            LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
-            formulaOneDao.createRaceSession(raceSession);
-            LOGGER.info("Session created successfully!");
         }
         return raceSessions.get(sessionUid);
     }

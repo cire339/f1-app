@@ -1,5 +1,7 @@
 package com.cire.formula1.model;
 
+import com.cire.formula1.database.entity.LapHistoryDataEntity;
+import com.cire.formula1.database.entity.SessionHistoryDataEntity;
 import com.cire.formula1.packet.model.PacketSessionHistoryData;
 import com.cire.formula1.packet.model.data.LapHistoryData;
 import com.cire.formula1.packet.model.data.TyreStintHistoryData;
@@ -17,6 +19,12 @@ public class SessionHistoryData {
     private short bestSector2LapNum;
     private short bestSector3LapNum;
 
+    @JsonIgnore
+    private List<LapHistoryData> lapHistoryData = new ArrayList<>(PacketConstants.LAPS);
+
+    @JsonIgnore
+    private List<TyreStintHistoryData> tyreStintHistoryData = new ArrayList<>(PacketConstants.TYRE_STINTS);
+
     public SessionHistoryData(PacketSessionHistoryData data){
         this.numLaps = data.getNumLaps();
         this.numTyreStints = data.getNumTyreStints();
@@ -28,11 +36,22 @@ public class SessionHistoryData {
         this.tyreStintHistoryData = data.getTyreStintHistoryData();
     }
 
-    @JsonIgnore
-    private List<LapHistoryData> lapHistoryData = new ArrayList<>(PacketConstants.LAPS);
+    public SessionHistoryData() {
 
-    @JsonIgnore
-    private List<TyreStintHistoryData> tyreStintHistoryData = new ArrayList<>(PacketConstants.TYRE_STINTS);
+    }
+
+    public SessionHistoryData(SessionHistoryDataEntity sessionHistoryData) {
+        this.numLaps = sessionHistoryData.getNumberLaps().shortValue();
+        this.numTyreStints = sessionHistoryData.getNumberTyreStints().shortValue();
+        this.bestLapTimeLapNum = sessionHistoryData.getBestLapTimeLapNumber().shortValue();
+        this.bestSector1LapNum = sessionHistoryData.getBestSector1LapNumber().shortValue();
+        this.bestSector2LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
+        this.bestSector3LapNum = sessionHistoryData.getBestSector3LapNumber().shortValue();
+        this.lapHistoryData = new ArrayList<>();
+        for(LapHistoryDataEntity lapHistoryDataEntity: sessionHistoryData.getLapHistoryData()){
+            this.lapHistoryData.add(new LapHistoryData(lapHistoryDataEntity));
+        }
+    }
 
     public short getNumLaps() {
         return numLaps;

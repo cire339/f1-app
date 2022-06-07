@@ -1,6 +1,6 @@
 package com.cire.formula1.model;
 
-import com.cire.formula1.packet.model.PacketSessionHistoryData;
+import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.packet.model.data.CarSetupData;
 import com.cire.formula1.packet.model.data.FinalClassificationData;
 import com.cire.formula1.packet.model.data.Penalty;
@@ -21,6 +21,14 @@ public class Player {
     private FinalClassificationData classificationDetails;
     @JsonProperty
     private SessionHistoryData sessionHistoryData;
+
+    public Player(PlayerEntity playerEntity) {
+        this.sessionHistoryData = new SessionHistoryData(playerEntity.getSessionHistoryData());
+    }
+
+    public Player() {
+
+    }
 
     public CarSetupData getCarSetup() {
         return carSetup;

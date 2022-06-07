@@ -64,10 +64,15 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private void processSessionHistory(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
-        //For now, I will only use the final one sent after the session has ended.
+        //One final Session History packet is sent at the very end after the Final Classification packet is sent.
         if(raceSession.isRaceEnded()){
             PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
             raceSession.getPlayers().get(data.getCarIdx()).setSessionHistoryData(new SessionHistoryData(data));
+
+            //Save session to DB.
+            LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
+            formulaOneDao.createRaceSession(raceSession);
+            LOGGER.info("Session created successfully!");
         }
     }
 
