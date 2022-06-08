@@ -14,6 +14,8 @@ import java.util.List;
 public class Player {
 
     @JsonProperty
+    private String playerName;
+    @JsonProperty
     private CarSetupData carSetup;
     @JsonProperty
     private List<Penalty> penalties = new ArrayList<>();
@@ -23,11 +25,20 @@ public class Player {
     private SessionHistoryData sessionHistoryData;
 
     public Player(PlayerEntity playerEntity) {
+        this.playerName = playerEntity.getPlayerName();
         this.sessionHistoryData = new SessionHistoryData(playerEntity.getSessionHistoryData());
     }
 
-    public Player() {
+    public Player(short carIndex) {
+        this.playerName = "Player " + carIndex;
+    }
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public CarSetupData getCarSetup() {
@@ -65,7 +76,8 @@ public class Player {
     @Override
     public String toString() {
         return "Player{" +
-                "carSetup=" + carSetup +
+                "playerName='" + playerName + '\'' +
+                ", carSetup=" + carSetup +
                 ", penalties=" + penalties +
                 ", classificationDetails=" + classificationDetails +
                 ", sessionHistoryData=" + sessionHistoryData +

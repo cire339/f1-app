@@ -22,6 +22,9 @@ public class PlayerEntity {
     @Column(name = "race_session_id", nullable = false, insertable = false, updatable = false)
     private Integer raceSessionId;
 
+    @Column(name = "player_name")
+    private String playerName;
+
     @JsonBackReference("raceSession")
     @ManyToOne
     @JoinColumn(name = "race_session_id", referencedColumnName = "id")
@@ -32,6 +35,7 @@ public class PlayerEntity {
     private SessionHistoryDataEntity sessionHistoryData;
 
     public PlayerEntity(Player player){
+        this.playerName = player.getPlayerName();
         SessionHistoryDataEntity shde = new SessionHistoryDataEntity(player.getSessionHistoryData());
         shde.setPlayer(this);
         this.sessionHistoryData = shde;
@@ -55,6 +59,14 @@ public class PlayerEntity {
 
     public void setRaceSessionId(Integer raceSessionId) {
         this.raceSessionId = raceSessionId;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     @Override

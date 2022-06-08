@@ -36,16 +36,18 @@ public class RaceSession {
 
     public RaceSession(){
         for(int i=0;i<PacketConstants.CARS;i++){
-            this.players.add(new Player());
+            this.players.add(new Player((short) i));
         }
     }
 
     public RaceSession(RaceSessionEntity entity){
         this.sessionUid = new BigInteger(entity.getSessionUid());
         this.players = new ArrayList<>();
-        for(PlayerEntity playerEntity: entity.getPlayers()){
-            Player player = new Player(playerEntity);
-            this.players.add(player);
+        if(entity.getPlayers() != null) {
+            for (PlayerEntity playerEntity : entity.getPlayers()) {
+                Player player = new Player(playerEntity);
+                this.players.add(player);
+            }
         }
     }
 

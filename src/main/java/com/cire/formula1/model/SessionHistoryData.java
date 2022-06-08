@@ -40,16 +40,31 @@ public class SessionHistoryData {
 
     }
 
+
     public SessionHistoryData(SessionHistoryDataEntity sessionHistoryData) {
-        this.numLaps = sessionHistoryData.getNumberLaps().shortValue();
-        this.numTyreStints = sessionHistoryData.getNumberTyreStints().shortValue();
-        this.bestLapTimeLapNum = sessionHistoryData.getBestLapTimeLapNumber().shortValue();
-        this.bestSector1LapNum = sessionHistoryData.getBestSector1LapNumber().shortValue();
-        this.bestSector2LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
-        this.bestSector3LapNum = sessionHistoryData.getBestSector3LapNumber().shortValue();
-        this.lapHistoryData = new ArrayList<>();
-        for(LapHistoryDataEntity lapHistoryDataEntity: sessionHistoryData.getLapHistoryData()){
-            this.lapHistoryData.add(new LapHistoryData(lapHistoryDataEntity));
+        if(sessionHistoryData.getNumberLaps() != null) {
+            this.numLaps = sessionHistoryData.getNumberLaps().shortValue();
+        }
+        if(sessionHistoryData.getNumberTyreStints() != null) {
+            this.numTyreStints = sessionHistoryData.getNumberTyreStints() != null ? sessionHistoryData.getNumberTyreStints().shortValue() : null;
+        }
+        if(sessionHistoryData.getBestLapTimeLapNumber() != null){
+            this.bestLapTimeLapNum = sessionHistoryData.getBestLapTimeLapNumber().shortValue();
+        }
+        if(sessionHistoryData.getBestSector1LapNumber() != null){
+            sessionHistoryData.getBestSector1LapNumber().shortValue();
+        }
+        if(sessionHistoryData.getBestSector2LapNumber() != null){
+            sessionHistoryData.getBestSector2LapNumber().shortValue();
+        }
+        if(sessionHistoryData.getBestSector3LapNumber() != null){
+            sessionHistoryData.getBestSector2LapNumber().shortValue();
+        }
+        if(sessionHistoryData.getLapHistoryData() != null) {
+            this.lapHistoryData = new ArrayList<>();
+            for (LapHistoryDataEntity lapHistoryDataEntity : sessionHistoryData.getLapHistoryData()) {
+                this.lapHistoryData.add(new LapHistoryData(lapHistoryDataEntity));
+            }
         }
     }
 

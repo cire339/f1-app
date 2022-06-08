@@ -24,22 +24,22 @@ public class SessionHistoryDataEntity {
     @Column(name = "player_id", nullable = false, insertable = false, updatable = false)
     private Integer playerId;
 
-    @Column(name = "number_laps", nullable = true)
+    @Column(name = "number_laps")
     private Integer numberLaps;
 
-    @Column(name = "number_tyre_stints", nullable = true)
+    @Column(name = "number_tyre_stints")
     private Integer numberTyreStints;
 
-    @Column(name = "best_lap_time_lap_number", nullable = true)
+    @Column(name = "best_lap_time_lap_number")
     private Integer bestLapTimeLapNumber;
 
-    @Column(name = "best_sector_1_lap_number", nullable = true)
+    @Column(name = "best_sector_1_lap_number")
     private Integer bestSector1LapNumber;
 
-    @Column(name = "best_sector_2_lap_number", nullable = true)
+    @Column(name = "best_sector_2_lap_number")
     private Integer bestSector2LapNumber;
 
-    @Column(name = "best_sector_3_lap_number", nullable = true)
+    @Column(name = "best_sector_3_lap_number")
     private Integer bestSector3LapNumber;
 
     @JsonManagedReference
@@ -52,17 +52,21 @@ public class SessionHistoryDataEntity {
     private PlayerEntity player;
 
     public SessionHistoryDataEntity(SessionHistoryData data){
-        this.numberLaps = (int) data.getNumLaps();
-        this.numberTyreStints = (int) data.getNumTyreStints();
-        this.bestLapTimeLapNumber = (int) data.getBestLapTimeLapNum();
-        this.bestSector1LapNumber = (int) data.getBestSector1LapNum();
-        this.bestSector2LapNumber = (int) data.getBestSector2LapNum();
-        this.bestSector3LapNumber = (int) data.getBestSector3LapNum();
-        this.lapHistoryData = new ArrayList<>();
-        for(LapHistoryData lapHistoryData: data.getLapHistoryData()){
-            LapHistoryDataEntity lapHistoryDataEntity = new LapHistoryDataEntity(lapHistoryData);
-            lapHistoryDataEntity.setSessionHistoryData(this);
-            this.lapHistoryData.add(lapHistoryDataEntity);
+        if(data != null) {
+            this.numberLaps = (int) data.getNumLaps();
+            this.numberTyreStints = (int) data.getNumTyreStints();
+            this.bestLapTimeLapNumber = (int) data.getBestLapTimeLapNum();
+            this.bestSector1LapNumber = (int) data.getBestSector1LapNum();
+            this.bestSector2LapNumber = (int) data.getBestSector2LapNum();
+            this.bestSector3LapNumber = (int) data.getBestSector3LapNum();
+            if(data.getLapHistoryData() != null) {
+                this.lapHistoryData = new ArrayList<>();
+                for (LapHistoryData lapHistoryData : data.getLapHistoryData()) {
+                    LapHistoryDataEntity lapHistoryDataEntity = new LapHistoryDataEntity(lapHistoryData);
+                    lapHistoryDataEntity.setSessionHistoryData(this);
+                    this.lapHistoryData.add(lapHistoryDataEntity);
+                }
+            }
         }
 
     }

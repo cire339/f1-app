@@ -20,19 +20,19 @@ public class LapHistoryDataEntity {
     @Column(name = "session_history_data_id", nullable = false, insertable = false, updatable = false)
     private Integer sessionHistoryDataId;
 
-    @Column(name = "lap_time", nullable = true)
+    @Column(name = "lap_time")
     private Long lapTime;
 
-    @Column(name = "sector_1_time", nullable = true)
+    @Column(name = "sector_1_time")
     private Long sector1Time;
 
-    @Column(name = "sector_2_time", nullable = true)
+    @Column(name = "sector_2_time")
     private Long sector2Time;
 
-    @Column(name = "sector_3_time", nullable = true)
+    @Column(name = "sector_3_time")
     private Long sector3Time;
 
-    @Column(name = "lap_valid_flag", nullable = true)
+    @Column(name = "lap_valid_flag")
     private Integer lapValidFlag;
 
     @JsonBackReference("sessionHistoryData")
