@@ -33,7 +33,7 @@ public class PacketLapData extends Packet {
         sb.append(super.toString());
         sb.append(",lapData=");
         for (LapData l : lapData) {
-            sb.append(l.toString() + ",");
+            sb.append(l.toString()).append(",");
         }
         sb.replace(sb.length() - 1, sb.length() - 1, "]");
         return sb.toString();

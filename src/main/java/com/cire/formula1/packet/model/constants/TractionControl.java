@@ -12,7 +12,7 @@ public enum TractionControl {
     MEDIUM(1),
     HIGH(2);
 
-    private static Map<Integer, TractionControl> map = new HashMap<>();
+    private static final Map<Integer, TractionControl> map = new HashMap<>();
 
     static {
         for (TractionControl tractionControl : TractionControl.values()) {
@@ -20,7 +20,7 @@ public enum TractionControl {
         }
     }
 
-    private int value;
+    private final int value;
     
     TractionControl(int value) {
         this.value = value;

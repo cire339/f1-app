@@ -3,19 +3,20 @@ package com.cire.formula1.database;
 import com.cire.formula1.database.entity.LapHistoryDataEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
-import com.cire.formula1.database.entity.SessionHistoryDataEntity;
 import com.cire.formula1.database.repository.RaceSessionEntityRepository;
 import com.cire.formula1.model.RaceSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class FormulaOneDaoImpl implements FormulaOneDao {
 
-    private RaceSessionEntityRepository raceSessionRepo;
+    private final RaceSessionEntityRepository raceSessionRepo;
 
     @Autowired
     public FormulaOneDaoImpl(RaceSessionEntityRepository raceSessionRepo) {
@@ -47,6 +48,14 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     @Override
     public Optional<RaceSessionEntity> getRaceSessionByUid(BigInteger sessionUid) {
         return raceSessionRepo.findBySessionUid(sessionUid.toString());
+    }
+
+    @Override
+    public List<BigInteger> getAllRaceSessions() {
+        Iterable<RaceSessionEntity> sessions =  raceSessionRepo.findAll();
+        List<BigInteger> sessionUidList = new ArrayList<>();
+        sessions.forEach(session -> sessionUidList.add(new BigInteger(session.getSessionUid())));
+        return sessionUidList;
     }
 
     @Override

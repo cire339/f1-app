@@ -33,7 +33,7 @@ public enum PacketId {
     // Lap and tyre data for session
     SESSION_HISTORY(11);
 
-    private static Map<Integer, PacketId> map = new HashMap<>();
+    private static final Map<Integer, PacketId> map = new HashMap<>();
 
     static {
         for (PacketId packetId : PacketId.values()) {
@@ -41,9 +41,9 @@ public enum PacketId {
         }
     }
 
-    private int value;
+    private final int value;
     
-    private PacketId(int value) {
+    PacketId(int value) {
         this.value = value;
     }
 

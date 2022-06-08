@@ -61,7 +61,7 @@ public enum InfringementType {
     ILLEGAL_TIME_GAIN(50),
     MANDATORY_PITSTOP(51);
     
-    private static Map<Integer, InfringementType> map = new HashMap<>();
+    private static final Map<Integer, InfringementType> map = new HashMap<>();
 
     static {
         for (InfringementType infringementType : InfringementType.values()) {
@@ -69,7 +69,7 @@ public enum InfringementType {
         }
     }
 
-    private int value;
+    private final int value;
     
     InfringementType(int value) {
         this.value = value;

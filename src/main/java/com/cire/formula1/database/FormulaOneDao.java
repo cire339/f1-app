@@ -4,6 +4,7 @@ import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.RaceSession;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 public interface FormulaOneDao {
@@ -11,6 +12,8 @@ public interface FormulaOneDao {
     RaceSessionEntity createRaceSession(RaceSession session);
 
     Optional<RaceSessionEntity> getRaceSessionByUid(BigInteger sessionUid);
+
+    List<BigInteger> getAllRaceSessions();
 
     void deleteRaceSession(RaceSessionEntity sessionUid);
 

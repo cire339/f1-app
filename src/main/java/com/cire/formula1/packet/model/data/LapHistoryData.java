@@ -12,10 +12,18 @@ public class LapHistoryData {
 
     public LapHistoryData(LapHistoryDataEntity lapHistoryDataEntity) {
         this.lapTimeInMS = lapHistoryDataEntity.getLapTime();
-        this.sector1TimeInMS = lapHistoryDataEntity.getSector1Time() != null ? Math.toIntExact(lapHistoryDataEntity.getSector1Time()) : null;
-        this.sector2TimeInMS = lapHistoryDataEntity.getSector2Time() != null ? Math.toIntExact(lapHistoryDataEntity.getSector2Time()) : null;
-        this.sector2TimeInMS = lapHistoryDataEntity.getSector3Time() != null ? Math.toIntExact(lapHistoryDataEntity.getSector3Time()) : null;
-        this.lapValidBitFlags = lapHistoryDataEntity.getLapValidFlag() != null ? lapHistoryDataEntity.getLapValidFlag().shortValue() : null;
+        if(lapHistoryDataEntity.getSector1Time() != null){
+            this.sector1TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector1Time());
+        }
+        if(lapHistoryDataEntity.getSector2Time() != null){
+            this.sector2TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector2Time());
+        }
+        if(lapHistoryDataEntity.getSector3Time() != null){
+            this.sector3TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector3Time());
+        }
+        if(lapHistoryDataEntity.getLapValidFlag() != null){
+            this.lapValidBitFlags = lapHistoryDataEntity.getLapValidFlag().shortValue();
+        }
     }
 
     public LapHistoryData() {

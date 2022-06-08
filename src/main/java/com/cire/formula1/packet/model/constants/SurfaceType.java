@@ -22,7 +22,7 @@ public enum SurfaceType {
     METAL(10),
     RIDGED(11);
     
-    private static Map<Integer, SurfaceType> map = new HashMap<>();
+    private static final Map<Integer, SurfaceType> map = new HashMap<>();
 
     static {
         for (SurfaceType surfaceType : SurfaceType.values()) {
@@ -30,7 +30,7 @@ public enum SurfaceType {
         }
     }
 
-    private int value;
+    private final int value;
     
     SurfaceType(int value) {
         this.value = value;

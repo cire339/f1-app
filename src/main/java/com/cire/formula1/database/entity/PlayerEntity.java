@@ -1,7 +1,6 @@
 package com.cire.formula1.database.entity;
 
 import com.cire.formula1.model.Player;
-import com.cire.formula1.model.RaceSession;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

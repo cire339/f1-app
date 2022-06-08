@@ -33,7 +33,7 @@ public class PacketCarDamageData extends Packet {
         sb.append(super.toString());
         sb.append(",carDamageData=");
         for (CarDamageData c: carDamageData) {
-            sb.append(c.toString() + ",");
+            sb.append(c.toString()).append(",");
         }
         sb.replace(sb.length() - 1, sb.length() - 1, "]");
         return sb.toString();

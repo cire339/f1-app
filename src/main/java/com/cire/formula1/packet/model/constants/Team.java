@@ -68,7 +68,7 @@ public enum Team {
     JORDAN_1991(56);
     */
 
-    private static Map<Integer, Team> map = new HashMap<>();
+    private static final Map<Integer, Team> map = new HashMap<>();
 
     static {
         for (Team team : Team.values()) {
@@ -76,7 +76,7 @@ public enum Team {
         }
     }
 
-    private int value;
+    private final int value;
     
     Team(int value) {
         this.value = value;

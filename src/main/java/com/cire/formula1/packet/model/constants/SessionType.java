@@ -23,7 +23,7 @@ public enum SessionType {
     R3(12),
     TIME_TRIAL(13);
 
-    private static Map<Integer, SessionType> map = new HashMap<>();
+    private static final Map<Integer, SessionType> map = new HashMap<>();
 
     static {
         for (SessionType sessionType : SessionType.values()) {
@@ -31,7 +31,7 @@ public enum SessionType {
         }
     }
 
-    private int value;
+    private final int value;
     
     SessionType(int value) {
         this.value = value;

@@ -22,7 +22,7 @@ public enum VisualTyreCompound {
     F2_HARD(14),
     F2_WET(15);
 
-    private static Map<Integer, VisualTyreCompound> map = new HashMap<>();
+    private static final Map<Integer, VisualTyreCompound> map = new HashMap<>();
 
     static {
         for (VisualTyreCompound visualTyreCompound : VisualTyreCompound.values()) {
@@ -30,7 +30,7 @@ public enum VisualTyreCompound {
         }
     }
 
-    private int value;
+    private final int value;
 
     VisualTyreCompound(int value) {
         this.value = value;

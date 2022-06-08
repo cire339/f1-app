@@ -9,7 +9,7 @@ public enum SafetyCarStatus {
     FULL_SAFETY_CAR(1),
     VIRTUAL_SAFETY_CAR(2);
     
-    private static Map<Integer, SafetyCarStatus> map = new HashMap<>();
+    private static final Map<Integer, SafetyCarStatus> map = new HashMap<>();
 
     static {
         for (SafetyCarStatus safetyCarStatus : SafetyCarStatus.values()) {
@@ -17,7 +17,7 @@ public enum SafetyCarStatus {
         }
     }
 
-    private int value;
+    private final int value;
     
     SafetyCarStatus(int value) {
         this.value = value;

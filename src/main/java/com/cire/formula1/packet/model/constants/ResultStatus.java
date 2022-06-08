@@ -16,7 +16,7 @@ public enum ResultStatus {
     NOT_CLASSIFIED(5),
     RETIRED(6);
 
-    private static Map<Integer, ResultStatus> map = new HashMap<>();
+    private static final Map<Integer, ResultStatus> map = new HashMap<>();
 
     static {
         for (ResultStatus resultStatus : ResultStatus.values()) {
@@ -24,7 +24,7 @@ public enum ResultStatus {
         }
     }
 
-    private int value;
+    private final int value;
     
     ResultStatus(int value) {
         this.value = value;

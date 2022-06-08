@@ -14,7 +14,7 @@ public enum DriverStatus {
     OUT_LAP(3),
     ON_TRACK(4);
 
-    private static Map<Integer, DriverStatus> map = new HashMap<>();
+    private static final Map<Integer, DriverStatus> map = new HashMap<>();
 
     static {
         for (DriverStatus driverStatus : DriverStatus.values()) {
@@ -22,7 +22,7 @@ public enum DriverStatus {
         }
     }
 
-    private int value;
+    private final int value;
     
     DriverStatus(int value) {
         this.value = value;

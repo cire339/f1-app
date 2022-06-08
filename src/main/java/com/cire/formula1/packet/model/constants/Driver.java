@@ -91,7 +91,7 @@ public enum Driver {
     RALPH_BOSCHUNG(89),
     YUKI_TSUNODA(94);
 
-    private static Map<Integer, Driver> map = new HashMap<>();
+    private static final Map<Integer, Driver> map = new HashMap<>();
 
     static {
         for (Driver driver : Driver.values()) {
@@ -99,7 +99,7 @@ public enum Driver {
         }
     }
 
-    private int value;
+    private final int value;
     
     Driver(int value) {
         this.value = value;

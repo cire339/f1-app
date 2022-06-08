@@ -46,10 +46,10 @@ public class PacketFinalClassificationData extends Packet {
     public String toString() {
         StringBuilder sb = new StringBuilder("FinalClassification[");
         sb.append(super.toString());
-        sb.append("numCars=" + this.numCars);
+        sb.append("numCars=").append(this.numCars);
         sb.append(",finalClassificationData=");
         for (FinalClassificationData f : finalClassificationData) {
-            sb.append(f.toString() + ",");
+            sb.append(f.toString()).append(",");
         }
         sb.replace(sb.length() - 1, sb.length() - 1, "]");
         return  sb.toString();

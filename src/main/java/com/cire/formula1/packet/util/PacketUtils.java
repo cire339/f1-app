@@ -3,7 +3,6 @@ package com.cire.formula1.packet.util;
 import io.netty.buffer.ByteBuf;
 
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**

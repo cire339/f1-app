@@ -15,7 +15,7 @@ public enum MfdPanel {
     TEMPERATURES(4),
     MFD_CLOSED(255);
 
-    private static Map<Integer, MfdPanel> map = new HashMap<>();
+    private static final Map<Integer, MfdPanel> map = new HashMap<>();
 
     static {
         for (MfdPanel mfdPanel : MfdPanel.values()) {
@@ -23,7 +23,7 @@ public enum MfdPanel {
         }
     }
 
-    private int value;
+    private final int value;
     
     MfdPanel(int value) {
         this.value = value;

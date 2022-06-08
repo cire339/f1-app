@@ -44,7 +44,7 @@ public enum EventCode {
     BUTTON_STATUS("BUTN");
 
 
-    private static Map<String, EventCode> map = new HashMap<>();
+    private static final Map<String, EventCode> map = new HashMap<>();
 
     static {
         for (EventCode eventCode : EventCode.values()) {
@@ -52,7 +52,7 @@ public enum EventCode {
         }
     }
 
-    private String value;
+    private final String value;
     
     EventCode(String value) {
         this.value = value;

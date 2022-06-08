@@ -13,7 +13,7 @@ public enum ErsDeployMode {
     OVERTAKE(2),
     HOTLAP(3);
     
-    private static Map<Integer, ErsDeployMode> map = new HashMap<>();
+    private static final Map<Integer, ErsDeployMode> map = new HashMap<>();
 
     static {
         for (ErsDeployMode ersDeployMode : ErsDeployMode.values()) {
@@ -21,7 +21,7 @@ public enum ErsDeployMode {
         }
     }
 
-    private int value;
+    private final int value;
     
     ErsDeployMode(int value) {
         this.value = value;

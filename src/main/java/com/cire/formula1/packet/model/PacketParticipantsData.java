@@ -45,10 +45,10 @@ public class PacketParticipantsData extends Packet {
     public String toString() {
         StringBuilder sb = new StringBuilder("Participants[");
         sb.append(super.toString());
-        sb.append(",numActiveCars=" + this.numActiveCars);
+        sb.append(",numActiveCars=").append(this.numActiveCars);
         sb.append(",participants=");
         for (ParticipantData p : participants) {
-            sb.append(p.toString() + ",");
+            sb.append(p.toString()).append(",");
         }
         sb.replace(sb.length() - 1, sb.length() - 1, "]");
         return sb.toString();

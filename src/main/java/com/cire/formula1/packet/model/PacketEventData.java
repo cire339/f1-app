@@ -38,11 +38,9 @@ public class PacketEventData extends Packet {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Event[");
-        sb.append(super.toString());
-        sb.append(",eventStringCode=" +  this.eventCode);
-        sb.append(",eventDataDetails=" + this.eventDataDetails);
-        sb.append("]");
-        return sb.toString();
+        return "Event[" + super.toString() +
+                ",eventStringCode=" + this.eventCode +
+                ",eventDataDetails=" + this.eventDataDetails +
+                "]";
     }
 }

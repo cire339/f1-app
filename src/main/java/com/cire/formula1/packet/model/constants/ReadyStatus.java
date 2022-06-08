@@ -12,7 +12,7 @@ public enum ReadyStatus {
     READY(1),
     SPECTATING(2);
     
-    private static Map<Integer, ReadyStatus> map = new HashMap<>();
+    private static final Map<Integer, ReadyStatus> map = new HashMap<>();
 
     static {
         for (ReadyStatus readyStatus : ReadyStatus.values()) {
@@ -20,7 +20,7 @@ public enum ReadyStatus {
         }
     }
 
-    private int value;
+    private final int value;
     
     ReadyStatus(int value) {
         this.value = value;

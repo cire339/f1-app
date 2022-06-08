@@ -77,11 +77,11 @@ public class PacketCarTelemetryData extends Packet {
         sb.append(super.toString());
         sb.append(",carTelemetryData=");
         for (CarTelemetryData c : carTelemetryData) {
-            sb.append(c.toString() + ",");
+            sb.append(c.toString()).append(",");
         }
-        sb.append(",mfdPanelIndex=" + this.mfdPanelIndex);
-        sb.append(",mfdPanelIndexSecondaryPlayer=" + this.mfdPanelIndexSecondaryPlayer);
-        sb.append(",suggestedGear=" + this.suggestedGear);
+        sb.append(",mfdPanelIndex=").append(this.mfdPanelIndex);
+        sb.append(",mfdPanelIndexSecondaryPlayer=").append(this.mfdPanelIndexSecondaryPlayer);
+        sb.append(",suggestedGear=").append(this.suggestedGear);
         sb.append("]");
         return sb.toString();
     }

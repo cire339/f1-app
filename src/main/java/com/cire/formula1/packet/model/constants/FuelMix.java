@@ -13,7 +13,7 @@ public enum FuelMix {
     RICH(2),
     MAX(3);
     
-    private static Map<Integer, FuelMix> map = new HashMap<>();
+    private static final Map<Integer, FuelMix> map = new HashMap<>();
 
     static {
         for (FuelMix fuelMix : FuelMix.values()) {
@@ -21,7 +21,7 @@ public enum FuelMix {
         }
     }
 
-    private int value;
+    private final int value;
     
     FuelMix(int value) {
         this.value = value;

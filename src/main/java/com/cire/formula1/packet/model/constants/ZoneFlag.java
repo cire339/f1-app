@@ -15,7 +15,7 @@ public enum ZoneFlag {
     YELLOW(3),
     RED(4);
 
-    private static Map<Integer, ZoneFlag> map = new HashMap<>();
+    private static final Map<Integer, ZoneFlag> map = new HashMap<>();
 
     static {
         for (ZoneFlag zoneFlag : ZoneFlag.values()) {
@@ -23,7 +23,7 @@ public enum ZoneFlag {
         }
     }
 
-    private int value;
+    private final int value;
     
     ZoneFlag(int value) {
         this.value = value;

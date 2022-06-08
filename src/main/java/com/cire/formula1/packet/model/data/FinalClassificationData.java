@@ -18,8 +18,8 @@ public class FinalClassificationData {
     private short penaltiesTime;
     private short numPenalties;
     private short numTyreStints;
-    private short tyreStintsActual[] = new short[PacketConstants.TYRE_STINTS];
-    private short tyreStintsVisual[] = new short[PacketConstants.TYRE_STINTS];
+    private short[] tyreStintsActual = new short[PacketConstants.TYRE_STINTS];
+    private short[] tyreStintsVisual = new short[PacketConstants.TYRE_STINTS];
 
     /**
      * @return Finishing position

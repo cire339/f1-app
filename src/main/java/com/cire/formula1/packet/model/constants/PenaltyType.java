@@ -27,7 +27,7 @@ public enum PenaltyType {
     RETIRED(16),
     BLACK_FLAG_TIMER(17);
     
-    private static Map<Integer, PenaltyType> map = new HashMap<>();
+    private static final Map<Integer, PenaltyType> map = new HashMap<>();
 
     static {
         for (PenaltyType penaltyType : PenaltyType.values()) {
@@ -35,7 +35,7 @@ public enum PenaltyType {
         }
     }
 
-    private int value;
+    private final int value;
     
     PenaltyType(int value) {
         this.value = value;

@@ -12,7 +12,7 @@ public enum DrsAllowed {
     NOT_ALLOWED(0),
     ALLOWED(1);
 
-    private static Map<Integer, DrsAllowed> map = new HashMap<>();
+    private static final Map<Integer, DrsAllowed> map = new HashMap<>();
 
     static {
         for (DrsAllowed drsAllowed : DrsAllowed.values()) {
@@ -20,7 +20,7 @@ public enum DrsAllowed {
         }
     }
 
-    private int value;
+    private final int value;
     
     DrsAllowed(int value) {
         this.value = value;

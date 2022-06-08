@@ -7,7 +7,6 @@ import com.cire.formula1.model.RaceSession;
 import com.cire.formula1.model.RaceSessions;
 import com.cire.formula1.model.SessionHistoryData;
 import com.cire.formula1.packet.model.data.LapHistoryData;
-import com.cire.formula1.service.RaceSessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,35 +27,24 @@ public class RaceSessionController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RaceSessionController.class);
 
-    private final RaceSessionService raceSessionService;
-
     private final FormulaOneDao formulaOneDao;
 
     @Autowired
-    public RaceSessionController(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao) {
-        this.raceSessionService = raceSessionService;
+    public RaceSessionController(FormulaOneDao formulaOneDao) {
         this.formulaOneDao = formulaOneDao;
     }
 
     @GetMapping(produces = {APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllSessions() {
-        List<BigInteger> raceSessions = raceSessionService.getRaceAllSessions();
+        List<BigInteger> raceSessions = formulaOneDao.getAllRaceSessions();
         if(raceSessions.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(new RaceSessions(raceSessions), HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getSessionById(@PathVariable BigInteger sessionUid) {
-        RaceSession raceSession = raceSessionService.getRaceSessionByUid(sessionUid);
-        if(raceSession == null){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(raceSession, HttpStatus.OK);
-    }
-
-    @PostMapping(value = {"/db/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
+    /*
+    @PostMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
     public ResponseEntity<?> createSessionInDb(@PathVariable BigInteger sessionUid) {
         RaceSession raceSession = new RaceSession();
         raceSession.setSessionUid(sessionUid);
@@ -65,9 +53,10 @@ public class RaceSessionController {
 
         return new ResponseEntity<>(new RaceSession(raceSessionEntity), HttpStatus.OK);
     }
+    */
 
-    @GetMapping(value = {"/db/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getSessionByIdFromDb(@PathVariable BigInteger sessionUid) {
+    @GetMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getSessionById(@PathVariable BigInteger sessionUid) {
         Optional<RaceSessionEntity> raceSession = formulaOneDao.getRaceSessionByUid(sessionUid);
         if(raceSession.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -76,8 +65,9 @@ public class RaceSessionController {
         return new ResponseEntity<>(new RaceSession(raceSession.get()), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = {"/db/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> deleteSessionFromDb(@PathVariable BigInteger sessionUid) {
+    /*
+    @DeleteMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> deleteSession(@PathVariable BigInteger sessionUid) {
 
         Optional<RaceSessionEntity> session = formulaOneDao.getRaceSessionByUid(sessionUid);
         if(session.isPresent()) {
@@ -85,10 +75,11 @@ public class RaceSessionController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    */
 
     //TEST ENDPOINT - TODO: REMOVE
-    @PostMapping(value = {"/db/{sessionUid}/test"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> createTestSessionInDb(@PathVariable BigInteger sessionUid) {
+    @PostMapping(value = {"/{sessionUid}/test"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> createTestSession(@PathVariable BigInteger sessionUid) {
         RaceSession raceSession = new RaceSession();
         raceSession.setSessionUid(sessionUid);
         raceSession.setRaceStarted(true);
@@ -114,7 +105,7 @@ public class RaceSessionController {
         lapHistoryDataList.add(lapHistoryData);
 
         sessionHistoryData.setLapHistoryData(lapHistoryDataList);
-        player.setPlayerName("Eric");
+        player.setPlayerName("Test Player");
         player.setSessionHistoryData(sessionHistoryData);
         playerList.add(player);
         raceSession.setPlayers(playerList);

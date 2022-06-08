@@ -39,7 +39,7 @@ public enum Track {
     PORTIMAO(28),
     JEDDAH(29);
 
-    private static Map<Integer, Track> map = new HashMap<>();
+    private static final Map<Integer, Track> map = new HashMap<>();
 
     static {
         for (Track track : Track.values()) {
@@ -47,7 +47,7 @@ public enum Track {
         }
     }
 
-    private int value;
+    private final int value;
     
     Track(int value) {
         this.value = value;

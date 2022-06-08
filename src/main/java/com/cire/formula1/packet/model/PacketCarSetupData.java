@@ -15,7 +15,7 @@ import java.util.List;
  *
  * Frequency: 2 per second
  */
-public class PacketCarSetupData extends Packet { ;
+public class PacketCarSetupData extends Packet {
     
     private List<CarSetupData> carSetupData = new ArrayList<>(PacketConstants.CARS);
 
@@ -36,7 +36,7 @@ public class PacketCarSetupData extends Packet { ;
         sb.append(super.toString());
         sb.append(",carSetupData=");
         for (CarSetupData c: carSetupData) {
-            sb.append(c.toString() + ",");
+            sb.append(c.toString()).append(",");
         }
         sb.replace(sb.length() - 1, sb.length() - 1, "]");
         return sb.toString();

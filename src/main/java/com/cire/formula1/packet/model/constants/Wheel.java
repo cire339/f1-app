@@ -14,7 +14,7 @@ public enum Wheel {
     FRONT_LEFT(2),
     FRONT_RIGHT(3);
 
-    private static Map<Integer, Wheel> map = new HashMap<>();
+    private static final Map<Integer, Wheel> map = new HashMap<>();
 
     static {
         for (Wheel wheel : Wheel.values()) {
@@ -22,7 +22,7 @@ public enum Wheel {
         }
     }
 
-    private int value;
+    private final int value;
 
     Wheel(int value) {
         this.value = value;

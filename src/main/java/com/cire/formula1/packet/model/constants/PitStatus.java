@@ -12,7 +12,7 @@ public enum PitStatus {
     PITTING(1),
     IN_PIT_AREA(2);
 
-    private static Map<Integer, PitStatus> map = new HashMap<>();
+    private static final Map<Integer, PitStatus> map = new HashMap<>();
 
     static {
         for (PitStatus pitStatus : PitStatus.values()) {
@@ -20,7 +20,7 @@ public enum PitStatus {
         }
     }
 
-    private int value;
+    private final int value;
     
     PitStatus(int value) {
         this.value = value;

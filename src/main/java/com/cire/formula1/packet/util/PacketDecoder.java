@@ -315,12 +315,6 @@ public class PacketDecoder {
         packet.setHeader(header);
         packet.setEventCode(EventCode.valueFrom(PacketUtils.readString(packetBuffer, 4)));
         switch (packet.getEventCode()) {
-            case SESSION_STARTED:
-                //TODO: this
-                break;
-            case SESSION_ENDED:
-                //TODO: this
-                break;
             case FASTEST_LAP:
                 FastestLap fl = new FastestLap();
                 fl.setCarIndex(packetBuffer.readUnsignedByte());
@@ -332,19 +326,10 @@ public class PacketDecoder {
                 r.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setRetirement(r);
                 break;
-            case DRS_ENABLED:
-                //TODO: this
-                break;
-            case DRS_DISABLED:
-                //TODO: this
-                break;
             case TEAM_MATE_IN_PITS:
                 TeamMateInPits tmip = new TeamMateInPits();
                 tmip.setCarIndex(packetBuffer.readUnsignedByte());
                 edd.setTeamMateInPits(tmip);
-                break;
-            case CHEQUERED_FLAG:
-                //TODO: this
                 break;
             case RACE_WINNER:
                 RaceWinner rw = new RaceWinner();
@@ -375,9 +360,6 @@ public class PacketDecoder {
                 sl.setNumLights(packetBuffer.readUnsignedByte());
                 edd.setStartLights(sl);
                 break;
-            case LIGHTS_OUT:
-                //TODO: this
-                break;
             case DRIVE_THROUGH_SERVED:
                 DriveThroughPenaltyServed dtps = new DriveThroughPenaltyServed();
                 dtps.setCarIndex(packetBuffer.readUnsignedByte());
@@ -398,6 +380,13 @@ public class PacketDecoder {
                 Buttons bt = new Buttons();
                 bt.setButtonStatus(packetBuffer.readUnsignedIntLE());
                 edd.setButtons(bt);
+                break;
+            case SESSION_STARTED:
+            case SESSION_ENDED:
+            case DRS_ENABLED:
+            case DRS_DISABLED:
+            case CHEQUERED_FLAG:
+            case LIGHTS_OUT:
                 break;
             default:
                 throw new IllegalArgumentException("EventCode=" + packet.getEventCode() + " not supported");

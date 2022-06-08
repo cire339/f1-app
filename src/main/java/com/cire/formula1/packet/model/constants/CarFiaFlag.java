@@ -15,7 +15,7 @@ public enum CarFiaFlag {
     YELLOW(3),
     RED(4);
     
-    private static Map<Integer, CarFiaFlag> map = new HashMap<>();
+    private static final Map<Integer, CarFiaFlag> map = new HashMap<>();
 
     static {
         for (CarFiaFlag carFiaFlag : CarFiaFlag.values()) {
@@ -23,7 +23,7 @@ public enum CarFiaFlag {
         }
     }
 
-    private int value;
+    private final int value;
     
     CarFiaFlag(int value) {
         this.value = value;

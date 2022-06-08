@@ -23,7 +23,7 @@ public enum ActualTyreCompound {
     F2_HARD(14),
     F2_WET(15);
     
-    private static Map<Integer, ActualTyreCompound> map = new HashMap<>();
+    private static final Map<Integer, ActualTyreCompound> map = new HashMap<>();
 
     static {
         for (ActualTyreCompound actualTyreCompound : ActualTyreCompound.values()) {
@@ -31,7 +31,7 @@ public enum ActualTyreCompound {
         }
     }
 
-    private int value;
+    private final int value;
     
     ActualTyreCompound(int value) {
         this.value = value;

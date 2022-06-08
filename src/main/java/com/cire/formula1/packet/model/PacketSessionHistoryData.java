@@ -137,20 +137,20 @@ public class PacketSessionHistoryData extends Packet {
     public String toString() {
         StringBuilder sb = new StringBuilder("Session[");
         sb.append(super.toString());
-        sb.append(",carIdx=" + this.carIdx);
-        sb.append(",numLaps=" + this.numLaps);
-        sb.append(",numTyreStints=" + this.numTyreStints);
-        sb.append(",bestLapTimeLapNum=" + this.bestLapTimeLapNum);
-        sb.append(",bestSector1LapNum=" + this.bestSector1LapNum);
-        sb.append(",bestSector2LapNum=" + this.bestSector2LapNum);
-        sb.append(",bestSector3LapNum=" + this.bestSector3LapNum);
+        sb.append(",carIdx=").append(this.carIdx);
+        sb.append(",numLaps=").append(this.numLaps);
+        sb.append(",numTyreStints=").append(this.numTyreStints);
+        sb.append(",bestLapTimeLapNum=").append(this.bestLapTimeLapNum);
+        sb.append(",bestSector1LapNum=").append(this.bestSector1LapNum);
+        sb.append(",bestSector2LapNum=").append(this.bestSector2LapNum);
+        sb.append(",bestSector3LapNum=").append(this.bestSector3LapNum);
         sb.append(",lapHistoryData=");
         for (LapHistoryData lhd: lapHistoryData) {
-            sb.append(lhd.toString() + ",");
+            sb.append(lhd.toString()).append(",");
         }
         sb.append(",tyreStintHistoryData=");
         for (TyreStintHistoryData tshd : tyreStintHistoryData) {
-            sb.append(tshd.toString() + ",");
+            sb.append(tshd.toString()).append(",");
         }
         sb.append("]");
         return sb.toString();

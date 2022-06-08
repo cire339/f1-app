@@ -1,6 +1,5 @@
 package com.cire.formula1.service;
 
-import com.cire.formula1.database.FormulaOneDao;
 import com.cire.formula1.model.RaceSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +15,9 @@ public class RaceSessionServiceImpl implements RaceSessionService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RaceSessionServiceImpl.class);
 
-    private final FormulaOneDao formulaOneDao;
-
     Map<BigInteger, RaceSession> raceSessions = new HashMap<>();
 
-    public RaceSessionServiceImpl(FormulaOneDao formulaOneDao) {
-        this.formulaOneDao = formulaOneDao;
+    public RaceSessionServiceImpl() {
     }
 
     @Override

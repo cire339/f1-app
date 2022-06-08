@@ -45,10 +45,10 @@ public class PacketLobbyInfoData extends Packet {
     public String toString() {
         StringBuilder sb = new StringBuilder("LobbyInfo[");
         sb.append(super.toString());
-        sb.append(",numPlayers=" + this.numPlayers);
+        sb.append(",numPlayers=").append(this.numPlayers);
         sb.append(",lobbyInfoData=");
         for (LobbyInfoData l : lobbyInfoData) {
-            sb.append(l.toString() + ",");
+            sb.append(l.toString()).append(",");
         }
         sb.replace(sb.length() - 1, sb.length() - 1, "]");
         return sb.toString();

@@ -13,7 +13,7 @@ public enum Formula {
     F2(2),
     F1_GENERIC(3);
     
-    private static Map<Integer, Formula> map = new HashMap<>();
+    private static final Map<Integer, Formula> map = new HashMap<>();
 
     static {
         for (Formula formula : Formula.values()) {
@@ -21,7 +21,7 @@ public enum Formula {
         }
     }
 
-    private int value;
+    private final int value;
     
     Formula(int value) {
         this.value = value;

@@ -96,7 +96,7 @@ public enum Nationality {
     WALES(86),
     VIETNAM(87);
 
-    private static Map<Integer, Nationality> map = new HashMap<>();
+    private static final Map<Integer, Nationality> map = new HashMap<>();
 
     static {
         for (Nationality nationality : Nationality.values()) {
@@ -104,7 +104,7 @@ public enum Nationality {
         }
     }
 
-    private int value;
+    private final int value;
     
     Nationality(int value) {
         this.value = value;

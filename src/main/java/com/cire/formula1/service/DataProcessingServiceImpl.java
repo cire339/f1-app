@@ -153,10 +153,6 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             case DRS_DISABLED:
                 LOGGER.info("DRS is now disabled.");
                 break;
-            case TEAM_MATE_IN_PITS:
-                break;
-            case CHEQUERED_FLAG:
-                break;
             case RACE_WINNER:
                 RaceWinner raceWinner = eventDataPacket.getEventDataDetails().getRaceWinner();
                 LOGGER.info("Race winner is " + getDriverName(raceWinner.getCarIndex()));
@@ -179,8 +175,6 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                     raceSession.setFastestSpeedCarIndex(eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex());
                 }
                 break;
-            case START_LIGHTS:
-                break;
             case LIGHTS_OUT:
                 LOGGER.info("Race " + raceSession.getSessionUid() + " has started!");
                 raceSession.setRaceStarted(true);
@@ -193,8 +187,10 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 StopGoPenaltyServed sgPenServed = eventDataPacket.getEventDataDetails().getStopGoPenaltyServed();
                 LOGGER.info(getDriverName(sgPenServed.getCarIndex()) + " has served his stop go penalty.");
                 break;
+            case TEAM_MATE_IN_PITS:
+            case CHEQUERED_FLAG:
+            case START_LIGHTS:
             case FLASHBACK:
-                break;
             case BUTTON_STATUS:
                 break;
             default:
@@ -239,7 +235,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private synchronized void saveSessionInDatabase(){
         //Check DB first?
-        if(!formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
+        if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isEmpty()) {
             LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
             formulaOneDao.createRaceSession(raceSession);
             LOGGER.info("Session created successfully!");

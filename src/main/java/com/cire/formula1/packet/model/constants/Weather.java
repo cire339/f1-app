@@ -15,7 +15,7 @@ public enum Weather {
     HEAVY_RAIN(4),
     STORM(5);
 
-    private static Map<Integer, Weather> map = new HashMap<>();
+    private static final Map<Integer, Weather> map = new HashMap<>();
 
     static {
         for (Weather weather : Weather.values()) {
@@ -23,7 +23,7 @@ public enum Weather {
         }
     }
 
-    private int value;
+    private final int value;
     
     Weather(int value) {
         this.value = value;

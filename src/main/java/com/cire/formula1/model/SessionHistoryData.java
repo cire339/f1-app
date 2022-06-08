@@ -46,19 +46,19 @@ public class SessionHistoryData {
             this.numLaps = sessionHistoryData.getNumberLaps().shortValue();
         }
         if(sessionHistoryData.getNumberTyreStints() != null) {
-            this.numTyreStints = sessionHistoryData.getNumberTyreStints() != null ? sessionHistoryData.getNumberTyreStints().shortValue() : null;
+            this.numTyreStints = sessionHistoryData.getNumberTyreStints().shortValue();
         }
         if(sessionHistoryData.getBestLapTimeLapNumber() != null){
             this.bestLapTimeLapNum = sessionHistoryData.getBestLapTimeLapNumber().shortValue();
         }
         if(sessionHistoryData.getBestSector1LapNumber() != null){
-            sessionHistoryData.getBestSector1LapNumber().shortValue();
+            this.bestSector1LapNum = sessionHistoryData.getBestSector1LapNumber().shortValue();
         }
         if(sessionHistoryData.getBestSector2LapNumber() != null){
-            sessionHistoryData.getBestSector2LapNumber().shortValue();
+            this.bestSector2LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
         }
         if(sessionHistoryData.getBestSector3LapNumber() != null){
-            sessionHistoryData.getBestSector2LapNumber().shortValue();
+            this.bestSector3LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
         }
         if(sessionHistoryData.getLapHistoryData() != null) {
             this.lapHistoryData = new ArrayList<>();

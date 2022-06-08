@@ -12,7 +12,7 @@ public enum Sector {
     SECTOR2(1),
     SECTOR3(2);
 
-    private static Map<Integer, Sector> map = new HashMap<>();
+    private static final Map<Integer, Sector> map = new HashMap<>();
 
     static {
         for (Sector sector : Sector.values()) {
@@ -20,7 +20,7 @@ public enum Sector {
         }
     }
 
-    private int value;
+    private final int value;
     
     Sector(int value) {
         this.value = value;

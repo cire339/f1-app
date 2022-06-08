@@ -47,9 +47,9 @@ public class PacketMotionData extends Packet {
         sb.append(super.toString());
         sb.append(",carMotionData=");
         for (CarMotionData cmd : this.carMotionData) {
-            sb.append(cmd.toString() + ",");
+            sb.append(cmd.toString()).append(",");
         }
-        sb.append("extraCarMotionData=" + this.extraCarMotionData.toString());
+        sb.append("extraCarMotionData=").append(this.extraCarMotionData.toString());
         sb.append("]");
         return sb.toString();
     }
