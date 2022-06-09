@@ -1,6 +1,6 @@
 package com.cire.formula1.database.entity;
 
-import com.cire.formula1.model.Player;
+import com.cire.formula1.model.dto.PlayerDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -31,13 +31,14 @@ public class PlayerEntity {
 
     @JsonManagedReference
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
-    private SessionHistoryDataEntity sessionHistoryData;
+    private SessionHistoryEntity sessionHistory;
 
-    public PlayerEntity(Player player){
-        this.playerName = player.getPlayerName();
-        SessionHistoryDataEntity shde = new SessionHistoryDataEntity(player.getSessionHistoryData());
+    public PlayerEntity(PlayerDTO playerDTO){
+        this.id = playerDTO.getId();
+        this.playerName = playerDTO.getPlayerName();
+        SessionHistoryEntity shde = new SessionHistoryEntity(playerDTO.getSessionHistory());
         shde.setPlayer(this);
-        this.sessionHistoryData = shde;
+        this.sessionHistory = shde;
     }
 
     public PlayerEntity() {
@@ -89,11 +90,11 @@ public class PlayerEntity {
         this.raceSession = raceSession;
     }
 
-    public SessionHistoryDataEntity getSessionHistoryData() {
-        return sessionHistoryData;
+    public SessionHistoryEntity getSessionHistory() {
+        return sessionHistory;
     }
 
-    public void setSessionHistoryData(SessionHistoryDataEntity sessionHistoryData) {
-        this.sessionHistoryData = sessionHistoryData;
+    public void setSessionHistory(SessionHistoryEntity sessionHistory) {
+        this.sessionHistory = sessionHistory;
     }
 }

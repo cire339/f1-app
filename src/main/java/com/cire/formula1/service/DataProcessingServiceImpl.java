@@ -1,8 +1,8 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.database.FormulaOneDao;
-import com.cire.formula1.model.RaceSession;
-import com.cire.formula1.model.SessionHistoryData;
+import com.cire.formula1.model.dto.RaceSessionDTO;
+import com.cire.formula1.model.dto.SessionHistoryDTO;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import com.cire.formula1.packet.model.data.*;
@@ -21,7 +21,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private final RaceSessionService raceSessionService;
     private final FormulaOneDao formulaOneDao;
 
-    private RaceSession raceSession = null;
+    private RaceSessionDTO raceSession = null;
 
     @Autowired
     public DataProcessingServiceImpl(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao) {
@@ -71,12 +71,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private void processSessionHistory(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
         //One final Session History packet is sent at the very end after the Final Classification packet is sent.
+        //But it does not seem to be the case.. why?
         if(raceSession.isRaceEnded()){
             PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
-            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistoryData(new SessionHistoryData(data));
+            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
 
-            //Save session to DB.
-            saveSessionInDatabase();
+            //Update session in DB.
+            updateSessionInDatabase();
         }
     }
 
@@ -120,6 +121,9 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             LOGGER.info("Fastest lap: " + raceSession.getFastestLap().getLapTime() + " by " + getDriverName(raceSession.getFastestLap().getCarIndex()));
         }
         LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
+
+        //Update session in DB.
+        updateSessionInDatabase();
     }
 
     private void processEvent(Packet packet) {
@@ -133,6 +137,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             case SESSION_ENDED:
                 LOGGER.info("Session Ended.");
                 raceSession.setRaceEnded(true);
+                saveSessionInDatabase();
                 break;
             case FASTEST_LAP:
                 LOGGER.info("New Fastest lap by " +
@@ -239,6 +244,15 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
             formulaOneDao.createRaceSession(raceSession);
             LOGGER.info("Session created successfully!");
+        }
+    }
+
+    private synchronized void updateSessionInDatabase(){
+        //Check DB first?
+        if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
+            LOGGER.info("Updating session " + raceSession.getSessionUid() + " in database..");
+            formulaOneDao.updateRaceSession(raceSession);
+            LOGGER.info("Session updated successfully!");
         }
     }
 }

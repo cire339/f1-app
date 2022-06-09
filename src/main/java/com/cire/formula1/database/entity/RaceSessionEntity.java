@@ -1,7 +1,7 @@
 package com.cire.formula1.database.entity;
 
-import com.cire.formula1.model.Player;
-import com.cire.formula1.model.RaceSession;
+import com.cire.formula1.model.dto.PlayerDTO;
+import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -28,11 +28,12 @@ public class RaceSessionEntity {
     @OneToMany(mappedBy = "raceSession", cascade = CascadeType.ALL)
     private Collection<PlayerEntity> players;
 
-    public RaceSessionEntity(RaceSession raceSession){
+    public RaceSessionEntity(RaceSessionDTO raceSession){
+        this.id = raceSession.getId();
         this.sessionUid = String.valueOf(raceSession.getSessionUid());
         this.players = new ArrayList<>();
-        for(Player player: raceSession.getPlayers()){
-            PlayerEntity playerEntity = new PlayerEntity(player);
+        for(PlayerDTO playerDTO : raceSession.getPlayers()){
+            PlayerEntity playerEntity = new PlayerEntity(playerDTO);
             playerEntity.setRaceSession(this);
             this.players.add(playerEntity);
         }

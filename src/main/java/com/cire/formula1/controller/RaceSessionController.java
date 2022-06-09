@@ -2,11 +2,9 @@ package com.cire.formula1.controller;
 
 import com.cire.formula1.database.FormulaOneDao;
 import com.cire.formula1.database.entity.RaceSessionEntity;
-import com.cire.formula1.model.Player;
-import com.cire.formula1.model.RaceSession;
+import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.cire.formula1.model.RaceSessions;
-import com.cire.formula1.model.SessionHistoryData;
-import com.cire.formula1.packet.model.data.LapHistoryData;
+import com.cire.formula1.utils.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +59,7 @@ public class RaceSessionController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(new RaceSession(raceSession.get()), HttpStatus.OK);
+        return new ResponseEntity<>(new RaceSessionDTO(raceSession.get()), HttpStatus.OK);
     }
 
     /*
@@ -80,39 +77,20 @@ public class RaceSessionController {
     //TEST ENDPOINT - TODO: REMOVE
     @PostMapping(value = {"/{sessionUid}/test"}, produces = {APPLICATION_JSON_VALUE})
     public ResponseEntity<?> createTestSession(@PathVariable BigInteger sessionUid) {
-        RaceSession raceSession = new RaceSession();
-        raceSession.setSessionUid(sessionUid);
-        raceSession.setRaceStarted(true);
-        raceSession.setRaceEnded(true);
-        raceSession.setRaceWinnerCarIndex((short)0);
-        raceSession.setFastestSpeed(321.0F);
-        raceSession.setFastestSpeedCarIndex((short)0);
-        List<Player> playerList = new ArrayList<>();
-        Player player = new Player((short)0);
-        SessionHistoryData sessionHistoryData = new SessionHistoryData();
-        sessionHistoryData.setNumLaps((short) 16);
-        sessionHistoryData.setNumTyreStints((short)2);
-        sessionHistoryData.setBestLapTimeLapNum((short)3);
-        sessionHistoryData.setBestSector1LapNum((short)4);
-        sessionHistoryData.setBestSector2LapNum((short)2);
-        sessionHistoryData.setBestSector3LapNum((short)5);
-        List<LapHistoryData> lapHistoryDataList = new ArrayList<>();
-        LapHistoryData lapHistoryData = new LapHistoryData();
-        lapHistoryData.setLapTimeInMS(73546);
-        lapHistoryData.setSector1TimeInMS(22515);
-        lapHistoryData.setSector2TimeInMS(26515);
-        lapHistoryData.setSector3TimeInMS(24516);
-        lapHistoryDataList.add(lapHistoryData);
 
-        sessionHistoryData.setLapHistoryData(lapHistoryDataList);
-        player.setPlayerName("Test Player");
-        player.setSessionHistoryData(sessionHistoryData);
-        playerList.add(player);
-        raceSession.setPlayers(playerList);
+        RaceSessionDTO raceSession = DataUtils.createTestSession(sessionUid);
 
         RaceSessionEntity raceSessionEntity = formulaOneDao.createRaceSession(raceSession);
 
-        return new ResponseEntity<>(new RaceSession(raceSessionEntity), HttpStatus.OK);
+        return new ResponseEntity<>(new RaceSessionDTO(raceSessionEntity), HttpStatus.OK);
+    }
+
+    @GetMapping(value = {"/{sessionUid}/test"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getTestSession(@PathVariable BigInteger sessionUid) {
+
+        RaceSessionDTO raceSession = DataUtils.createTestSession(sessionUid);
+
+        return new ResponseEntity<>(raceSession, HttpStatus.OK);
     }
 
 }

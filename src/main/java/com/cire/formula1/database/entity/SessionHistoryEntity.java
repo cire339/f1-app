@@ -1,7 +1,7 @@
 package com.cire.formula1.database.entity;
 
-import com.cire.formula1.model.SessionHistoryData;
-import com.cire.formula1.packet.model.data.LapHistoryData;
+import com.cire.formula1.model.dto.LapHistoryDTO;
+import com.cire.formula1.model.dto.SessionHistoryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -12,9 +12,9 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "session_history_data", schema = "public", catalog = "FormulaOne")
+@Table(name = "session_history", schema = "public", catalog = "FormulaOne")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SessionHistoryDataEntity {
+public class SessionHistoryEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -44,34 +44,35 @@ public class SessionHistoryDataEntity {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "sessionHistoryData", cascade = CascadeType.ALL)
-    private Collection<LapHistoryDataEntity> lapHistoryData;
+    private Collection<LapHistoryEntity> lapHistory;
 
     @JsonBackReference("player")
     @OneToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private PlayerEntity player;
 
-    public SessionHistoryDataEntity(SessionHistoryData data){
+    public SessionHistoryEntity(SessionHistoryDTO data){
         if(data != null) {
+            this.id = data.getId();
             this.numberLaps = (int) data.getNumLaps();
             this.numberTyreStints = (int) data.getNumTyreStints();
             this.bestLapTimeLapNumber = (int) data.getBestLapTimeLapNum();
             this.bestSector1LapNumber = (int) data.getBestSector1LapNum();
             this.bestSector2LapNumber = (int) data.getBestSector2LapNum();
             this.bestSector3LapNumber = (int) data.getBestSector3LapNum();
-            if(data.getLapHistoryData() != null) {
-                this.lapHistoryData = new ArrayList<>();
-                for (LapHistoryData lapHistoryData : data.getLapHistoryData()) {
-                    LapHistoryDataEntity lapHistoryDataEntity = new LapHistoryDataEntity(lapHistoryData);
+            if(data.getLapHistory() != null) {
+                this.lapHistory = new ArrayList<>();
+                for (LapHistoryDTO lapHistory : data.getLapHistory()) {
+                    LapHistoryEntity lapHistoryDataEntity = new LapHistoryEntity(lapHistory);
                     lapHistoryDataEntity.setSessionHistoryData(this);
-                    this.lapHistoryData.add(lapHistoryDataEntity);
+                    this.lapHistory.add(lapHistoryDataEntity);
                 }
             }
         }
 
     }
 
-    public SessionHistoryDataEntity() {
+    public SessionHistoryEntity() {
 
     }
 
@@ -143,7 +144,7 @@ public class SessionHistoryDataEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SessionHistoryDataEntity that = (SessionHistoryDataEntity) o;
+        SessionHistoryEntity that = (SessionHistoryEntity) o;
         return id == that.id && Objects.equals(playerId, that.playerId) && Objects.equals(numberLaps, that.numberLaps) && Objects.equals(numberTyreStints, that.numberTyreStints) && Objects.equals(bestLapTimeLapNumber, that.bestLapTimeLapNumber) && Objects.equals(bestSector1LapNumber, that.bestSector1LapNumber) && Objects.equals(bestSector2LapNumber, that.bestSector2LapNumber) && Objects.equals(bestSector3LapNumber, that.bestSector3LapNumber);
     }
 
@@ -152,12 +153,12 @@ public class SessionHistoryDataEntity {
         return Objects.hash(id, playerId, numberLaps, numberTyreStints, bestLapTimeLapNumber, bestSector1LapNumber, bestSector2LapNumber, bestSector3LapNumber);
     }
 
-    public Collection<LapHistoryDataEntity> getLapHistoryData() {
-        return lapHistoryData;
+    public Collection<LapHistoryEntity> getLapHistory() {
+        return lapHistory;
     }
 
-    public void setLapHistoryData(Collection<LapHistoryDataEntity> lapHistoryData) {
-        this.lapHistoryData = lapHistoryData;
+    public void setLapHistory(Collection<LapHistoryEntity> lapHistory) {
+        this.lapHistory = lapHistory;
     }
 
     public PlayerEntity getPlayer() {

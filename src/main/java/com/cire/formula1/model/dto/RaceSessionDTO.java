@@ -1,4 +1,4 @@
-package com.cire.formula1.model;
+package com.cire.formula1.model.dto;
 
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
@@ -12,11 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RaceSession {
+public class RaceSessionDTO {
 
     /**
      * Object that will keep track of data in a session
      */
+    @JsonProperty
+    private int id;
     @JsonProperty
     private BigInteger sessionUid;
     @JsonProperty
@@ -32,23 +34,32 @@ public class RaceSession {
     @JsonProperty
     private boolean raceEnded = false;
     @JsonProperty
-    private List<Player> players = new ArrayList<>(PacketConstants.CARS);
+    private List<PlayerDTO> playerDTOS = new ArrayList<>(PacketConstants.CARS);
 
-    public RaceSession(){
+    public RaceSessionDTO(){
         for(int i=0;i<PacketConstants.CARS;i++){
-            this.players.add(new Player((short) i));
+            this.playerDTOS.add(new PlayerDTO((short) i));
         }
     }
 
-    public RaceSession(RaceSessionEntity entity){
+    public RaceSessionDTO(RaceSessionEntity entity){
+        this.id = entity.getId();
         this.sessionUid = new BigInteger(entity.getSessionUid());
-        this.players = new ArrayList<>();
+        this.playerDTOS = new ArrayList<>();
         if(entity.getPlayers() != null) {
             for (PlayerEntity playerEntity : entity.getPlayers()) {
-                Player player = new Player(playerEntity);
-                this.players.add(player);
+                PlayerDTO playerDTO = new PlayerDTO(playerEntity);
+                this.playerDTOS.add(playerDTO);
             }
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public BigInteger getSessionUid() {
@@ -107,25 +118,26 @@ public class RaceSession {
         this.raceEnded = raceEnded;
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public List<PlayerDTO> getPlayers() {
+        return playerDTOS;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public void setPlayers(List<PlayerDTO> playerDTOS) {
+        this.playerDTOS = playerDTOS;
     }
 
     @Override
     public String toString() {
         return "RaceSession{" +
-                "sessionUid=" + sessionUid +
+                "id=" + id +
+                ", sessionUid=" + sessionUid +
                 ", raceWinnerCarIndex=" + raceWinnerCarIndex +
                 ", fastestLap=" + fastestLap +
                 ", fastestSpeedCarIndex=" + fastestSpeedCarIndex +
                 ", fastestSpeed=" + fastestSpeed +
                 ", raceStarted=" + raceStarted +
                 ", raceEnded=" + raceEnded +
-                ", players=" + players +
+                ", players=" + playerDTOS +
                 '}';
     }
 }

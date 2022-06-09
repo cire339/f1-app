@@ -1,10 +1,10 @@
 package com.cire.formula1.database;
 
-import com.cire.formula1.database.entity.LapHistoryDataEntity;
+import com.cire.formula1.database.entity.LapHistoryEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.database.repository.RaceSessionEntityRepository;
-import com.cire.formula1.model.RaceSession;
+import com.cire.formula1.model.dto.RaceSessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +24,18 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     }
 
     @Override
-    public RaceSessionEntity createRaceSession(RaceSession session) {
+    public RaceSessionEntity createRaceSession(RaceSessionDTO session) {
         //Set IDs to 0 for some reason...
         RaceSessionEntity raceSessionEntity = new RaceSessionEntity(session);
         raceSessionEntity.setId(0);
         for(PlayerEntity pe: raceSessionEntity.getPlayers()){
             pe.setId(0);
             pe.setRaceSessionId(0);
-            if(pe.getSessionHistoryData() != null) {
-                pe.getSessionHistoryData().setId(0);
-                pe.getSessionHistoryData().setPlayerId(0);
-                if(pe.getSessionHistoryData().getLapHistoryData() != null) {
-                    for (LapHistoryDataEntity ld : pe.getSessionHistoryData().getLapHistoryData()) {
+            if(pe.getSessionHistory() != null) {
+                pe.getSessionHistory().setId(0);
+                pe.getSessionHistory().setPlayerId(0);
+                if(pe.getSessionHistory().getLapHistory() != null) {
+                    for (LapHistoryEntity ld : pe.getSessionHistory().getLapHistory()) {
                         ld.setId(0);
                         ld.setSessionHistoryDataId(0);
                     }
@@ -61,6 +61,11 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     @Override
     public void deleteRaceSession(RaceSessionEntity session) {
         raceSessionRepo.delete(session);
+    }
+
+    @Override
+    public RaceSessionEntity updateRaceSession(RaceSessionDTO session) {
+        return raceSessionRepo.save(new RaceSessionEntity(session));
     }
 
 

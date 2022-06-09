@@ -1,4 +1,4 @@
-package com.cire.formula1.model;
+package com.cire.formula1.model.dto;
 
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.packet.model.data.CarSetupData;
@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Player {
+public class PlayerDTO {
 
+    @JsonProperty
+    private int id;
     @JsonProperty
     private String playerName;
     @JsonProperty
@@ -22,15 +24,24 @@ public class Player {
     @JsonProperty
     private FinalClassificationData classificationDetails;
     @JsonProperty
-    private SessionHistoryData sessionHistoryData;
+    private SessionHistoryDTO sessionHistoryDTO;
 
-    public Player(PlayerEntity playerEntity) {
+    public PlayerDTO(PlayerEntity playerEntity) {
+        this.id = playerEntity.getId();
         this.playerName = playerEntity.getPlayerName();
-        this.sessionHistoryData = new SessionHistoryData(playerEntity.getSessionHistoryData());
+        this.sessionHistoryDTO = new SessionHistoryDTO(playerEntity.getSessionHistory());
     }
 
-    public Player(short carIndex) {
+    public PlayerDTO(short carIndex) {
         this.playerName = "Player " + carIndex;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPlayerName() {
@@ -57,12 +68,12 @@ public class Player {
         this.penalties = penalties;
     }
 
-    public SessionHistoryData getSessionHistoryData() {
-        return sessionHistoryData;
+    public SessionHistoryDTO getSessionHistory() {
+        return sessionHistoryDTO;
     }
 
-    public void setSessionHistoryData(SessionHistoryData sessionHistoryData) {
-        this.sessionHistoryData = sessionHistoryData;
+    public void setSessionHistory(SessionHistoryDTO sessionHistoryDTO) {
+        this.sessionHistoryDTO = sessionHistoryDTO;
     }
 
     public FinalClassificationData getClassificationDetails() {
@@ -76,11 +87,12 @@ public class Player {
     @Override
     public String toString() {
         return "Player{" +
-                "playerName='" + playerName + '\'' +
+                "id=" + id +
+                ", playerName='" + playerName + '\'' +
                 ", carSetup=" + carSetup +
                 ", penalties=" + penalties +
                 ", classificationDetails=" + classificationDetails +
-                ", sessionHistoryData=" + sessionHistoryData +
+                ", sessionHistory=" + sessionHistoryDTO +
                 '}';
     }
 }

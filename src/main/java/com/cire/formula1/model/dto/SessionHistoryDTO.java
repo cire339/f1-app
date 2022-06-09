@@ -1,7 +1,7 @@
-package com.cire.formula1.model;
+package com.cire.formula1.model.dto;
 
-import com.cire.formula1.database.entity.LapHistoryDataEntity;
-import com.cire.formula1.database.entity.SessionHistoryDataEntity;
+import com.cire.formula1.database.entity.LapHistoryEntity;
+import com.cire.formula1.database.entity.SessionHistoryEntity;
 import com.cire.formula1.packet.model.PacketSessionHistoryData;
 import com.cire.formula1.packet.model.data.LapHistoryData;
 import com.cire.formula1.packet.model.data.TyreStintHistoryData;
@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionHistoryData {
+public class SessionHistoryDTO {
+    private int id;
     private short numLaps;
     private short numTyreStints;
     private short bestLapTimeLapNum;
@@ -20,28 +21,34 @@ public class SessionHistoryData {
     private short bestSector3LapNum;
 
     @JsonIgnore
-    private List<LapHistoryData> lapHistoryData = new ArrayList<>(PacketConstants.LAPS);
+    private List<LapHistoryDTO> lapHistory = new ArrayList<>(PacketConstants.LAPS);
 
     @JsonIgnore
     private List<TyreStintHistoryData> tyreStintHistoryData = new ArrayList<>(PacketConstants.TYRE_STINTS);
 
-    public SessionHistoryData(PacketSessionHistoryData data){
+    public SessionHistoryDTO(PacketSessionHistoryData data){
         this.numLaps = data.getNumLaps();
         this.numTyreStints = data.getNumTyreStints();
         this.bestLapTimeLapNum = data.getBestLapTimeLapNum();
         this.bestSector1LapNum = data.getBestSector1LapNum();
         this.bestSector2LapNum = data.getBestSector2LapNum();
         this.bestSector3LapNum = data.getBestSector3LapNum();
-        this.lapHistoryData = data.getLapHistoryData();
+        if(data.getLapHistoryData() != null){
+            List<LapHistoryDTO> laps = new ArrayList<>();
+            for(LapHistoryData lapData : data.getLapHistoryData()){
+                laps.add(new LapHistoryDTO(lapData));
+            }
+            this.lapHistory = laps;
+        }
         this.tyreStintHistoryData = data.getTyreStintHistoryData();
     }
 
-    public SessionHistoryData() {
+    public SessionHistoryDTO() {
 
     }
 
-
-    public SessionHistoryData(SessionHistoryDataEntity sessionHistoryData) {
+    public SessionHistoryDTO(SessionHistoryEntity sessionHistoryData) {
+        this.id = sessionHistoryData.getId();
         if(sessionHistoryData.getNumberLaps() != null) {
             this.numLaps = sessionHistoryData.getNumberLaps().shortValue();
         }
@@ -60,12 +67,20 @@ public class SessionHistoryData {
         if(sessionHistoryData.getBestSector3LapNumber() != null){
             this.bestSector3LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
         }
-        if(sessionHistoryData.getLapHistoryData() != null) {
-            this.lapHistoryData = new ArrayList<>();
-            for (LapHistoryDataEntity lapHistoryDataEntity : sessionHistoryData.getLapHistoryData()) {
-                this.lapHistoryData.add(new LapHistoryData(lapHistoryDataEntity));
+        if(sessionHistoryData.getLapHistory() != null) {
+            this.lapHistory = new ArrayList<>();
+            for (LapHistoryEntity lapHistoryDataEntity : sessionHistoryData.getLapHistory()) {
+                this.lapHistory.add(new LapHistoryDTO(lapHistoryDataEntity));
             }
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public short getNumLaps() {
@@ -116,12 +131,12 @@ public class SessionHistoryData {
         this.bestSector3LapNum = bestSector3LapNum;
     }
 
-    public List<LapHistoryData> getLapHistoryData() {
-        return lapHistoryData;
+    public List<LapHistoryDTO> getLapHistory() {
+        return lapHistory;
     }
 
-    public void setLapHistoryData(List<LapHistoryData> lapHistoryData) {
-        this.lapHistoryData = lapHistoryData;
+    public void setLapHistory(List<LapHistoryDTO> lapHistory) {
+        this.lapHistory = lapHistory;
     }
 
     public List<TyreStintHistoryData> getTyreStintHistoryData() {
@@ -135,13 +150,14 @@ public class SessionHistoryData {
     @Override
     public String toString() {
         return "SessionHistoryData{" +
-                "numLaps=" + numLaps +
+                "id=" + id +
+                ", numLaps=" + numLaps +
                 ", numTyreStints=" + numTyreStints +
                 ", bestLapTimeLapNum=" + bestLapTimeLapNum +
                 ", bestSector1LapNum=" + bestSector1LapNum +
                 ", bestSector2LapNum=" + bestSector2LapNum +
                 ", bestSector3LapNum=" + bestSector3LapNum +
-                ", lapHistoryData=" + lapHistoryData +
+                ", lapHistory=" + lapHistory +
                 ", tyreStintHistoryData=" + tyreStintHistoryData +
                 '}';
     }

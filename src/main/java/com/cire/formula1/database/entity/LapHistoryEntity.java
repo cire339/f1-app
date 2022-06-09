@@ -1,6 +1,6 @@
 package com.cire.formula1.database.entity;
 
-import com.cire.formula1.packet.model.data.LapHistoryData;
+import com.cire.formula1.model.dto.LapHistoryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -10,14 +10,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "lap_history_data", schema = "public", catalog = "FormulaOne")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LapHistoryDataEntity {
+public class LapHistoryEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "session_history_data_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "session_history_id", nullable = false, insertable = false, updatable = false)
     private Integer sessionHistoryDataId;
 
     @Column(name = "lap_time")
@@ -37,18 +37,18 @@ public class LapHistoryDataEntity {
 
     @JsonBackReference("sessionHistoryData")
     @ManyToOne
-    @JoinColumn(name = "session_history_data_id", referencedColumnName = "id")
-    private SessionHistoryDataEntity sessionHistoryData;
+    @JoinColumn(name = "session_history_id", referencedColumnName = "id")
+    private SessionHistoryEntity sessionHistoryData;
 
-    public LapHistoryDataEntity(LapHistoryData lapHistoryData) {
-        this.lapTime = lapHistoryData.getLapTimeInMS();
-        this.sector1Time = (long) lapHistoryData.getSector1TimeInMS();
-        this.sector2Time = (long) lapHistoryData.getSector2TimeInMS();
-        this.sector3Time = (long) lapHistoryData.getSector3TimeInMS();
-        this.lapValidFlag = (int) lapHistoryData.getLapValidBitFlags();
+    public LapHistoryEntity(LapHistoryDTO lapHistory) {
+        this.lapTime = lapHistory.getLapTimeInMS();
+        this.sector1Time = (long) lapHistory.getSector1TimeInMS();
+        this.sector2Time = (long) lapHistory.getSector2TimeInMS();
+        this.sector3Time = (long) lapHistory.getSector3TimeInMS();
+        this.lapValidFlag = (int) lapHistory.getLapValidBitFlags();
     }
 
-    public LapHistoryDataEntity() {
+    public LapHistoryEntity() {
 
     }
 
@@ -112,7 +112,7 @@ public class LapHistoryDataEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LapHistoryDataEntity that = (LapHistoryDataEntity) o;
+        LapHistoryEntity that = (LapHistoryEntity) o;
         return id == that.id && Objects.equals(sessionHistoryDataId, that.sessionHistoryDataId) && Objects.equals(lapTime, that.lapTime) && Objects.equals(sector1Time, that.sector1Time) && Objects.equals(sector2Time, that.sector2Time) && Objects.equals(sector3Time, that.sector3Time) && Objects.equals(lapValidFlag, that.lapValidFlag);
     }
 
@@ -121,11 +121,11 @@ public class LapHistoryDataEntity {
         return Objects.hash(id, sessionHistoryDataId, lapTime, sector1Time, sector2Time, sector3Time, lapValidFlag);
     }
 
-    public SessionHistoryDataEntity getSessionHistoryData() {
+    public SessionHistoryEntity getSessionHistoryData() {
         return sessionHistoryData;
     }
 
-    public void setSessionHistoryData(SessionHistoryDataEntity sessionHistoryData) {
+    public void setSessionHistoryData(SessionHistoryEntity sessionHistoryData) {
         this.sessionHistoryData = sessionHistoryData;
     }
 }
