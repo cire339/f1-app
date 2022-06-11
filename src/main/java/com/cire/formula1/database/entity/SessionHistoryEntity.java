@@ -140,19 +140,6 @@ public class SessionHistoryEntity {
         this.bestSector3LapNumber = bestSector3LapNumber;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SessionHistoryEntity that = (SessionHistoryEntity) o;
-        return id == that.id && Objects.equals(playerId, that.playerId) && Objects.equals(numberLaps, that.numberLaps) && Objects.equals(numberTyreStints, that.numberTyreStints) && Objects.equals(bestLapTimeLapNumber, that.bestLapTimeLapNumber) && Objects.equals(bestSector1LapNumber, that.bestSector1LapNumber) && Objects.equals(bestSector2LapNumber, that.bestSector2LapNumber) && Objects.equals(bestSector3LapNumber, that.bestSector3LapNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, playerId, numberLaps, numberTyreStints, bestLapTimeLapNumber, bestSector1LapNumber, bestSector2LapNumber, bestSector3LapNumber);
-    }
-
     public Collection<LapHistoryEntity> getLapHistory() {
         return lapHistory;
     }

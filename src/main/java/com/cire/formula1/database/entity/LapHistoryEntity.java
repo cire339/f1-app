@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "lap_history_data", schema = "public", catalog = "FormulaOne")
+@Table(name = "lap_history", schema = "public", catalog = "FormulaOne")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LapHistoryEntity {
 
@@ -106,19 +106,6 @@ public class LapHistoryEntity {
 
     public void setLapValidFlag(Integer lapValidFlag) {
         this.lapValidFlag = lapValidFlag;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LapHistoryEntity that = (LapHistoryEntity) o;
-        return id == that.id && Objects.equals(sessionHistoryDataId, that.sessionHistoryDataId) && Objects.equals(lapTime, that.lapTime) && Objects.equals(sector1Time, that.sector1Time) && Objects.equals(sector2Time, that.sector2Time) && Objects.equals(sector3Time, that.sector3Time) && Objects.equals(lapValidFlag, that.lapValidFlag);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, sessionHistoryDataId, lapTime, sector1Time, sector2Time, sector3Time, lapValidFlag);
     }
 
     public SessionHistoryEntity getSessionHistoryData() {

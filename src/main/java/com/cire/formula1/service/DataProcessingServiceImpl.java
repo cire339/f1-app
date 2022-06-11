@@ -1,6 +1,7 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.database.FormulaOneDao;
+import com.cire.formula1.model.dto.PenaltyDTO;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.cire.formula1.model.dto.SessionHistoryDTO;
 import com.cire.formula1.packet.model.*;
@@ -53,6 +54,10 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     }
 
+    /**
+        Secondary player data. This could include player name, car damage, etc..
+        Anything the main player can't see.
+     */
     @Override
     public void processSecondaryData(Packet packet, String playerName) {
         processHeader(packet, playerName);
@@ -166,8 +171,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             case PENALTY_ISSUED:
                 Penalty penalty = eventDataPacket.getEventDataDetails().getPenalty();
                 LOGGER.info("Penalty issued for " + getDriverName(penalty.getCarIndex()) + ": " + penalty.getInfringementType().name() + " " + penalty.getPenaltyType().name());
-                //Add penalty to the player.
-                raceSession.getPlayers().get(penalty.getCarIndex()).getPenalties().add(penalty);
+                //Add penalty to the player(s).
+                raceSession.getPlayers().get(penalty.getCarIndex()).getPenalties().add(new PenaltyDTO(penalty));
+                //TODO: Check this to make sure it's right..
+                if(penalty.getOtherCarIndex() != 255){
+                    raceSession.getPlayers().get(penalty.getOtherCarIndex()).getInvolvedPenalties().add(new PenaltyDTO(penalty));
+                }
                 break;
             case SPEED_TRAP_TRIGGERED:
                 //Set highest speed

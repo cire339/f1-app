@@ -63,19 +63,6 @@ public class RaceSessionEntity {
         this.sessionUid = sessionUid;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RaceSessionEntity that = (RaceSessionEntity) o;
-        return id == that.id && Objects.equals(sessionUid, that.sessionUid);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, sessionUid);
-    }
-
     public Collection<PlayerEntity> getPlayers() {
         return players;
     }

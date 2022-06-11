@@ -1,6 +1,7 @@
 package com.cire.formula1.database;
 
 import com.cire.formula1.database.entity.LapHistoryEntity;
+import com.cire.formula1.database.entity.PenaltyEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.database.repository.RaceSessionEntityRepository;
@@ -39,6 +40,12 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
                         ld.setId(0);
                         ld.setSessionHistoryDataId(0);
                     }
+                }
+            }
+            if(pe.getPenalties() != null){
+                for(PenaltyEntity penalty: pe.getPenalties()){
+                    penalty.setId(0);
+                    penalty.setPlayerId(0);
                 }
             }
         }

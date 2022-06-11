@@ -34,22 +34,22 @@ public class RaceSessionDTO {
     @JsonProperty
     private boolean raceEnded = false;
     @JsonProperty
-    private List<PlayerDTO> playerDTOS = new ArrayList<>(PacketConstants.CARS);
+    private List<PlayerDTO> players = new ArrayList<>(PacketConstants.CARS);
 
     public RaceSessionDTO(){
         for(int i=0;i<PacketConstants.CARS;i++){
-            this.playerDTOS.add(new PlayerDTO((short) i));
+            this.players.add(new PlayerDTO(i));
         }
     }
 
     public RaceSessionDTO(RaceSessionEntity entity){
         this.id = entity.getId();
         this.sessionUid = new BigInteger(entity.getSessionUid());
-        this.playerDTOS = new ArrayList<>();
+        this.players = new ArrayList<>();
         if(entity.getPlayers() != null) {
             for (PlayerEntity playerEntity : entity.getPlayers()) {
                 PlayerDTO playerDTO = new PlayerDTO(playerEntity);
-                this.playerDTOS.add(playerDTO);
+                this.players.add(playerDTO);
             }
         }
     }
@@ -119,11 +119,11 @@ public class RaceSessionDTO {
     }
 
     public List<PlayerDTO> getPlayers() {
-        return playerDTOS;
+        return players;
     }
 
     public void setPlayers(List<PlayerDTO> playerDTOS) {
-        this.playerDTOS = playerDTOS;
+        this.players = playerDTOS;
     }
 
     @Override
@@ -137,7 +137,7 @@ public class RaceSessionDTO {
                 ", fastestSpeed=" + fastestSpeed +
                 ", raceStarted=" + raceStarted +
                 ", raceEnded=" + raceEnded +
-                ", players=" + playerDTOS +
+                ", players=" + players +
                 '}';
     }
 }

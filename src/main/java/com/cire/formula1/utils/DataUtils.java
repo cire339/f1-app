@@ -1,13 +1,9 @@
 package com.cire.formula1.utils;
 
-import com.cire.formula1.model.dto.LapHistoryDTO;
-import com.cire.formula1.model.dto.PlayerDTO;
-import com.cire.formula1.model.dto.RaceSessionDTO;
-import com.cire.formula1.model.dto.SessionHistoryDTO;
+import com.cire.formula1.model.dto.*;
 import com.cire.formula1.packet.model.constants.InfringementType;
 import com.cire.formula1.packet.model.constants.PenaltyType;
 import com.cire.formula1.packet.model.data.CarSetupData;
-import com.cire.formula1.packet.model.data.Penalty;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -28,10 +24,54 @@ public class DataUtils {
 
         //Player
         List<PlayerDTO> playerDTOList = new ArrayList<>();
-        PlayerDTO playerDTO = new PlayerDTO((short)0);
-        playerDTO.setPlayerName("Test Player");
+        PlayerDTO player0 = createPlayerDTO(0);
+        PlayerDTO player1 = createPlayerDTO(1);
+        playerDTOList.add(player0);
+        playerDTOList.add(player1);
+        raceSession.setPlayers(playerDTOList);
 
-        //Car setup
+        return raceSession;
+    }
+
+    private static PlayerDTO createPlayerDTO(int playerId){
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setId(playerId);
+        playerDTO.setCarIndex(playerId);
+        playerDTO.setPlayerName("Test Player " + playerId);
+
+
+        //Session History Data
+        SessionHistoryDTO sessionHistoryDTO = new SessionHistoryDTO();
+        sessionHistoryDTO.setNumLaps((short) 16);
+        sessionHistoryDTO.setNumTyreStints((short)2);
+        sessionHistoryDTO.setBestLapTimeLapNum((short)3);
+        sessionHistoryDTO.setBestSector1LapNum((short)4);
+        sessionHistoryDTO.setBestSector2LapNum((short)2);
+        sessionHistoryDTO.setBestSector3LapNum((short)5);
+
+        //Lap Data
+        List<LapHistoryDTO> lapHistoryDataList = new ArrayList<>();
+        LapHistoryDTO lapHistoryDTO = new LapHistoryDTO();
+        lapHistoryDTO.setLapTimeInMS(73546);
+        lapHistoryDTO.setSector1TimeInMS(22515);
+        lapHistoryDTO.setSector2TimeInMS(26515);
+        lapHistoryDTO.setSector3TimeInMS(24516);
+        lapHistoryDataList.add(lapHistoryDTO);
+
+        //Classification details
+        //TODO: Add this..
+
+        //Put everything together
+        playerDTO.setCarSetup(createCarSetupData());
+        playerDTO.setPenalties(createPenalties(playerId));
+        playerDTO.setInvolvedPenalties(createInvolvedPenalties(playerId));
+        sessionHistoryDTO.setLapHistory(lapHistoryDataList);
+        playerDTO.setSessionHistory(sessionHistoryDTO);
+
+        return playerDTO;
+    }
+
+    private static CarSetupData createCarSetupData(){
         CarSetupData carSetupData = new CarSetupData();
         carSetupData.setFrontWing((short)1);
         carSetupData.setRearWing((short)1);
@@ -56,58 +96,63 @@ public class DataUtils {
         carSetupData.setBallast((short)1);
         carSetupData.setFuelLoad((float)1);
 
-        //Penalties
-        List<Penalty> penalties = new ArrayList<>();
-        Penalty penalty1 = new Penalty();
+        return carSetupData;
+    }
+
+    private static List<PenaltyDTO> createPenalties(int playerId){
+        List<PenaltyDTO> penalties = new ArrayList<>();
+
+        PenaltyDTO penalty1 = new PenaltyDTO();
         penalty1.setPenaltyType(PenaltyType.WARNING);
         penalty1.setInfringementType(InfringementType.CORNER_CUTTING_GAINED_TIME);
-        penalty1.setCarIndex((short)0);
-        penalty1.setOtherCarIndex((short)1);
-        penalty1.setTime((short)28466);
-        penalty1.setLapNum((short)3);
+        penalty1.setPlayerId(playerId);
+        penalty1.setCarIndex(playerId);
+        penalty1.setOtherCarIndex(playerId+1);
+        penalty1.setPenaltyTime((short)28466);
+        penalty1.setLapNumber((short)3);
         penalty1.setPlacesGained((short)2);
         penalties.add(penalty1);
 
-        Penalty penalty2 = new Penalty();
+        PenaltyDTO penalty2 = new PenaltyDTO();
         penalty2.setPenaltyType(PenaltyType.TIME_PENALTY);
         penalty2.setInfringementType(InfringementType.IGNORING_DRIVE_THROUGH);
-        penalty2.setCarIndex((short)0);
-        penalty2.setOtherCarIndex((short)2);
-        penalty2.setTime((short)10947);
-        penalty2.setLapNum((short)2);
+        penalty2.setPlayerId(playerId);
+        penalty2.setCarIndex(playerId);
+        penalty2.setOtherCarIndex((short)255);
+        penalty2.setPenaltyTime((short)10947);
+        penalty2.setLapNumber((short)2);
         penalty2.setPlacesGained((short)0);
         penalties.add(penalty2);
 
-        //Session History Data
-        SessionHistoryDTO sessionHistoryDTO = new SessionHistoryDTO();
-        sessionHistoryDTO.setNumLaps((short) 16);
-        sessionHistoryDTO.setNumTyreStints((short)2);
-        sessionHistoryDTO.setBestLapTimeLapNum((short)3);
-        sessionHistoryDTO.setBestSector1LapNum((short)4);
-        sessionHistoryDTO.setBestSector2LapNum((short)2);
-        sessionHistoryDTO.setBestSector3LapNum((short)5);
+        return penalties;
+    }
 
-        //Lap Data
-        List<LapHistoryDTO> lapHistoryDataList = new ArrayList<>();
-        LapHistoryDTO lapHistoryDTO = new LapHistoryDTO();
-        lapHistoryDTO.setLapTimeInMS(73546);
-        lapHistoryDTO.setSector1TimeInMS(22515);
-        lapHistoryDTO.setSector2TimeInMS(26515);
-        lapHistoryDTO.setSector3TimeInMS(24516);
-        lapHistoryDataList.add(lapHistoryDTO);
+    private static List<PenaltyDTO> createInvolvedPenalties(int playerId){
+        List<PenaltyDTO> penalties = new ArrayList<>();
 
-        //Classification details
-        //TODO: Add this..
+        PenaltyDTO penalty1 = new PenaltyDTO();
+        penalty1.setPenaltyType(PenaltyType.WARNING);
+        penalty1.setInfringementType(InfringementType.CORNER_CUTTING_GAINED_TIME);
+        penalty1.setPlayerId(-1);
+        penalty1.setCarIndex(-1);
+        penalty1.setOtherCarIndex(playerId);
+        penalty1.setPenaltyTime((short)28466);
+        penalty1.setLapNumber((short)3);
+        penalty1.setPlacesGained((short)2);
+        penalties.add(penalty1);
 
-        //Put everything together
-        playerDTO.setCarSetup(carSetupData);
-        playerDTO.setPenalties(penalties);
-        sessionHistoryDTO.setLapHistory(lapHistoryDataList);
-        playerDTO.setSessionHistory(sessionHistoryDTO);
-        playerDTOList.add(playerDTO);
-        raceSession.setPlayers(playerDTOList);
+        PenaltyDTO penalty2 = new PenaltyDTO();
+        penalty2.setPenaltyType(PenaltyType.TIME_PENALTY);
+        penalty2.setInfringementType(InfringementType.IGNORING_DRIVE_THROUGH);
+        penalty2.setPlayerId(-1);
+        penalty2.setCarIndex(-1);
+        penalty2.setOtherCarIndex(playerId);
+        penalty2.setPenaltyTime((short)10947);
+        penalty2.setLapNumber((short)2);
+        penalty2.setPlacesGained((short)0);
+        penalties.add(penalty2);
 
-        return raceSession;
+        return penalties;
     }
 
 }
