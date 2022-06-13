@@ -3,7 +3,6 @@ package com.cire.formula1.model.dto;
 import com.cire.formula1.database.entity.PenaltyEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.packet.model.data.CarSetupData;
-import com.cire.formula1.packet.model.data.FinalClassificationData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,7 +25,7 @@ public class PlayerDTO {
     @JsonProperty
     private List<PenaltyDTO> involvedPenalties = new ArrayList<>();
     @JsonProperty
-    private FinalClassificationData classificationDetails;
+    private FinalClassificationDTO finalClassification;
     @JsonProperty
     private SessionHistoryDTO sessionHistory;
 
@@ -34,8 +33,6 @@ public class PlayerDTO {
         this.id = playerEntity.getId();
         this.carIndex = playerEntity.getCarIndex();
         this.playerName = playerEntity.getPlayerName();
-        this.sessionHistory = new SessionHistoryDTO(playerEntity.getSessionHistory());
-
         for(PenaltyEntity penalty: playerEntity.getPenalties()){
             //TODO: Verify that this is correct.
             if(penalty.getCarIndex() == this.carIndex){
@@ -44,7 +41,8 @@ public class PlayerDTO {
                 this.involvedPenalties.add(new PenaltyDTO(penalty));
             }
         }
-
+        this.finalClassification = new FinalClassificationDTO(playerEntity.getFinalClassification());
+        this.sessionHistory = new SessionHistoryDTO(playerEntity.getSessionHistory());
     }
 
     public PlayerDTO(int carIndex) {
@@ -112,12 +110,12 @@ public class PlayerDTO {
         this.sessionHistory = sessionHistoryDTO;
     }
 
-    public FinalClassificationData getClassificationDetails() {
-        return classificationDetails;
+    public FinalClassificationDTO getFinalClassification() {
+        return finalClassification;
     }
 
-    public void setClassificationDetails(FinalClassificationData classificationDetails) {
-        this.classificationDetails = classificationDetails;
+    public void setFinalClassification(FinalClassificationDTO finalClassification) {
+        this.finalClassification = finalClassification;
     }
 
     @Override
@@ -129,7 +127,7 @@ public class PlayerDTO {
                 ", carSetup=" + carSetup +
                 ", penalties=" + penalties +
                 ", involvedPenalties=" + involvedPenalties +
-                ", classificationDetails=" + classificationDetails +
+                ", finalClassification=" + finalClassification +
                 ", sessionHistory=" + sessionHistory +
                 '}';
     }

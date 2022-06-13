@@ -4,6 +4,7 @@ import com.cire.formula1.database.entity.LapHistoryEntity;
 import com.cire.formula1.database.entity.PenaltyEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
+import com.cire.formula1.database.repository.PlayerEntityRepository;
 import com.cire.formula1.database.repository.RaceSessionEntityRepository;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class FormulaOneDaoImpl implements FormulaOneDao {
 
     private final RaceSessionEntityRepository raceSessionRepo;
+    private final PlayerEntityRepository playerRepo;
 
     @Autowired
-    public FormulaOneDaoImpl(RaceSessionEntityRepository raceSessionRepo) {
+    public FormulaOneDaoImpl(RaceSessionEntityRepository raceSessionRepo, PlayerEntityRepository playerRepo) {
         this.raceSessionRepo = raceSessionRepo;
+        this.playerRepo = playerRepo;
     }
 
     @Override
@@ -47,6 +50,10 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
                     penalty.setId(0);
                     penalty.setPlayerId(0);
                 }
+            }
+            if(pe.getFinalClassification() != null){
+                pe.getFinalClassification().setId(0);
+                pe.getFinalClassification().setPlayerId(0);
             }
         }
         return raceSessionRepo.save(raceSessionEntity);
@@ -75,5 +82,9 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
         return raceSessionRepo.save(new RaceSessionEntity(session));
     }
 
+    @Override
+    public List<PlayerEntity> getPlayerByRaceSessionUid(BigInteger sessionUid) {
+        return playerRepo.findPlayerEntityByRaceSession_SessionUid(sessionUid.toString());
+    }
 
 }

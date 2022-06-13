@@ -1,5 +1,6 @@
 package com.cire.formula1.database;
 
+import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 
@@ -18,5 +19,7 @@ public interface FormulaOneDao {
     RaceSessionEntity updateRaceSession(RaceSessionDTO session);
 
     void deleteRaceSession(RaceSessionEntity sessionUid);
+
+    List<PlayerEntity> getPlayerByRaceSessionUid(BigInteger sessionUid);
 
 }

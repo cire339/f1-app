@@ -2,7 +2,6 @@ package com.cire.formula1.database.entity;
 
 import com.cire.formula1.model.dto.PenaltyDTO;
 import com.cire.formula1.model.dto.PlayerDTO;
-import com.cire.formula1.packet.model.data.Penalty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -11,7 +10,6 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "player", schema = "public", catalog = "FormulaOne")
@@ -39,6 +37,10 @@ public class PlayerEntity {
 
     @JsonManagedReference
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    private FinalClassificationEntity finalClassification;
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private SessionHistoryEntity sessionHistory;
 
     @JsonManagedReference
@@ -49,9 +51,11 @@ public class PlayerEntity {
         this.id = playerDTO.getId();
         this.carIndex = playerDTO.getCarIndex();
         this.playerName = playerDTO.getPlayerName();
+
         SessionHistoryEntity shde = new SessionHistoryEntity(playerDTO.getSessionHistory());
         shde.setPlayer(this);
         this.sessionHistory = shde;
+
         //Merge the 2 penalty lists and convert.
         List<PenaltyDTO> penalties = playerDTO.getPenalties();
         penalties.addAll(playerDTO.getInvolvedPenalties());
@@ -62,6 +66,10 @@ public class PlayerEntity {
             penaltyEntities.add(penaltyEntity);
         }
         this.penalties = penaltyEntities;
+
+        FinalClassificationEntity fce = new FinalClassificationEntity(playerDTO.getFinalClassification());
+        fce.setPlayer(this);
+        this.finalClassification = fce;
     }
 
     public PlayerEntity() {
@@ -122,5 +130,13 @@ public class PlayerEntity {
 
     public void setPenalties(Collection<PenaltyEntity> penalties) {
         this.penalties = penalties;
+    }
+
+    public FinalClassificationEntity getFinalClassification() {
+        return finalClassification;
+    }
+
+    public void setFinalClassification(FinalClassificationEntity finalClassification) {
+        this.finalClassification = finalClassification;
     }
 }

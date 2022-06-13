@@ -4,7 +4,6 @@ import com.cire.formula1.database.FormulaOneDao;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.cire.formula1.model.RaceSessions;
-import com.cire.formula1.utils.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +39,6 @@ public class RaceSessionController {
         return new ResponseEntity<>(new RaceSessions(raceSessions), HttpStatus.OK);
     }
 
-    /*
-    @PostMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> createSessionInDb(@PathVariable BigInteger sessionUid) {
-        RaceSession raceSession = new RaceSession();
-        raceSession.setSessionUid(sessionUid);
-
-        RaceSessionEntity raceSessionEntity = formulaOneDao.createRaceSession(raceSession);
-
-        return new ResponseEntity<>(new RaceSession(raceSessionEntity), HttpStatus.OK);
-    }
-    */
-
     @GetMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getSessionById(@PathVariable BigInteger sessionUid) {
         Optional<RaceSessionEntity> raceSession = formulaOneDao.getRaceSessionByUid(sessionUid);
@@ -73,24 +60,5 @@ public class RaceSessionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     */
-
-    //TEST ENDPOINT - TODO: REMOVE
-    @PostMapping(value = {"/{sessionUid}/test"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> createTestSession(@PathVariable BigInteger sessionUid) {
-
-        RaceSessionDTO raceSession = DataUtils.createTestSession(sessionUid);
-
-        RaceSessionEntity raceSessionEntity = formulaOneDao.createRaceSession(raceSession);
-
-        return new ResponseEntity<>(new RaceSessionDTO(raceSessionEntity), HttpStatus.OK);
-    }
-
-    @GetMapping(value = {"/{sessionUid}/test"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getTestSession(@PathVariable BigInteger sessionUid) {
-
-        RaceSessionDTO raceSession = DataUtils.createTestSession(sessionUid);
-
-        return new ResponseEntity<>(raceSession, HttpStatus.OK);
-    }
 
 }

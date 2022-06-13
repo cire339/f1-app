@@ -1,6 +1,7 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.database.FormulaOneDao;
+import com.cire.formula1.model.dto.FinalClassificationDTO;
 import com.cire.formula1.model.dto.PenaltyDTO;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.cire.formula1.model.dto.SessionHistoryDTO;
@@ -119,7 +120,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //Set final classification for each player.
         for(int i = 0; i<finalClassificationDataPacket.getNumCars(); i++){
             FinalClassificationData classificationData = finalClassificationDataPacket.getFinalClassificationData().get(i);
-            raceSession.getPlayers().get(i).setClassificationDetails(classificationData);
+            raceSession.getPlayers().get(i).setFinalClassification(new FinalClassificationDTO(classificationData));
         }
 
         if(raceSession.getFastestLap() != null) {

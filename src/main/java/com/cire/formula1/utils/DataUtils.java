@@ -3,6 +3,7 @@ package com.cire.formula1.utils;
 import com.cire.formula1.model.dto.*;
 import com.cire.formula1.packet.model.constants.InfringementType;
 import com.cire.formula1.packet.model.constants.PenaltyType;
+import com.cire.formula1.packet.model.constants.ResultStatus;
 import com.cire.formula1.packet.model.data.CarSetupData;
 
 import java.math.BigInteger;
@@ -59,7 +60,17 @@ public class DataUtils {
         lapHistoryDataList.add(lapHistoryDTO);
 
         //Classification details
-        //TODO: Add this..
+        FinalClassificationDTO finalClassificationDTO = new FinalClassificationDTO();
+        finalClassificationDTO.setFinalPosition((short) 1);
+        finalClassificationDTO.setGridPosition((short) 5);
+        finalClassificationDTO.setBestLapTime(73546);
+        finalClassificationDTO.setNumberOfLaps((short) 3);
+        finalClassificationDTO.setNumberOfPenalties((short) 2);
+        finalClassificationDTO.setPoints((short) 25);
+        finalClassificationDTO.setNumberOfPitStops((short) 2);
+        finalClassificationDTO.setPenaltiesTime((short) 5);
+        finalClassificationDTO.setNumberOfTyreStints((short) 2);
+        finalClassificationDTO.setResultStatus(ResultStatus.FINISHED.name());
 
         //Put everything together
         playerDTO.setCarSetup(createCarSetupData());
@@ -67,6 +78,7 @@ public class DataUtils {
         playerDTO.setInvolvedPenalties(createInvolvedPenalties(playerId));
         sessionHistoryDTO.setLapHistory(lapHistoryDataList);
         playerDTO.setSessionHistory(sessionHistoryDTO);
+        playerDTO.setFinalClassification(finalClassificationDTO);
 
         return playerDTO;
     }
