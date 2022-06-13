@@ -9,6 +9,7 @@ import com.cire.formula1.database.repository.RaceSessionEntityRepository;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     }
 
     @Override
+    @Transactional
     public RaceSessionEntity createRaceSession(RaceSessionDTO session) {
         //Set IDs to 0 for some reason...
         RaceSessionEntity raceSessionEntity = new RaceSessionEntity(session);
@@ -56,15 +58,18 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
                 pe.getFinalClassification().setPlayerId(0);
             }
         }
-        return raceSessionRepo.save(raceSessionEntity);
+        raceSessionRepo.saveAndFlush(raceSessionEntity);
+        return raceSessionRepo.findBySessionUid(raceSessionEntity.getSessionUid()).get();
     }
 
     @Override
+    @Transactional
     public Optional<RaceSessionEntity> getRaceSessionByUid(BigInteger sessionUid) {
         return raceSessionRepo.findBySessionUid(sessionUid.toString());
     }
 
     @Override
+    @Transactional
     public List<BigInteger> getAllRaceSessions() {
         Iterable<RaceSessionEntity> sessions =  raceSessionRepo.findAll();
         List<BigInteger> sessionUidList = new ArrayList<>();
@@ -73,13 +78,16 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     }
 
     @Override
+    @Transactional
     public void deleteRaceSession(RaceSessionEntity session) {
         raceSessionRepo.delete(session);
     }
 
     @Override
+    @Transactional
     public RaceSessionEntity updateRaceSession(RaceSessionDTO session) {
-        return raceSessionRepo.save(new RaceSessionEntity(session));
+        raceSessionRepo.saveAndFlush(new RaceSessionEntity(session));
+        return raceSessionRepo.findBySessionUid(String.valueOf(session.getSessionUid())).get();
     }
 
     @Override

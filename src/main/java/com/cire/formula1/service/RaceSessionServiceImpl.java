@@ -44,6 +44,18 @@ public class RaceSessionServiceImpl implements RaceSessionService {
     }
 
     @Override
+    public synchronized RaceSessionDTO updateRaceSession(RaceSessionDTO raceSession){
+        BigInteger sessionUid = raceSession.getSessionUid();
+        if(raceSessions.containsKey(sessionUid)){
+            raceSessions.replace(sessionUid, raceSession);
+            return raceSessions.get(sessionUid);
+        }else{
+            LOGGER.debug("RaceSession with UID=" + sessionUid + " does not exist.");
+            return createRaceSession(sessionUid);
+        }
+    }
+
+    @Override
     public List<BigInteger> getRaceAllSessions() {
         return raceSessions.keySet().stream().toList();
     }

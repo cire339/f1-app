@@ -45,6 +45,16 @@ public class RaceSessionDTO {
     public RaceSessionDTO(RaceSessionEntity entity){
         this.id = entity.getId();
         this.sessionUid = new BigInteger(entity.getSessionUid());
+        this.fastestSpeed = entity.getFastestSpeed();
+        if(entity.getFastestSpeedCarIndex() != null) {
+            this.fastestSpeedCarIndex = entity.getFastestSpeedCarIndex().shortValue();
+        }
+        if(entity.getFastestLapCarIndex() != null && entity.getFastestLap() != null) {
+            FastestLap fl = new FastestLap();
+            fl.setCarIndex(entity.getFastestLapCarIndex().shortValue());
+            fl.setLapTime(entity.getFastestLap());
+            this.fastestLap = fl;
+        }
         this.players = new ArrayList<>();
         if(entity.getPlayers() != null) {
             for (PlayerEntity playerEntity : entity.getPlayers()) {

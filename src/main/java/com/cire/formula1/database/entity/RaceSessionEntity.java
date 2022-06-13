@@ -24,6 +24,18 @@ public class RaceSessionEntity {
     @Column(name = "session_uid", nullable = false, length = -1)
     private String sessionUid;
 
+    @Column(name = "fastest_speed")
+    private Float fastestSpeed;
+
+    @Column(name = "fastest_speed_car_index")
+    private Integer fastestSpeedCarIndex;
+
+    @Column(name = "fastest_lap")
+    private Float fastestLap;
+
+    @Column(name = "fastest_lap_car_index")
+    private Integer fastestLapCarIndex;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "raceSession", cascade = CascadeType.ALL)
     private Collection<PlayerEntity> players;
@@ -31,6 +43,12 @@ public class RaceSessionEntity {
     public RaceSessionEntity(RaceSessionDTO raceSession){
         this.id = raceSession.getId();
         this.sessionUid = String.valueOf(raceSession.getSessionUid());
+        this.fastestSpeed = raceSession.getFastestSpeed();
+        this.fastestSpeedCarIndex = (int) raceSession.getFastestSpeedCarIndex();
+        if(raceSession.getFastestLap() != null) {
+            this.fastestLap = raceSession.getFastestLap().getLapTime();
+            this.fastestSpeedCarIndex = (int) raceSession.getFastestLap().getCarIndex();
+        }
         this.players = new ArrayList<>();
         for(PlayerDTO playerDTO : raceSession.getPlayers()){
             PlayerEntity playerEntity = new PlayerEntity(playerDTO);
@@ -61,6 +79,38 @@ public class RaceSessionEntity {
 
     public void setSessionUid(String sessionUid) {
         this.sessionUid = sessionUid;
+    }
+
+    public Float getFastestSpeed() {
+        return fastestSpeed;
+    }
+
+    public void setFastestSpeed(Float fastestSpeed) {
+        this.fastestSpeed = fastestSpeed;
+    }
+
+    public Integer getFastestSpeedCarIndex() {
+        return fastestSpeedCarIndex;
+    }
+
+    public void setFastestSpeedCarIndex(Integer fastestSpeedCarIndex) {
+        this.fastestSpeedCarIndex = fastestSpeedCarIndex;
+    }
+
+    public Float getFastestLap() {
+        return fastestLap;
+    }
+
+    public void setFastestLap(Float fastestLap) {
+        this.fastestLap = fastestLap;
+    }
+
+    public Integer getFastestLapCarIndex() {
+        return fastestLapCarIndex;
+    }
+
+    public void setFastestLapCarIndex(Integer fastestLapCarIndex) {
+        this.fastestLapCarIndex = fastestLapCarIndex;
     }
 
     public Collection<PlayerEntity> getPlayers() {

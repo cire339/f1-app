@@ -12,4 +12,6 @@ public interface RaceSessionService {
     RaceSessionDTO getRaceSessionByUid(BigInteger sessionUid);
 
     List<BigInteger> getRaceAllSessions();
+
+    RaceSessionDTO updateRaceSession(RaceSessionDTO raceSession);
 }

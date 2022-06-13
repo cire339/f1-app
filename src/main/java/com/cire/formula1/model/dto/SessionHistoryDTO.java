@@ -7,10 +7,12 @@ import com.cire.formula1.packet.model.data.LapHistoryData;
 import com.cire.formula1.packet.model.data.TyreStintHistoryData;
 import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SessionHistoryDTO {
     private int id;
     private short numLaps;

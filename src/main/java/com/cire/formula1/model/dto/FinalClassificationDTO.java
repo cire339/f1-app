@@ -4,9 +4,11 @@ import com.cire.formula1.database.entity.FinalClassificationEntity;
 import com.cire.formula1.packet.model.data.FinalClassificationData;
 import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Arrays;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FinalClassificationDTO {
 
     private int id;

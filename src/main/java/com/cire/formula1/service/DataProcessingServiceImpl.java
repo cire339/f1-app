@@ -1,6 +1,7 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.database.FormulaOneDao;
+import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.dto.FinalClassificationDTO;
 import com.cire.formula1.model.dto.PenaltyDTO;
 import com.cire.formula1.model.dto.RaceSessionDTO;
@@ -53,6 +54,10 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             default -> throw new IllegalArgumentException("PacketId=" + packetId + " unrecognized");
         }
 
+        //Update session in memory.
+        if(raceSession != null) {
+            raceSession = raceSessionService.updateRaceSession(raceSession);
+        }
     }
 
     /**
@@ -62,6 +67,11 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     @Override
     public void processSecondaryData(Packet packet, String playerName) {
         processHeader(packet, playerName);
+
+        //Update session in memory.
+        if(raceSession != null) {
+            raceSessionService.updateRaceSession(raceSession);
+        }
     }
 
     private void processHeader(Packet packet, String playerName) {
@@ -180,14 +190,20 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 }
                 break;
             case SPEED_TRAP_TRIGGERED:
-                //Set highest speed
-                if(eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed() > raceSession.getFastestSpeed()){
+                //Set overall highest speed
+                Float speedCaptured = eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed();
+                short carIndex = eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex();
+                if(speedCaptured > raceSession.getFastestSpeed()){
                     LOGGER.info("New speed trap highest speed by " +
-                            getDriverName(eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex()) +
+                            getDriverName(carIndex) +
                             " with a speed of " +
-                            eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
-                    raceSession.setFastestSpeed(eventDataPacket.getEventDataDetails().getSpeedTrap().getSpeed());
-                    raceSession.setFastestSpeedCarIndex(eventDataPacket.getEventDataDetails().getSpeedTrap().getCarIndex());
+                            speedCaptured);
+                    raceSession.setFastestSpeed(speedCaptured);
+                    raceSession.setFastestSpeedCarIndex(carIndex);
+                }
+                //Set player fastest speed
+                if(speedCaptured > raceSession.getPlayers().get(carIndex).getFastestSpeed()){
+                    raceSession.getPlayers().get(carIndex).setFastestSpeed(speedCaptured);
                 }
                 break;
             case LIGHTS_OUT:
@@ -252,7 +268,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //Check DB first?
         if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isEmpty()) {
             LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
-            formulaOneDao.createRaceSession(raceSession);
+            raceSession = new RaceSessionDTO(formulaOneDao.createRaceSession(raceSession));
+            raceSessionService.updateRaceSession(raceSession);
             LOGGER.info("Session created successfully!");
         }
     }
@@ -261,7 +278,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //Check DB first?
         if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
             LOGGER.info("Updating session " + raceSession.getSessionUid() + " in database..");
-            formulaOneDao.updateRaceSession(raceSession);
+            raceSession = new RaceSessionDTO(formulaOneDao.updateRaceSession(raceSession));
+            raceSessionService.updateRaceSession(raceSession);
             LOGGER.info("Session updated successfully!");
         }
     }

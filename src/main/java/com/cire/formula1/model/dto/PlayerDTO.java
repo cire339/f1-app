@@ -5,11 +5,13 @@ import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.packet.model.data.CarSetupData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PlayerDTO {
 
     @JsonProperty
@@ -18,6 +20,8 @@ public class PlayerDTO {
     private Integer carIndex;
     @JsonProperty
     private String playerName;
+    @JsonProperty
+    private Float fastestSpeed = 0F;
     @JsonProperty
     private CarSetupData carSetup;
     @JsonProperty
@@ -33,16 +37,21 @@ public class PlayerDTO {
         this.id = playerEntity.getId();
         this.carIndex = playerEntity.getCarIndex();
         this.playerName = playerEntity.getPlayerName();
+        this.fastestSpeed = playerEntity.getFastestSpeed();
         for(PenaltyEntity penalty: playerEntity.getPenalties()){
             //TODO: Verify that this is correct.
-            if(penalty.getCarIndex() == this.carIndex){
+            if(Objects.equals(penalty.getCarIndex(), this.carIndex)){
                 this.penalties.add(new PenaltyDTO(penalty));
             }else{
                 this.involvedPenalties.add(new PenaltyDTO(penalty));
             }
         }
-        this.finalClassification = new FinalClassificationDTO(playerEntity.getFinalClassification());
-        this.sessionHistory = new SessionHistoryDTO(playerEntity.getSessionHistory());
+        if(playerEntity.getFinalClassification() != null) {
+            this.finalClassification = new FinalClassificationDTO(playerEntity.getFinalClassification());
+        }
+        if(playerEntity.getSessionHistory() != null) {
+            this.sessionHistory = new SessionHistoryDTO(playerEntity.getSessionHistory());
+        }
     }
 
     public PlayerDTO(int carIndex) {
@@ -76,6 +85,14 @@ public class PlayerDTO {
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    public Float getFastestSpeed() {
+        return fastestSpeed;
+    }
+
+    public void setFastestSpeed(Float fastestSpeed) {
+        this.fastestSpeed = fastestSpeed;
     }
 
     public CarSetupData getCarSetup() {
