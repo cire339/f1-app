@@ -210,4 +210,20 @@ public class FinalClassificationDTO {
                 ", tyreStintsVisual=" + Arrays.toString(tyreStintsVisual) +
                 '}';
     }
+
+    public void updateFinalClassification(FinalClassificationDTO newFC) {
+        this.finalPosition = newFC.getFinalPosition();
+        this.numberOfLaps = newFC.getNumberOfLaps();
+        this.gridPosition = newFC.getGridPosition();
+        this.points = newFC.getPoints();
+        this.numberOfPitStops = newFC.getNumberOfPitStops();
+        this.resultStatus = newFC.getResultStatus();
+        this.bestLapTime = newFC.getBestLapTime();
+        this.totalRaceTime = newFC.getTotalRaceTime();
+        this.penaltiesTime = newFC.getPenaltiesTime();
+        this.numberOfPenalties = newFC.getNumberOfPenalties();
+        this.numberOfTyreStints = newFC.getNumberOfTyreStints();
+        this.tyreStintsActual = newFC.getTyreStintsActual();
+        this.tyreStintsVisual = newFC.getTyreStintsVisual();
+    }
 }

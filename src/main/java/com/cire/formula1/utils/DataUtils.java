@@ -8,7 +8,9 @@ import com.cire.formula1.packet.model.data.CarSetupData;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DataUtils {
 
@@ -51,7 +53,7 @@ public class DataUtils {
         sessionHistoryDTO.setBestSector3LapNum((short)5);
 
         //Lap Data
-        List<LapHistoryDTO> lapHistoryDataList = new ArrayList<>();
+        Set<LapHistoryDTO> lapHistoryDataList = new HashSet<>();
         LapHistoryDTO lapHistoryDTO = new LapHistoryDTO();
         lapHistoryDTO.setLapTimeInMS(73546);
         lapHistoryDTO.setSector1TimeInMS(22515);
@@ -111,8 +113,8 @@ public class DataUtils {
         return carSetupData;
     }
 
-    private static List<PenaltyDTO> createPenalties(int playerId){
-        List<PenaltyDTO> penalties = new ArrayList<>();
+    private static Set<PenaltyDTO> createPenalties(int playerId){
+        Set<PenaltyDTO> penalties = new HashSet<>();
 
         PenaltyDTO penalty1 = new PenaltyDTO();
         penalty1.setPenaltyType(PenaltyType.WARNING);
@@ -139,8 +141,8 @@ public class DataUtils {
         return penalties;
     }
 
-    private static List<PenaltyDTO> createInvolvedPenalties(int playerId){
-        List<PenaltyDTO> penalties = new ArrayList<>();
+    private static Set<PenaltyDTO> createInvolvedPenalties(int playerId){
+        Set<PenaltyDTO> penalties = new HashSet<>();
 
         PenaltyDTO penalty1 = new PenaltyDTO();
         penalty1.setPenaltyType(PenaltyType.WARNING);

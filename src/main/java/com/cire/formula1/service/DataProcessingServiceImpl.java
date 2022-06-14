@@ -87,14 +87,19 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private void processSessionHistory(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
         //One final Session History packet is sent at the very end after the Final Classification packet is sent.
-        //But it does not seem to be the case.. why?
-        if(raceSession.isRaceEnded()){
-            PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
-            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+        //But it does not seem to be the case.. why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
 
+        //if(raceSession.isRaceEnded()){
+            PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
+            SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
+            if(sessionHistory != null){
+                sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
+            }else {
+                raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+            }
             //Update session in DB.
             updateSessionInDatabase();
-        }
+       // }
     }
 
     private void processSession(Packet packet) {

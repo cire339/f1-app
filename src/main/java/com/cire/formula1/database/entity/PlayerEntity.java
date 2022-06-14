@@ -7,9 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "player", schema = "public", catalog = "FormulaOne")
@@ -39,16 +38,16 @@ public class PlayerEntity {
     private RaceSessionEntity raceSession;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private FinalClassificationEntity finalClassification;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private SessionHistoryEntity sessionHistory;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Collection<PenaltyEntity> penalties;
+    private Set<PenaltyEntity> penalties;
 
     public PlayerEntity(PlayerDTO playerDTO){
         this.id = playerDTO.getId();
@@ -63,9 +62,9 @@ public class PlayerEntity {
         }
 
         //Merge the 2 penalty lists and convert.
-        List<PenaltyDTO> penalties = playerDTO.getPenalties();
+        Set<PenaltyDTO> penalties = playerDTO.getPenalties();
         penalties.addAll(playerDTO.getInvolvedPenalties());
-        List<PenaltyEntity> penaltyEntities = new ArrayList<>();
+        Set<PenaltyEntity> penaltyEntities = new HashSet<>();
         for(PenaltyDTO penalty: penalties){
             PenaltyEntity penaltyEntity = new PenaltyEntity(penalty);
             penaltyEntity.setPlayer(this);
@@ -140,11 +139,11 @@ public class PlayerEntity {
         this.sessionHistory = sessionHistory;
     }
 
-    public Collection<PenaltyEntity> getPenalties() {
+    public Set<PenaltyEntity> getPenalties() {
         return penalties;
     }
 
-    public void setPenalties(Collection<PenaltyEntity> penalties) {
+    public void setPenalties(Set<PenaltyEntity> penalties) {
         this.penalties = penalties;
     }
 

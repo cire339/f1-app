@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "race_session", schema = "public", catalog = "FormulaOne")
@@ -38,7 +36,7 @@ public class RaceSessionEntity {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "raceSession", cascade = CascadeType.ALL)
-    private Collection<PlayerEntity> players;
+    private Set<PlayerEntity> players;
 
     public RaceSessionEntity(RaceSessionDTO raceSession){
         this.id = raceSession.getId();
@@ -49,7 +47,7 @@ public class RaceSessionEntity {
             this.fastestLap = raceSession.getFastestLap().getLapTime();
             this.fastestSpeedCarIndex = (int) raceSession.getFastestLap().getCarIndex();
         }
-        this.players = new ArrayList<>();
+        this.players = new HashSet<>();
         for(PlayerDTO playerDTO : raceSession.getPlayers()){
             PlayerEntity playerEntity = new PlayerEntity(playerDTO);
             playerEntity.setRaceSession(this);
@@ -113,11 +111,11 @@ public class RaceSessionEntity {
         this.fastestLapCarIndex = fastestLapCarIndex;
     }
 
-    public Collection<PlayerEntity> getPlayers() {
+    public Set<PlayerEntity> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Collection<PlayerEntity> players) {
+    public void setPlayers(Set<PlayerEntity> players) {
         this.players = players;
     }
 }

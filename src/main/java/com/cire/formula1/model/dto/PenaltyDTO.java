@@ -142,4 +142,14 @@ public class PenaltyDTO {
                 ", placesGained=" + placesGained +
                 '}';
     }
+
+    public void updatePenalty(PenaltyDTO newPenalty){
+        this.carIndex = newPenalty.getCarIndex();
+        this.otherCarIndex = newPenalty.getOtherCarIndex();
+        this.penaltyType = newPenalty.getPenaltyType();
+        this.infringementType = newPenalty.getInfringementType();
+        this.penaltyTime = newPenalty.getPenaltyTime();
+        this.lapNumber = newPenalty.getLapNumber();
+        this.placesGained = newPenalty.getPlacesGained();
+    }
 }

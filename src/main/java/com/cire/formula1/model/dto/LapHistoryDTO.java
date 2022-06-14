@@ -101,4 +101,12 @@ public class LapHistoryDTO {
                 ", lapValidBitFlags=" + lapValidBitFlags +
                 '}';
     }
+
+    public void updateLapHistory(LapHistoryDTO newLH) {
+        this.lapTimeInMS = newLH.getLapTimeInMS();
+        this.sector1TimeInMS = newLH.getSector1TimeInMS();
+        this.sector2TimeInMS = newLH.getSector2TimeInMS();
+        this.sector3TimeInMS = newLH.getSector3TimeInMS();
+        this.lapValidBitFlags = newLH.getLapValidBitFlags();
+    }
 }

@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SessionHistoryDTO {
@@ -23,7 +25,7 @@ public class SessionHistoryDTO {
     private short bestSector3LapNum;
 
     @JsonIgnore
-    private List<LapHistoryDTO> lapHistory = new ArrayList<>(PacketConstants.LAPS);
+    private Set<LapHistoryDTO> lapHistory = new HashSet<>(PacketConstants.LAPS);
 
     @JsonIgnore
     private List<TyreStintHistoryData> tyreStintHistoryData = new ArrayList<>(PacketConstants.TYRE_STINTS);
@@ -36,7 +38,7 @@ public class SessionHistoryDTO {
         this.bestSector2LapNum = data.getBestSector2LapNum();
         this.bestSector3LapNum = data.getBestSector3LapNum();
         if(data.getLapHistoryData() != null){
-            List<LapHistoryDTO> laps = new ArrayList<>();
+            Set<LapHistoryDTO> laps = new HashSet<>();
             for(LapHistoryData lapData : data.getLapHistoryData()){
                 laps.add(new LapHistoryDTO(lapData));
             }
@@ -70,7 +72,7 @@ public class SessionHistoryDTO {
             this.bestSector3LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
         }
         if(sessionHistoryData.getLapHistory() != null) {
-            this.lapHistory = new ArrayList<>();
+            this.lapHistory = new HashSet<>();
             for (LapHistoryEntity lapHistoryDataEntity : sessionHistoryData.getLapHistory()) {
                 this.lapHistory.add(new LapHistoryDTO(lapHistoryDataEntity));
             }
@@ -133,11 +135,11 @@ public class SessionHistoryDTO {
         this.bestSector3LapNum = bestSector3LapNum;
     }
 
-    public List<LapHistoryDTO> getLapHistory() {
+    public Set<LapHistoryDTO> getLapHistory() {
         return lapHistory;
     }
 
-    public void setLapHistory(List<LapHistoryDTO> lapHistory) {
+    public void setLapHistory(Set<LapHistoryDTO> lapHistory) {
         this.lapHistory = lapHistory;
     }
 
@@ -162,5 +164,18 @@ public class SessionHistoryDTO {
                 ", lapHistory=" + lapHistory +
                 ", tyreStintHistoryData=" + tyreStintHistoryData +
                 '}';
+    }
+
+    public void updateSessionHistory(SessionHistoryDTO newSH){
+        this.setNumLaps(newSH.getNumLaps());
+        this.setNumTyreStints(newSH.getNumTyreStints());
+        this.setBestLapTimeLapNum(newSH.getBestLapTimeLapNum());
+        this.setBestSector1LapNum(newSH.getBestSector1LapNum());
+        this.setBestSector2LapNum(newSH.getBestSector2LapNum());
+        this.setBestSector3LapNum(newSH.getBestSector3LapNum());
+        for(int i=0;i<newSH.getLapHistory().size();i++){
+            this.lapHistory.stream().toList().get(i).updateLapHistory(newSH.getLapHistory().stream().toList().get(i));
+        }
+        this.setTyreStintHistoryData(newSH.getTyreStintHistoryData());
     }
 }

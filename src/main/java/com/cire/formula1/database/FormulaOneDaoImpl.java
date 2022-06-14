@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class FormulaOneDaoImpl implements FormulaOneDao {
 
     private final RaceSessionEntityRepository raceSessionRepo;
@@ -29,7 +30,6 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     }
 
     @Override
-    @Transactional
     public RaceSessionEntity createRaceSession(RaceSessionDTO session) {
         //Set IDs to 0 for some reason...
         RaceSessionEntity raceSessionEntity = new RaceSessionEntity(session);
@@ -63,13 +63,11 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     }
 
     @Override
-    @Transactional
     public Optional<RaceSessionEntity> getRaceSessionByUid(BigInteger sessionUid) {
         return raceSessionRepo.findBySessionUid(sessionUid.toString());
     }
 
     @Override
-    @Transactional
     public List<BigInteger> getAllRaceSessions() {
         Iterable<RaceSessionEntity> sessions =  raceSessionRepo.findAll();
         List<BigInteger> sessionUidList = new ArrayList<>();
@@ -78,13 +76,11 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
     }
 
     @Override
-    @Transactional
     public void deleteRaceSession(RaceSessionEntity session) {
         raceSessionRepo.delete(session);
     }
 
     @Override
-    @Transactional
     public RaceSessionEntity updateRaceSession(RaceSessionDTO session) {
         raceSessionRepo.saveAndFlush(new RaceSessionEntity(session));
         return raceSessionRepo.findBySessionUid(String.valueOf(session.getSessionUid())).get();

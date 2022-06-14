@@ -5,11 +5,8 @@ import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.packet.model.data.CarSetupData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PlayerDTO {
@@ -25,9 +22,9 @@ public class PlayerDTO {
     @JsonProperty
     private CarSetupData carSetup;
     @JsonProperty
-    private List<PenaltyDTO> penalties = new ArrayList<>();
+    private Set<PenaltyDTO> penalties = new HashSet<>();
     @JsonProperty
-    private List<PenaltyDTO> involvedPenalties = new ArrayList<>();
+    private Set<PenaltyDTO> involvedPenalties = new HashSet<>();
     @JsonProperty
     private FinalClassificationDTO finalClassification;
     @JsonProperty
@@ -103,19 +100,19 @@ public class PlayerDTO {
         this.carSetup = carSetup;
     }
 
-    public List<PenaltyDTO> getPenalties() {
+    public Set<PenaltyDTO> getPenalties() {
         return penalties;
     }
 
-    public void setPenalties(List<PenaltyDTO> penalties) {
+    public void setPenalties(Set<PenaltyDTO> penalties) {
         this.penalties = penalties;
     }
 
-    public List<PenaltyDTO> getInvolvedPenalties() {
+    public Set<PenaltyDTO> getInvolvedPenalties() {
         return involvedPenalties;
     }
 
-    public void setInvolvedPenalties(List<PenaltyDTO> involvedPenalties) {
+    public void setInvolvedPenalties(Set<PenaltyDTO> involvedPenalties) {
         this.involvedPenalties = involvedPenalties;
     }
 
@@ -147,5 +144,19 @@ public class PlayerDTO {
                 ", finalClassification=" + finalClassification +
                 ", sessionHistory=" + sessionHistory +
                 '}';
+    }
+
+    public void updatePlayer(PlayerDTO newPlayer){
+        this.carIndex = newPlayer.getCarIndex();
+        this.playerName = newPlayer.getPlayerName();
+        this.carSetup = newPlayer.getCarSetup();
+        for(int i=0;i<newPlayer.getPenalties().size();i++){
+            this.penalties.stream().toList().get(i).updatePenalty(newPlayer.getPenalties().stream().toList().get(i));
+        }
+        for(int i=0;i<newPlayer.getInvolvedPenalties().size();i++){
+            this.involvedPenalties.stream().toList().get(i).updatePenalty(newPlayer.getPenalties().stream().toList().get(i));
+        }
+        this.finalClassification.updateFinalClassification(newPlayer.getFinalClassification());
+        this.sessionHistory.updateSessionHistory(newPlayer.getSessionHistory());
     }
 }

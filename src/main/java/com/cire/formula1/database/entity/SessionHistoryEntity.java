@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "session_history", schema = "public", catalog = "FormulaOne")
@@ -43,8 +41,8 @@ public class SessionHistoryEntity {
     private Integer bestSector3LapNumber;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "sessionHistoryData", cascade = CascadeType.ALL)
-    private Collection<LapHistoryEntity> lapHistory;
+    @OneToMany(mappedBy = "sessionHistoryData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<LapHistoryEntity> lapHistory;
 
     @JsonBackReference("player")
     @OneToOne
@@ -52,24 +50,21 @@ public class SessionHistoryEntity {
     private PlayerEntity player;
 
     public SessionHistoryEntity(SessionHistoryDTO data){
-        if(data != null) {
-            this.id = data.getId();
-            this.numberLaps = (int) data.getNumLaps();
-            this.numberTyreStints = (int) data.getNumTyreStints();
-            this.bestLapTimeLapNumber = (int) data.getBestLapTimeLapNum();
-            this.bestSector1LapNumber = (int) data.getBestSector1LapNum();
-            this.bestSector2LapNumber = (int) data.getBestSector2LapNum();
-            this.bestSector3LapNumber = (int) data.getBestSector3LapNum();
-            if(data.getLapHistory() != null) {
-                this.lapHistory = new ArrayList<>();
-                for (LapHistoryDTO lapHistory : data.getLapHistory()) {
-                    LapHistoryEntity lapHistoryDataEntity = new LapHistoryEntity(lapHistory);
-                    lapHistoryDataEntity.setSessionHistoryData(this);
-                    this.lapHistory.add(lapHistoryDataEntity);
-                }
+        this.id = data.getId();
+        this.numberLaps = (int) data.getNumLaps();
+        this.numberTyreStints = (int) data.getNumTyreStints();
+        this.bestLapTimeLapNumber = (int) data.getBestLapTimeLapNum();
+        this.bestSector1LapNumber = (int) data.getBestSector1LapNum();
+        this.bestSector2LapNumber = (int) data.getBestSector2LapNum();
+        this.bestSector3LapNumber = (int) data.getBestSector3LapNum();
+        if(data.getLapHistory() != null) {
+            this.lapHistory = new HashSet<>();
+            for (LapHistoryDTO lapHistory : data.getLapHistory()) {
+                LapHistoryEntity lapHistoryDataEntity = new LapHistoryEntity(lapHistory);
+                lapHistoryDataEntity.setSessionHistoryData(this);
+                this.lapHistory.add(lapHistoryDataEntity);
             }
         }
-
     }
 
     public SessionHistoryEntity() {
@@ -140,11 +135,11 @@ public class SessionHistoryEntity {
         this.bestSector3LapNumber = bestSector3LapNumber;
     }
 
-    public Collection<LapHistoryEntity> getLapHistory() {
+    public Set<LapHistoryEntity> getLapHistory() {
         return lapHistory;
     }
 
-    public void setLapHistory(Collection<LapHistoryEntity> lapHistory) {
+    public void setLapHistory(Set<LapHistoryEntity> lapHistory) {
         this.lapHistory = lapHistory;
     }
 
