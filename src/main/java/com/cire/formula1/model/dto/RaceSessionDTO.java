@@ -61,9 +61,7 @@ public class RaceSessionDTO {
                 PlayerDTO playerDTO = new PlayerDTO(playerEntity);
                 this.players.add(playerDTO);
             }
-            System.out.println("Before");
             orderPlayersByCarIndex();
-            System.out.println("After");
         }
     }
 
