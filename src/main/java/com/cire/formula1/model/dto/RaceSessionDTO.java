@@ -61,6 +61,9 @@ public class RaceSessionDTO {
                 PlayerDTO playerDTO = new PlayerDTO(playerEntity);
                 this.players.add(playerDTO);
             }
+            System.out.println("Before");
+            orderPlayersByCarIndex();
+            System.out.println("After");
         }
     }
 
@@ -149,5 +152,21 @@ public class RaceSessionDTO {
                 ", raceEnded=" + raceEnded +
                 ", players=" + players +
                 '}';
+    }
+
+    private void orderPlayersByCarIndex(){
+        boolean sorted = false;
+        PlayerDTO temp;
+        while(!sorted) {
+            sorted = true;
+            for (int i = 0; i < this.getPlayers().size() - 1; i++) {
+                if (this.getPlayers().get(i).getCarIndex() > this.getPlayers().get(i+1).getCarIndex()) {
+                    temp = this.getPlayers().get(i);
+                    this.getPlayers().set(i, this.getPlayers().get(i+1));
+                    this.getPlayers().set(i+1, temp);
+                    sorted = false;
+                }
+            }
+        }
     }
 }

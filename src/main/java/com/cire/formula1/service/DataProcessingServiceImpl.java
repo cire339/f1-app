@@ -284,7 +284,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
             LOGGER.info("Updating session " + raceSession.getSessionUid() + " in database..");
             raceSession = new RaceSessionDTO(formulaOneDao.updateRaceSession(raceSession));
-            raceSessionService.updateRaceSession(raceSession);
+            raceSession = raceSessionService.updateRaceSession(raceSession);
             LOGGER.info("Session updated successfully!");
         }
     }
