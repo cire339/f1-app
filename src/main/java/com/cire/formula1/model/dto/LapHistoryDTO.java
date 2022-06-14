@@ -6,6 +6,7 @@ import com.cire.formula1.packet.model.data.LapHistoryData;
 public class LapHistoryDTO {
 
     private int id;
+    private int lapNumber;
     private long lapTimeInMS;
     private int sector1TimeInMS;
     private int sector2TimeInMS;
@@ -15,6 +16,7 @@ public class LapHistoryDTO {
 
     public LapHistoryDTO(LapHistoryEntity lapHistoryDataEntity) {
         this.id = lapHistoryDataEntity.getId();
+        this.lapNumber = lapHistoryDataEntity.getLapNumber();
         this.lapTimeInMS = lapHistoryDataEntity.getLapTime();
         if(lapHistoryDataEntity.getSector1Time() != null){
             this.sector1TimeInMS = Math.toIntExact(lapHistoryDataEntity.getSector1Time());
@@ -30,7 +32,8 @@ public class LapHistoryDTO {
         }
     }
 
-    public LapHistoryDTO(LapHistoryData lapData) {
+    public LapHistoryDTO(LapHistoryData lapData, Integer lapNumber) {
+        this.lapNumber = lapNumber;
         this.lapTimeInMS = lapData.getLapTimeInMS();
         this.sector1TimeInMS = lapData.getSector1TimeInMS();
         this.sector2TimeInMS = lapData.getSector2TimeInMS();
@@ -48,6 +51,14 @@ public class LapHistoryDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getLapNumber() {
+        return lapNumber;
+    }
+
+    public void setLapNumber(int lapNumber) {
+        this.lapNumber = lapNumber;
     }
 
     public long getLapTimeInMS() {

@@ -3,7 +3,6 @@ package com.cire.formula1.model.dto;
 import com.cire.formula1.database.entity.LapHistoryEntity;
 import com.cire.formula1.database.entity.SessionHistoryEntity;
 import com.cire.formula1.packet.model.PacketSessionHistoryData;
-import com.cire.formula1.packet.model.data.LapHistoryData;
 import com.cire.formula1.packet.model.data.TyreStintHistoryData;
 import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,10 +36,11 @@ public class SessionHistoryDTO {
         this.bestSector1LapNum = data.getBestSector1LapNum();
         this.bestSector2LapNum = data.getBestSector2LapNum();
         this.bestSector3LapNum = data.getBestSector3LapNum();
-        if(data.getLapHistoryData() != null){
+        if(data.getLapHistoryData() != null && !data.getLapHistoryData().isEmpty()){
             Set<LapHistoryDTO> laps = new HashSet<>();
-            for(LapHistoryData lapData : data.getLapHistoryData()){
-                laps.add(new LapHistoryDTO(lapData));
+            //Only get the laps that have data.
+            for(int i=0; i<numLaps;i++){
+                laps.add(new LapHistoryDTO(data.getLapHistoryData().get(i), i));
             }
             this.lapHistory = laps;
         }
@@ -71,11 +71,12 @@ public class SessionHistoryDTO {
         if(sessionHistoryData.getBestSector3LapNumber() != null){
             this.bestSector3LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
         }
-        if(sessionHistoryData.getLapHistory() != null) {
+        if(sessionHistoryData.getLapHistory() != null && !sessionHistoryData.getLapHistory().isEmpty()) {
             this.lapHistory = new HashSet<>();
             for (LapHistoryEntity lapHistoryDataEntity : sessionHistoryData.getLapHistory()) {
                 this.lapHistory.add(new LapHistoryDTO(lapHistoryDataEntity));
             }
+            orderLapHistoryByLapNumber();
         }
     }
 
@@ -173,9 +174,37 @@ public class SessionHistoryDTO {
         this.setBestSector1LapNum(newSH.getBestSector1LapNum());
         this.setBestSector2LapNum(newSH.getBestSector2LapNum());
         this.setBestSector3LapNum(newSH.getBestSector3LapNum());
-        for(int i=0;i<newSH.getLapHistory().size();i++){
-            this.lapHistory.stream().toList().get(i).updateLapHistory(newSH.getLapHistory().stream().toList().get(i));
+        List<LapHistoryDTO> lapHistoryList = new ArrayList<>(this.getLapHistory());
+        List<LapHistoryDTO> newLapHistoryList = new ArrayList<>(newSH.getLapHistory());
+        //Update old laps data.
+        for(int i=0;i<lapHistoryList.size();i++){
+            lapHistoryList.get(i).updateLapHistory(newLapHistoryList.get(i));
         }
+        //Add new lap data
+        for(int i=this.getLapHistory().size(); i<newLapHistoryList.size();i++){
+            lapHistoryList.add(newLapHistoryList.get(i));
+        }
+        this.getLapHistory().clear();
+        this.getLapHistory().addAll(lapHistoryList);
         this.setTyreStintHistoryData(newSH.getTyreStintHistoryData());
+    }
+
+    private void orderLapHistoryByLapNumber(){
+        boolean sorted = false;
+        LapHistoryDTO temp;
+        List<LapHistoryDTO> lapHistoryList = new ArrayList<>(this.getLapHistory());
+        while(!sorted) {
+            sorted = true;
+            for (int i = 0; i < lapHistoryList.size() - 1; i++) {
+                if (lapHistoryList.get(i).getLapNumber() > lapHistoryList.get(i+1).getLapNumber()) {
+                    temp = lapHistoryList.get(i);
+                    lapHistoryList.set(i, lapHistoryList.get(i+1));
+                    lapHistoryList.set(i+1, temp);
+                    sorted = false;
+                }
+            }
+        }
+        this.lapHistory.clear();
+        this.lapHistory.addAll(lapHistoryList);
     }
 }

@@ -20,6 +20,9 @@ public class LapHistoryEntity {
     @Column(name = "session_history_id", nullable = false, insertable = false, updatable = false)
     private Integer sessionHistoryDataId;
 
+    @Column(name = "lap_number")
+    private Integer lapNumber;
+
     @Column(name = "lap_time")
     private Long lapTime;
 
@@ -41,6 +44,7 @@ public class LapHistoryEntity {
     private SessionHistoryEntity sessionHistoryData;
 
     public LapHistoryEntity(LapHistoryDTO lapHistory) {
+        this.lapNumber = lapHistory.getLapNumber();
         this.lapTime = lapHistory.getLapTimeInMS();
         this.sector1Time = (long) lapHistory.getSector1TimeInMS();
         this.sector2Time = (long) lapHistory.getSector2TimeInMS();
@@ -66,6 +70,14 @@ public class LapHistoryEntity {
 
     public void setSessionHistoryDataId(Integer sessionHistoryDataId) {
         this.sessionHistoryDataId = sessionHistoryDataId;
+    }
+
+    public Integer getLapNumber() {
+        return lapNumber;
+    }
+
+    public void setLapNumber(Integer lapNumber) {
+        this.lapNumber = lapNumber;
     }
 
     public Long getLapTime() {
