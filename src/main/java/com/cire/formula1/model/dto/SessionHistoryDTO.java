@@ -8,10 +8,7 @@ import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SessionHistoryDTO {
@@ -24,7 +21,7 @@ public class SessionHistoryDTO {
     private short bestSector3LapNum;
 
     @JsonIgnore
-    private Set<LapHistoryDTO> lapHistory = new HashSet<>(PacketConstants.LAPS);
+    private Set<LapHistoryDTO> lapHistory = new LinkedHashSet<>(PacketConstants.LAPS);
 
     @JsonIgnore
     private List<TyreStintHistoryData> tyreStintHistoryData = new ArrayList<>(PacketConstants.TYRE_STINTS);
@@ -37,10 +34,10 @@ public class SessionHistoryDTO {
         this.bestSector2LapNum = data.getBestSector2LapNum();
         this.bestSector3LapNum = data.getBestSector3LapNum();
         if(data.getLapHistoryData() != null && !data.getLapHistoryData().isEmpty()){
-            Set<LapHistoryDTO> laps = new HashSet<>();
+            Set<LapHistoryDTO> laps = new LinkedHashSet<>();
             //Only get the laps that have data.
             for(int i=0; i<numLaps;i++){
-                laps.add(new LapHistoryDTO(data.getLapHistoryData().get(i), i));
+                laps.add(new LapHistoryDTO(data.getLapHistoryData().get(i), i+1));
             }
             this.lapHistory = laps;
         }
@@ -72,7 +69,7 @@ public class SessionHistoryDTO {
             this.bestSector3LapNum = sessionHistoryData.getBestSector2LapNumber().shortValue();
         }
         if(sessionHistoryData.getLapHistory() != null && !sessionHistoryData.getLapHistory().isEmpty()) {
-            this.lapHistory = new HashSet<>();
+            this.lapHistory = new LinkedHashSet<>();
             for (LapHistoryEntity lapHistoryDataEntity : sessionHistoryData.getLapHistory()) {
                 this.lapHistory.add(new LapHistoryDTO(lapHistoryDataEntity));
             }
@@ -168,24 +165,25 @@ public class SessionHistoryDTO {
     }
 
     public void updateSessionHistory(SessionHistoryDTO newSH){
+        List<LapHistoryDTO> lapHistoryList = new ArrayList<>(this.getLapHistory());
+        List<LapHistoryDTO> newLapHistoryList = new ArrayList<>(newSH.getLapHistory());
+        //Update old laps data (0 to current number of laps)
+        for(int i=0; i<this.getNumLaps(); i++){
+            lapHistoryList.get(i).updateLapHistory(newLapHistoryList.get(i));
+        }
+        //Add new lap data (current number of laps to new number of laps)
+        for(int i=this.getNumLaps(); i<newSH.getNumLaps(); i++){
+            lapHistoryList.add(newLapHistoryList.get(i));
+        }
+        this.getLapHistory().clear();
+        this.getLapHistory().addAll(lapHistoryList);
+
         this.setNumLaps(newSH.getNumLaps());
         this.setNumTyreStints(newSH.getNumTyreStints());
         this.setBestLapTimeLapNum(newSH.getBestLapTimeLapNum());
         this.setBestSector1LapNum(newSH.getBestSector1LapNum());
         this.setBestSector2LapNum(newSH.getBestSector2LapNum());
         this.setBestSector3LapNum(newSH.getBestSector3LapNum());
-        List<LapHistoryDTO> lapHistoryList = new ArrayList<>(this.getLapHistory());
-        List<LapHistoryDTO> newLapHistoryList = new ArrayList<>(newSH.getLapHistory());
-        //Update old laps data.
-        for(int i=0;i<lapHistoryList.size();i++){
-            lapHistoryList.get(i).updateLapHistory(newLapHistoryList.get(i));
-        }
-        //Add new lap data
-        for(int i=this.getLapHistory().size(); i<newLapHistoryList.size();i++){
-            lapHistoryList.add(newLapHistoryList.get(i));
-        }
-        this.getLapHistory().clear();
-        this.getLapHistory().addAll(lapHistoryList);
         this.setTyreStintHistoryData(newSH.getTyreStintHistoryData());
     }
 

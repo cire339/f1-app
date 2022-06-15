@@ -58,7 +58,7 @@ public class SessionHistoryEntity {
         this.bestSector2LapNumber = (int) data.getBestSector2LapNum();
         this.bestSector3LapNumber = (int) data.getBestSector3LapNum();
         if(data.getLapHistory() != null) {
-            this.lapHistory = new HashSet<>();
+            this.lapHistory = new LinkedHashSet<>();
             for (LapHistoryDTO lapHistory : data.getLapHistory()) {
                 LapHistoryEntity lapHistoryDataEntity = new LapHistoryEntity(lapHistory);
                 lapHistoryDataEntity.setSessionHistoryData(this);

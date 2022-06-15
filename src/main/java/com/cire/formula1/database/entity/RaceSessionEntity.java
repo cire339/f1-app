@@ -47,7 +47,7 @@ public class RaceSessionEntity {
             this.fastestLap = raceSession.getFastestLap().getLapTime();
             this.fastestSpeedCarIndex = (int) raceSession.getFastestLap().getCarIndex();
         }
-        this.players = new HashSet<>();
+        this.players = new LinkedHashSet<>();
         for(PlayerDTO playerDTO : raceSession.getPlayers()){
             PlayerEntity playerEntity = new PlayerEntity(playerDTO);
             playerEntity.setRaceSession(this);

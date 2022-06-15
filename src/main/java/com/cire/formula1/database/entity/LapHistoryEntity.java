@@ -44,6 +44,7 @@ public class LapHistoryEntity {
     private SessionHistoryEntity sessionHistoryData;
 
     public LapHistoryEntity(LapHistoryDTO lapHistory) {
+        this.id = lapHistory.getId();
         this.lapNumber = lapHistory.getLapNumber();
         this.lapTime = lapHistory.getLapTimeInMS();
         this.sector1Time = (long) lapHistory.getSector1TimeInMS();

@@ -114,6 +114,7 @@ public class LapHistoryDTO {
     }
 
     public void updateLapHistory(LapHistoryDTO newLH) {
+        this.lapNumber = newLH.getLapNumber();
         this.lapTimeInMS = newLH.getLapTimeInMS();
         this.sector1TimeInMS = newLH.getSector1TimeInMS();
         this.sector2TimeInMS = newLH.getSector2TimeInMS();

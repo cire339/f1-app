@@ -7,10 +7,7 @@ import com.cire.formula1.packet.model.constants.ResultStatus;
 import com.cire.formula1.packet.model.data.CarSetupData;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DataUtils {
 
@@ -53,7 +50,7 @@ public class DataUtils {
         sessionHistoryDTO.setBestSector3LapNum((short)5);
 
         //Lap Data
-        Set<LapHistoryDTO> lapHistoryDataList = new HashSet<>();
+        Set<LapHistoryDTO> lapHistoryDataList = new LinkedHashSet<>();
         LapHistoryDTO lapHistoryDTO = new LapHistoryDTO();
         lapHistoryDTO.setLapTimeInMS(73546);
         lapHistoryDTO.setSector1TimeInMS(22515);

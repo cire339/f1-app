@@ -34,7 +34,9 @@ public class FinalClassificationDTO {
         this.gridPosition = data.getGridPosition();
         this.points = data.getPoints();
         this.numberOfPitStops = data.getNumPitStops();
-        this.resultStatus = data.getResultStatus().name();
+        if(data.getResultStatus() != null) {
+            this.resultStatus = data.getResultStatus().name();
+        }
         this.bestLapTime = data.getBestLapTimeInMS();
         this.totalRaceTime = data.getTotalRaceTime();
         this.penaltiesTime = data.getPenaltiesTime();
