@@ -1,13 +1,13 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.database.FormulaOneDao;
-import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.dto.FinalClassificationDTO;
 import com.cire.formula1.model.dto.PenaltyDTO;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.cire.formula1.model.dto.SessionHistoryDTO;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
+import com.cire.formula1.packet.model.constants.SessionType;
 import com.cire.formula1.packet.model.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +104,16 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private void processSession(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
-        LOGGER.debug("This is a session packet!");
+        //For now, I will only save the data that does not change.
+        PacketSessionData sessionDataPacket = (PacketSessionData) packet;
+
+        //Only save to DB the races.
+        if(sessionDataPacket.getSessionType().equals(SessionType.R)){
+            raceSession.setSaveToDatabase(true);
+        }
+        raceSession.setSessionType(sessionDataPacket.getSessionType().name());
+        raceSession.setTrack(sessionDataPacket.getTrackId().name());
+        raceSession.setTotalLaps(sessionDataPacket.getTotalLaps());
     }
 
     private void processParticipants(Packet packet) {
@@ -270,22 +279,24 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private synchronized void saveSessionInDatabase(){
-        //Check DB first?
-        if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isEmpty()) {
-            LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
-            raceSession = new RaceSessionDTO(formulaOneDao.createRaceSession(raceSession));
-            raceSessionService.updateRaceSession(raceSession);
-            LOGGER.info("Session created successfully!");
+        if(raceSession.isSaveToDatabase()) {
+            if (formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isEmpty()) {
+                LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
+                raceSession = new RaceSessionDTO(formulaOneDao.createRaceSession(raceSession));
+                raceSessionService.updateRaceSession(raceSession);
+                LOGGER.info("Session created successfully!");
+            }
         }
     }
 
     private synchronized void updateSessionInDatabase(){
-        //Check DB first?
-        if(formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
-            LOGGER.info("Updating session " + raceSession.getSessionUid() + " in database..");
-            raceSession = new RaceSessionDTO(formulaOneDao.updateRaceSession(raceSession));
-            raceSession = raceSessionService.updateRaceSession(raceSession);
-            LOGGER.info("Session updated successfully!");
+        if(raceSession.isSaveToDatabase()) {
+            if (formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
+                LOGGER.info("Updating session " + raceSession.getSessionUid() + " in database..");
+                raceSession = new RaceSessionDTO(formulaOneDao.updateRaceSession(raceSession));
+                raceSessionService.updateRaceSession(raceSession);
+                LOGGER.info("Session updated successfully!");
+            }
         }
     }
 }

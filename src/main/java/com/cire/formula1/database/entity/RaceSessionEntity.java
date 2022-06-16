@@ -22,6 +22,15 @@ public class RaceSessionEntity {
     @Column(name = "session_uid", nullable = false, length = -1)
     private String sessionUid;
 
+    @Column(name = "session_type", length = -1)
+    private String sessionType;
+
+    @Column(name = "track_name", length = -1)
+    private String trackName;
+
+    @Column(name = "total_laps")
+    private Integer totalLaps;
+
     @Column(name = "fastest_speed")
     private Float fastestSpeed;
 
@@ -41,6 +50,9 @@ public class RaceSessionEntity {
     public RaceSessionEntity(RaceSessionDTO raceSession){
         this.id = raceSession.getId();
         this.sessionUid = String.valueOf(raceSession.getSessionUid());
+        this.sessionType = raceSession.getSessionType();
+        this.trackName = raceSession.getTrack();
+        this.totalLaps = (int) raceSession.getTotalLaps();
         this.fastestSpeed = raceSession.getFastestSpeed();
         this.fastestSpeedCarIndex = (int) raceSession.getFastestSpeedCarIndex();
         if(raceSession.getFastestLap() != null) {
@@ -77,6 +89,30 @@ public class RaceSessionEntity {
 
     public void setSessionUid(String sessionUid) {
         this.sessionUid = sessionUid;
+    }
+
+    public String getSessionType() {
+        return sessionType;
+    }
+
+    public void setSessionType(String sessionType) {
+        this.sessionType = sessionType;
+    }
+
+    public String getTrackName() {
+        return trackName;
+    }
+
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
+    }
+
+    public Integer getTotalLaps() {
+        return totalLaps;
+    }
+
+    public void setTotalLaps(Integer totalLaps) {
+        this.totalLaps = totalLaps;
     }
 
     public Float getFastestSpeed() {

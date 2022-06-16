@@ -4,6 +4,7 @@ import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.packet.model.data.FastestLap;
 import com.cire.formula1.packet.util.PacketConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,6 +35,16 @@ public class RaceSessionDTO {
     @JsonProperty
     private boolean raceEnded = false;
     @JsonProperty
+    private String sessionType;
+    @JsonProperty
+    private String track;
+    @JsonProperty
+    private short totalLaps;
+
+    @JsonIgnore
+    private boolean saveToDatabase = false;
+
+    @JsonProperty
     private List<PlayerDTO> players = new ArrayList<>(PacketConstants.CARS);
 
     public RaceSessionDTO(){
@@ -45,6 +56,11 @@ public class RaceSessionDTO {
     public RaceSessionDTO(RaceSessionEntity entity){
         this.id = entity.getId();
         this.sessionUid = new BigInteger(entity.getSessionUid());
+        this.sessionType = entity.getSessionType();
+        this.track = entity.getTrackName();
+        if(entity.getTotalLaps() != null) {
+            this.totalLaps = entity.getTotalLaps().shortValue();
+        }
         this.fastestSpeed = entity.getFastestSpeed();
         if(entity.getFastestSpeedCarIndex() != null) {
             this.fastestSpeedCarIndex = entity.getFastestSpeedCarIndex().shortValue();
@@ -63,6 +79,8 @@ public class RaceSessionDTO {
             }
             orderPlayersByCarIndex();
         }
+        //Set this to true since it's in the DB.
+        this.saveToDatabase = true;
     }
 
     public int getId() {
@@ -127,6 +145,38 @@ public class RaceSessionDTO {
 
     public void setRaceEnded(boolean raceEnded) {
         this.raceEnded = raceEnded;
+    }
+
+    public String getSessionType() {
+        return sessionType;
+    }
+
+    public void setSessionType(String sessionType) {
+        this.sessionType = sessionType;
+    }
+
+    public String getTrack() {
+        return track;
+    }
+
+    public void setTrack(String track) {
+        this.track = track;
+    }
+
+    public short getTotalLaps() {
+        return totalLaps;
+    }
+
+    public void setTotalLaps(short totalLaps) {
+        this.totalLaps = totalLaps;
+    }
+
+    public boolean isSaveToDatabase() {
+        return saveToDatabase;
+    }
+
+    public void setSaveToDatabase(boolean saveToDatabase) {
+        this.saveToDatabase = saveToDatabase;
     }
 
     public List<PlayerDTO> getPlayers() {
