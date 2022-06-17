@@ -9,6 +9,7 @@ import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import com.cire.formula1.packet.model.constants.SessionType;
 import com.cire.formula1.packet.model.data.*;
+import org.jfree.chart.JFreeChart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,15 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private final RaceSessionService raceSessionService;
     private final FormulaOneDao formulaOneDao;
+    private final GraphService graphService;
 
     private RaceSessionDTO raceSession = null;
 
     @Autowired
-    public DataProcessingServiceImpl(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao) {
+    public DataProcessingServiceImpl(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao, GraphService graphService) {
         this.raceSessionService = raceSessionService;
         this.formulaOneDao = formulaOneDao;
+        this.graphService = graphService;
     }
 
     @Override
@@ -136,6 +139,10 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private void processLapData(Packet packet) {
         //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a lap data packet!");
+        PacketLapData lapDataPacket = (PacketLapData) packet;
+
+       //graphService.updatePlayerPositionDataSet(lapDataPacket.getLapData());
+
     }
 
     private void processFinalClassification(Packet packet) {
