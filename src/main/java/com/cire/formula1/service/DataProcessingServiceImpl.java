@@ -1,10 +1,7 @@
 package com.cire.formula1.service;
 
 import com.cire.formula1.database.FormulaOneDao;
-import com.cire.formula1.model.dto.FinalClassificationDTO;
-import com.cire.formula1.model.dto.PenaltyDTO;
-import com.cire.formula1.model.dto.RaceSessionDTO;
-import com.cire.formula1.model.dto.SessionHistoryDTO;
+import com.cire.formula1.model.dto.*;
 import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import com.cire.formula1.packet.model.constants.SessionType;
@@ -83,7 +80,9 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
         if(!sessionUid.equals(BigInteger.ZERO)){
             raceSession = raceSessionService.getRaceSessionByUid(sessionUid);
-            raceSession.getPlayers().get(playerCarIndex).setPlayerName(playerName);
+            if(inBound(playerCarIndex, raceSession.getPlayers().size())) {
+                raceSession.getPlayers().get(playerCarIndex).setPlayerName(playerName);
+            }
         }else{
             LOGGER.debug("Session UID is empty.. um..");
         }
@@ -93,11 +92,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //One final Session History packet is sent at the very end after the Final Classification packet is sent.
         //But it does not seem to be the case.. why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
         PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
-        SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
-        if(sessionHistory != null){
-            sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
-        }else {
-            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+        if(inBound(data.getCarIdx(), raceSession.getPlayers().size())) {
+            SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
+            if (sessionHistory != null) {
+                sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
+            } else {
+                raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+            }
         }
         //Only update the DB if the race has ended.
         if(raceSession.isRaceEnded()){
@@ -123,7 +124,14 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //TODO: Number changes if a player quits (retires). How should I handle this data?
         //TODO: Data that evolves over time. How to handle this?
         LOGGER.debug("This is a participant data packet!");
-        //PacketParticipantsData participantsDataPacket = (PacketParticipantsData) packet;
+        PacketParticipantsData data = (PacketParticipantsData) packet;
+        raceSession.setNumberActiveCars(data.getNumActiveCars());
+        LOGGER.info("There is " + raceSession.getNumberActiveCars() + " active cars in this session.");
+        for(short i=0; i<data.getNumActiveCars(); i++){
+            if(!inBound(i, raceSession.getPlayers().size())){
+                raceSession.getPlayers().add(new PlayerDTO(i));
+            }
+        }
     }
 
     private void processMotion(Packet packet) {
@@ -131,8 +139,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketMotionData data = (PacketMotionData) packet;
 
         //TODO: for now to test, only trace first lap.
-        if(raceSession.getPlayers().get(carIndex).getCurrentLapNumber() == 1) {
-            graphService.updateMotionDataSet(data.getCarMotionData(), packet.getHeader().getPlayerCarIndex(), raceSession.getPlayers().get(carIndex).getCurrentLapNumber());
+        if(inBound(carIndex, raceSession.getPlayers().size()) && raceSession.getPlayers().get(carIndex).getCurrentLapNumber() == 1) {
+            //graphService.updateMotionDataSet(data.getCarMotionData(), packet.getHeader().getPlayerCarIndex(), raceSession.getPlayers().get(carIndex).getCurrentLapNumber());
         }
     }
 
@@ -147,7 +155,9 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
         //Set current lap number.
         short currentLapNumber = data.getLapData().get(carIndex).getCurrentLapNum();
-        raceSession.getPlayers().get(carIndex).setCurrentLapNumber(currentLapNumber);
+        if(inBound(carIndex, raceSession.getPlayers().size())) {
+            raceSession.getPlayers().get(carIndex).setCurrentLapNumber(currentLapNumber);
+        }
 
        //graphService.updatePlayerPositionDataSet(lapDataPacket.getLapData());
 
@@ -314,4 +324,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             }
         }
     }
+
+     private boolean inBound(short index, int arrayLength){
+         return (index >= 0) && (index < arrayLength);
+     }
 }

@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -36,8 +33,8 @@ public class PlayerController {
         this.formulaOneDao = formulaOneDao;
     }
 
-    @GetMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getPlayersBySessionId(@PathVariable BigInteger sessionUid) {
+    @GetMapping(produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getPlayersBySessionId(@RequestParam(value="session-uid") BigInteger sessionUid) {
         List<PlayerEntity> playerEntities = formulaOneDao.getPlayerByRaceSessionUid(sessionUid);
         if(playerEntities.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -49,5 +46,7 @@ public class PlayerController {
         }
         return new ResponseEntity<>(players, HttpStatus.OK);
     }
+
+    //TODO: Once we have the players ID, we can add endpoints to get all races for them.
 
 }

@@ -43,14 +43,14 @@ public class RaceSessionDTO {
 
     @JsonIgnore
     private boolean saveToDatabase = false;
+    @JsonIgnore
+    private short numberActiveCars;
 
     @JsonProperty
     private List<PlayerDTO> players = new ArrayList<>(PacketConstants.CARS);
 
     public RaceSessionDTO(){
-        for(int i=0;i<PacketConstants.CARS;i++){
-            this.players.add(new PlayerDTO(i));
-        }
+
     }
 
     public RaceSessionDTO(RaceSessionEntity entity){
@@ -179,6 +179,14 @@ public class RaceSessionDTO {
         this.saveToDatabase = saveToDatabase;
     }
 
+    public short getNumberActiveCars() {
+        return numberActiveCars;
+    }
+
+    public void setNumberActiveCars(short numberActiveCars) {
+        this.numberActiveCars = numberActiveCars;
+    }
+
     public List<PlayerDTO> getPlayers() {
         return players;
     }
@@ -189,7 +197,7 @@ public class RaceSessionDTO {
 
     @Override
     public String toString() {
-        return "RaceSession{" +
+        return "RaceSessionDTO{" +
                 "id=" + id +
                 ", sessionUid=" + sessionUid +
                 ", raceWinnerCarIndex=" + raceWinnerCarIndex +
@@ -198,6 +206,11 @@ public class RaceSessionDTO {
                 ", fastestSpeed=" + fastestSpeed +
                 ", raceStarted=" + raceStarted +
                 ", raceEnded=" + raceEnded +
+                ", sessionType='" + sessionType + '\'' +
+                ", track='" + track + '\'' +
+                ", totalLaps=" + totalLaps +
+                ", saveToDatabase=" + saveToDatabase +
+                ", numberActiveCars=" + numberActiveCars +
                 ", players=" + players +
                 '}';
     }
