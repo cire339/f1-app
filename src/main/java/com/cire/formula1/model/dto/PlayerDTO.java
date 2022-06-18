@@ -3,6 +3,7 @@ package com.cire.formula1.model.dto;
 import com.cire.formula1.database.entity.PenaltyEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.packet.model.data.CarSetupData;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,6 +30,9 @@ public class PlayerDTO {
     private FinalClassificationDTO finalClassification;
     @JsonProperty
     private SessionHistoryDTO sessionHistory;
+
+    @JsonIgnore
+    private short currentLapNumber;
 
     public PlayerDTO(PlayerEntity playerEntity) {
         this.id = playerEntity.getId();
@@ -130,6 +134,14 @@ public class PlayerDTO {
 
     public void setFinalClassification(FinalClassificationDTO finalClassification) {
         this.finalClassification = finalClassification;
+    }
+
+    public short getCurrentLapNumber() {
+        return currentLapNumber;
+    }
+
+    public void setCurrentLapNumber(short currentLapNumber) {
+        this.currentLapNumber = currentLapNumber;
     }
 
     @Override

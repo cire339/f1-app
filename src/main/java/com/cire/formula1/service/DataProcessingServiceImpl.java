@@ -127,8 +127,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processMotion(Packet packet) {
-        //TODO: Data that evolves over time. How to handle this?
-        LOGGER.debug("This is a motion packet!");
+        short carIndex = packet.getHeader().getPlayerCarIndex();
+        PacketMotionData data = (PacketMotionData) packet;
+
+        //TODO: for now to test, only trace first lap.
+        if(raceSession.getPlayers().get(carIndex).getCurrentLapNumber() == 1) {
+            graphService.updateMotionDataSet(data.getCarMotionData(), packet.getHeader().getPlayerCarIndex(), raceSession.getPlayers().get(carIndex).getCurrentLapNumber());
+        }
     }
 
     private void processLobbyInfo(Packet packet) {
@@ -137,9 +142,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processLapData(Packet packet) {
-        //TODO: Data that evolves over time. How to handle this?
-        LOGGER.debug("This is a lap data packet!");
-        PacketLapData lapDataPacket = (PacketLapData) packet;
+        short carIndex = packet.getHeader().getPlayerCarIndex();
+        PacketLapData data = (PacketLapData) packet;
+
+        //Set current lap number.
+        short currentLapNumber = data.getLapData().get(carIndex).getCurrentLapNum();
+        raceSession.getPlayers().get(carIndex).setCurrentLapNumber(currentLapNumber);
 
        //graphService.updatePlayerPositionDataSet(lapDataPacket.getLapData());
 

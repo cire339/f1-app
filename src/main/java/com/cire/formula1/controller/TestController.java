@@ -77,12 +77,36 @@ class TestController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-disposition", "attachment; filename=PlayerPositions.svg");
 
-        JFreeChart chart = graphService.getGraph();
+        JFreeChart chart = graphService.getPlayerPositionGraph();
         SVGGraphics2D g2 = new SVGGraphics2D(1800, 1200);
         g2.setRenderingHint(JFreeChart.KEY_SUPPRESS_SHADOW_GENERATION, true);
         Rectangle r = new Rectangle(0, 0, 1800, 1200);
         chart.draw(g2, r);
         File f = new File("PlayerPositions.svg");
+        SVGUtils.writeToSVG(f, g2.getSVGElement());
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(f.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+
+    }
+
+    @GetMapping(value = {"/car-motion-graph"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getCarMotionGraph() throws IOException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "attachment; filename=CarMotion.svg");
+
+        JFreeChart chart = graphService.getMotionGraph();
+        SVGGraphics2D g2 = new SVGGraphics2D(1800, 1200);
+        g2.setRenderingHint(JFreeChart.KEY_SUPPRESS_SHADOW_GENERATION, true);
+        Rectangle r = new Rectangle(0, 0, 1800, 1200);
+        chart.draw(g2, r);
+        File f = new File("CarMotion.svg");
         SVGUtils.writeToSVG(f, g2.getSVGElement());
 
         InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
