@@ -33,9 +33,9 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     @Override
-    public void processPrimaryData(Packet packet, String playerName) {
+    public void processData(Packet packet) {
 
-        processHeader(packet, playerName);
+        processHeader(packet);
         PacketId packetId = packet.getHeader().getPacketId();
 
         switch (packetId) {
@@ -60,28 +60,15 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         }
     }
 
-    /**
-        Secondary player data. This could include player name, car damage, etc..
-        Anything the main player can't see.
-     */
-    @Override
-    public void processSecondaryData(Packet packet, String playerName) {
-        processHeader(packet, playerName);
-
-        //Update session in memory.
-        if(raceSession != null) {
-            raceSessionService.updateRaceSession(raceSession);
-        }
-    }
-
-    private void processHeader(Packet packet, String playerName) {
+    private void processHeader(Packet packet) {
         BigInteger sessionUid = packet.getHeader().getSessionUid();
         short playerCarIndex = packet.getHeader().getPlayerCarIndex();
 
         if(!sessionUid.equals(BigInteger.ZERO)){
             raceSession = raceSessionService.getRaceSessionByUid(sessionUid);
             if(inBound(playerCarIndex, raceSession.getPlayers().size())) {
-                raceSession.getPlayers().get(playerCarIndex).setPlayerName(playerName);
+                //TODO: Name handling in F1 2022
+                raceSession.getPlayers().get(playerCarIndex).setPlayerName("cirelol");
             }
         }else{
             LOGGER.debug("Session UID is empty.. um..");

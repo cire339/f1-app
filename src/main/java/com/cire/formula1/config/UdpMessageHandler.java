@@ -25,42 +25,16 @@ public class UdpMessageHandler
         this.dataProcessingService = dataProcessingService;
     }
 
-    @ServiceActivator(inputChannel = "inboundChannelCire")
-    public void handleMessageCire(Message<byte[]> message, @Headers Map<String, Object> headerMap) {
-        //LOGGER.info("Incoming packet from cire.");
-        //TODO: better player name handling.
-        handlePrimaryMessage(message, "cirelol");
-    }
-
-    @ServiceActivator(inputChannel = "inboundChannelTijeune")
-    public void handleMessageTijeune(Message<byte[]> message, @Headers Map<String, Object> headerMap) {
-        //LOGGER.info("Incoming packet from TiJeune.");
-        //TODO: better player name handling.
-        handleSecondaryMessage(message, "TiJeune");
-    }
-
-    private void handlePrimaryMessage(Message<byte[]> message, String playerName){
-        //Testing hex formatting
-        //String hexStr = HexFormat.of().formatHex(message.getPayload());
-        //LOGGER.info(hexStr);
-
+    @ServiceActivator(inputChannel = "inboundChannel")
+    public void handleMessage(Message<byte[]> message, @Headers Map<String, Object> headerMap) {
         //1. Decode the packet
         PacketDecoder packetDecoder = new PacketDecoder();
         ByteBuf buffer = Unpooled.wrappedBuffer(message.getPayload());
         Packet packet = packetDecoder.decode(buffer);
 
         //2. Send packet for processing
-        dataProcessingService.processPrimaryData(packet, playerName);
-    }
-
-    private void handleSecondaryMessage(Message<byte[]> message, String playerName){
-        //1. Decode the packet
-        PacketDecoder packetDecoder = new PacketDecoder();
-        ByteBuf buffer = Unpooled.wrappedBuffer(message.getPayload());
-        Packet packet = packetDecoder.decode(buffer);
-
-        //2. Send packet for processing
-        dataProcessingService.processSecondaryData(packet, playerName);
+        //TODO: better player name handling. - 2022 will let us see player names.
+        dataProcessingService.processData(packet);
     }
 
 }

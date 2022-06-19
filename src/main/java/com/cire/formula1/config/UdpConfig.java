@@ -11,45 +11,27 @@ import org.springframework.messaging.MessageChannel;
 @Configuration
 public class UdpConfig {
 
-    @Value("${udp.channel.cire:EricChannel}")
-    private String cireChannel;
+    @Value("${udp.channel.name:packetChannel}")
+    private String channelName;
     @Value("${udp.port.cire:11111}")
-    private Integer cirePort;
+    private Integer port;
 
-    @Value("${udp.channel.tijeune:tijeuneChannel}")
-    private String tijeuneChannel;
-    @Value("${udp.port.tijeune:22222}")
-    private Integer tijeunePort;
-
-    @Bean(name = "inboundChannelCire")
-    public MessageChannel inboundChannelCire() {
+    @Bean(name = "inboundChannel")
+    public MessageChannel inboundChannel() {
         return new DirectChannel();
     }
 
-    @Bean(name = "inboundChannelTijeune")
-    public MessageChannel inboundChannelTijeune() {
-        return new DirectChannel();
-    }
-
-    @Bean(name = "udpReceivingAdapterCire")
+    @Bean(name = "udpReceivingAdapter")
     public UnicastReceivingChannelAdapter udpReceivingAdapter() {
-        UnicastReceivingChannelAdapter adapter = new UnicastReceivingChannelAdapter(cirePort);
-        adapter.setOutputChannel(inboundChannelCire());
-        adapter.setOutputChannelName(cireChannel);
+        UnicastReceivingChannelAdapter adapter = new UnicastReceivingChannelAdapter(port);
+        adapter.setOutputChannel(inboundChannel());
+        adapter.setOutputChannelName(channelName);
         return adapter;
     }
 
-    @Bean(name = "udpReceivingAdapterTijeune")
-    public UnicastReceivingChannelAdapter udpReceivingAdapterTijeune() {
-        UnicastReceivingChannelAdapter adapter = new UnicastReceivingChannelAdapter(tijeunePort);
-        adapter.setOutputChannel(inboundChannelTijeune());
-        adapter.setOutputChannelName(tijeuneChannel);
-        return adapter;
-    }
-
-    @Bean(name = "udpSendingAdapterCire")
+    @Bean(name = "udpSendingAdapter")
     public UnicastSendingMessageHandler udpSendingAdapter() {
-        return new UnicastSendingMessageHandler("localhost", tijeunePort);
+        return new UnicastSendingMessageHandler("localhost", port);
     }
 
 }
