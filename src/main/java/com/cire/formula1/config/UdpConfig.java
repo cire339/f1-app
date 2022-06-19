@@ -13,7 +13,7 @@ public class UdpConfig {
 
     @Value("${udp.channel.name:packetChannel}")
     private String channelName;
-    @Value("${udp.port.cire:11111}")
+    @Value("${udp.port:11111}")
     private Integer port;
 
     @Bean(name = "inboundChannel")

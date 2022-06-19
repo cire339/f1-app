@@ -1,35 +1,123 @@
-package com.cire.formula1.packet.model.data;
+package com.cire.formula1.model.dto;
 
 import com.cire.formula1.database.entity.CarSetupEntity;
+import com.cire.formula1.packet.model.data.CarSetupData;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CarSetupData {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CarSetupDTO {
 
+    @JsonProperty
+    private int id;
+    @JsonProperty
     private short frontWing;
+    @JsonProperty
     private short rearWing;
+    @JsonProperty
     private short onThrottle;
+    @JsonProperty
     private short offThrottle;
+    @JsonProperty
     private float frontCamber;
+    @JsonProperty
     private float rearCamber;
+    @JsonProperty
     private float frontToe;
+    @JsonProperty
     private float rearToe;
+    @JsonProperty
     private short frontSuspension;
+    @JsonProperty
     private short rearSuspension;
+    @JsonProperty
     private short frontAntiRollBar;
+    @JsonProperty
     private short rearAntiRollBar;
+    @JsonProperty
     private short frontSuspensionHeight;
+    @JsonProperty
     private short rearSuspensionHeight;
+    @JsonProperty
     private short brakePressure;
+    @JsonProperty
     private short brakeBias;
+    @JsonProperty
     private float rearLeftTyrePressure;
+    @JsonProperty
     private float rearRightTyrePressure;
+    @JsonProperty
     private float frontLeftTyrePressure;
+    @JsonProperty
     private float frontRightTyrePressure;
+    @JsonProperty
     private short ballast;
+    @JsonProperty
     private float fuelLoad;
 
-    /**
-     * @return Front wing aero
-     */
+    public CarSetupDTO(CarSetupEntity carSetup) {
+        this.id = carSetup.getId();
+        this.frontWing = carSetup.getFrontWing().shortValue();
+        this.rearWing = carSetup.getRearWing().shortValue();
+        this.onThrottle = carSetup.getOnThrottle().shortValue();
+        this.offThrottle = carSetup.getOffThrottle().shortValue();
+        this.frontCamber = carSetup.getFrontCamber().floatValue();
+        this.rearCamber = carSetup.getRearCamber().floatValue();
+        this.frontToe = carSetup.getFrontToe().floatValue();
+        this.rearToe = carSetup.getRearToe().floatValue();
+        this.frontSuspension = carSetup.getFrontSuspension().shortValue();
+        this.rearSuspension = carSetup.getRearSuspension().shortValue();
+        this.frontAntiRollBar = carSetup.getFrontAntiRollBar().shortValue();
+        this.rearAntiRollBar = carSetup.getRearAntiRollBar().shortValue();
+        this.frontSuspensionHeight = carSetup.getFrontSuspensionHeight().shortValue();
+        this.rearSuspensionHeight = carSetup.getRearSuspensionHeight().shortValue();
+        this.brakePressure = carSetup.getBrakePressure().shortValue();
+        this.brakeBias = carSetup.getBrakeBias().shortValue();
+        this.rearLeftTyrePressure = carSetup.getRearLeftTyrePressure().floatValue();
+        this.rearRightTyrePressure = carSetup.getRearRightTyrePressure().floatValue();
+        this.frontLeftTyrePressure = carSetup.getFrontLeftTyrePressure().floatValue();
+        this.frontRightTyrePressure = carSetup.getFrontRightTyrePressure().floatValue();
+        this.ballast = carSetup.getBallast().shortValue();
+        this.fuelLoad = carSetup.getFuelLoad().floatValue();
+    }
+
+    public CarSetupDTO(CarSetupData carSetup) {
+        this.frontWing = carSetup.getFrontWing();
+        this.rearWing = carSetup.getRearWing();
+        this.onThrottle = carSetup.getOnThrottle();
+        this.offThrottle = carSetup.getOffThrottle();
+        this.frontCamber = carSetup.getFrontCamber();
+        this.rearCamber = carSetup.getRearCamber();
+        this.frontToe = carSetup.getFrontToe();
+        this.rearToe = carSetup.getRearToe();
+        this.frontSuspension = carSetup.getFrontSuspension();
+        this.rearSuspension = carSetup.getRearSuspension();
+        this.frontAntiRollBar = carSetup.getFrontAntiRollBar();
+        this.rearAntiRollBar = carSetup.getRearAntiRollBar();
+        this.frontSuspensionHeight = carSetup.getFrontSuspensionHeight();
+        this.rearSuspensionHeight = carSetup.getRearSuspensionHeight();
+        this.brakePressure = carSetup.getBrakePressure();
+        this.brakeBias = carSetup.getBrakeBias();
+        this.rearLeftTyrePressure = carSetup.getRearLeftTyrePressure();
+        this.rearRightTyrePressure = carSetup.getRearRightTyrePressure();
+        this.frontLeftTyrePressure = carSetup.getFrontLeftTyrePressure();
+        this.frontRightTyrePressure = carSetup.getFrontRightTyrePressure();
+        this.ballast = carSetup.getBallast();
+        this.fuelLoad = carSetup.getFuelLoad();
+    }
+
+    public CarSetupDTO() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public short getFrontWing() {
         return frontWing;
     }
@@ -38,9 +126,6 @@ public class CarSetupData {
         this.frontWing = frontWing;
     }
 
-    /**
-     * @return Rear wing aero
-     */
     public short getRearWing() {
         return rearWing;
     }
@@ -49,9 +134,6 @@ public class CarSetupData {
         this.rearWing = rearWing;
     }
 
-    /**
-     * @return Differential adjustment on throttle (percentage)
-     */
     public short getOnThrottle() {
         return onThrottle;
     }
@@ -60,9 +142,6 @@ public class CarSetupData {
         this.onThrottle = onThrottle;
     }
 
-    /**
-     * @return Differential adjustment off throttle (percentage)
-     */
     public short getOffThrottle() {
         return offThrottle;
     }
@@ -71,9 +150,6 @@ public class CarSetupData {
         this.offThrottle = offThrottle;
     }
 
-    /**
-     * @return Front camber angle (suspension geometry)
-     */
     public float getFrontCamber() {
         return frontCamber;
     }
@@ -82,9 +158,6 @@ public class CarSetupData {
         this.frontCamber = frontCamber;
     }
 
-    /**
-     * @return Rear camber angle (suspension geometry)
-     */
     public float getRearCamber() {
         return rearCamber;
     }
@@ -93,9 +166,6 @@ public class CarSetupData {
         this.rearCamber = rearCamber;
     }
 
-    /**
-     * @return Front toe angle (suspension geometry)
-     */
     public float getFrontToe() {
         return frontToe;
     }
@@ -104,9 +174,6 @@ public class CarSetupData {
         this.frontToe = frontToe;
     }
 
-    /**
-     * @return Rear toe angle (suspension geometry)
-     */
     public float getRearToe() {
         return rearToe;
     }
@@ -115,9 +182,6 @@ public class CarSetupData {
         this.rearToe = rearToe;
     }
 
-    /**
-     * @return Front suspension
-     */
     public short getFrontSuspension() {
         return frontSuspension;
     }
@@ -126,9 +190,6 @@ public class CarSetupData {
         this.frontSuspension = frontSuspension;
     }
 
-    /**
-     * @return Rear suspension
-     */
     public short getRearSuspension() {
         return rearSuspension;
     }
@@ -137,9 +198,6 @@ public class CarSetupData {
         this.rearSuspension = rearSuspension;
     }
 
-    /**
-     * @return Front anti-roll bar
-     */
     public short getFrontAntiRollBar() {
         return frontAntiRollBar;
     }
@@ -148,9 +206,6 @@ public class CarSetupData {
         this.frontAntiRollBar = frontAntiRollBar;
     }
 
-    /**
-     * @return Rear anti-roll bar
-     */
     public short getRearAntiRollBar() {
         return rearAntiRollBar;
     }
@@ -159,9 +214,6 @@ public class CarSetupData {
         this.rearAntiRollBar = rearAntiRollBar;
     }
 
-    /**
-     * @return Front ride height
-     */
     public short getFrontSuspensionHeight() {
         return frontSuspensionHeight;
     }
@@ -170,9 +222,6 @@ public class CarSetupData {
         this.frontSuspensionHeight = frontSuspensionHeight;
     }
 
-    /**
-     * @return Rear ride height
-     */
     public short getRearSuspensionHeight() {
         return rearSuspensionHeight;
     }
@@ -181,9 +230,6 @@ public class CarSetupData {
         this.rearSuspensionHeight = rearSuspensionHeight;
     }
 
-    /**
-     * @return Brake pressure (percentage)
-     */
     public short getBrakePressure() {
         return brakePressure;
     }
@@ -192,9 +238,6 @@ public class CarSetupData {
         this.brakePressure = brakePressure;
     }
 
-    /**
-     * @return Brake bias (percentage)
-     */
     public short getBrakeBias() {
         return brakeBias;
     }
@@ -203,9 +246,6 @@ public class CarSetupData {
         this.brakeBias = brakeBias;
     }
 
-    /**
-     * @return Rear left tyre pressure (PSI)
-     */
     public float getRearLeftTyrePressure() {
         return rearLeftTyrePressure;
     }
@@ -214,9 +254,6 @@ public class CarSetupData {
         this.rearLeftTyrePressure = rearLeftTyrePressure;
     }
 
-    /**
-     * @return Rear right tyre pressure (PSI)
-     */
     public float getRearRightTyrePressure() {
         return rearRightTyrePressure;
     }
@@ -225,9 +262,6 @@ public class CarSetupData {
         this.rearRightTyrePressure = rearRightTyrePressure;
     }
 
-    /**
-     * @return Front left tyre pressure (PSI)
-     */
     public float getFrontLeftTyrePressure() {
         return frontLeftTyrePressure;
     }
@@ -236,9 +270,6 @@ public class CarSetupData {
         this.frontLeftTyrePressure = frontLeftTyrePressure;
     }
 
-    /**
-     * @return Front right tyre pressure (PSI)
-     */
     public float getFrontRightTyrePressure() {
         return frontRightTyrePressure;
     }
@@ -247,9 +278,6 @@ public class CarSetupData {
         this.frontRightTyrePressure = frontRightTyrePressure;
     }
 
-    /**
-     * @return Ballast
-     */
     public short getBallast() {
         return ballast;
     }
@@ -258,41 +286,11 @@ public class CarSetupData {
         this.ballast = ballast;
     }
 
-    /**
-     * @return Fuel load
-     */
     public float getFuelLoad() {
         return fuelLoad;
     }
 
     public void setFuelLoad(float fuelLoad) {
         this.fuelLoad = fuelLoad;
-    }
-
-    @Override
-    public String toString() {
-        return "CarSetupData[frontWing=" + this.frontWing +
-                ",rearWing=" + this.rearWing +
-                ",onThrottle=" + this.onThrottle +
-                ",offThrottle=" + this.offThrottle +
-                ",frontCamber=" + this.frontCamber +
-                ",rearCamber=" + this.rearCamber +
-                ",frontToe=" + this.frontToe +
-                ",rearToe=" + this.rearToe +
-                ",frontSuspension=" + this.frontSuspension +
-                ",rearSuspension=" + this.rearSuspension +
-                ",frontAntiRollBar=" + this.frontAntiRollBar +
-                ",rearAntiRollBar=" + this.rearAntiRollBar +
-                ",frontSuspensionHeight=" + this.frontSuspensionHeight +
-                ",rearSuspensionHeight=" + this.rearSuspensionHeight +
-                ",brakePressure=" + this.brakePressure +
-                ",brakeBias=" + this.brakeBias +
-                ",rearLeftTyrePressure=" + this.rearLeftTyrePressure +
-                ",rearRightTyrePressure=" + this.rearRightTyrePressure +
-                ",frontLeftTyrePressure=" + this.frontLeftTyrePressure +
-                ",frontRightTyrePressure=" + this.frontRightTyrePressure +
-                ",ballast=" + this.ballast +
-                ",fuelLoad=" + this.fuelLoad +
-                "]";
     }
 }

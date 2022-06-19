@@ -53,6 +53,10 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
                     penalty.setPlayerId(0);
                 }
             }
+            if(pe.getCarSetup() != null){
+                pe.getCarSetup().setId(0);
+                pe.getCarSetup().setPlayerId(0);
+            }
             if(pe.getFinalClassification() != null){
                 pe.getFinalClassification().setId(0);
                 pe.getFinalClassification().setPlayerId(0);

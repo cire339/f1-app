@@ -49,6 +49,10 @@ public class PlayerEntity {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<PenaltyEntity> penalties;
 
+    @JsonManagedReference
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    private CarSetupEntity carSetup;
+
     public PlayerEntity(PlayerDTO playerDTO){
         this.id = playerDTO.getId();
         this.carIndex = playerDTO.getCarIndex();
@@ -71,6 +75,12 @@ public class PlayerEntity {
             penaltyEntities.add(penaltyEntity);
         }
         this.penalties = penaltyEntities;
+
+        if(playerDTO.getCarSetup() != null){
+            CarSetupEntity cse = new CarSetupEntity(playerDTO.getCarSetup());
+            cse.setPlayer(this);
+            this.carSetup = cse;
+        }
 
         if(playerDTO.getFinalClassification() != null) {
             FinalClassificationEntity fce = new FinalClassificationEntity(playerDTO.getFinalClassification());
@@ -145,6 +155,14 @@ public class PlayerEntity {
 
     public void setPenalties(Set<PenaltyEntity> penalties) {
         this.penalties = penalties;
+    }
+
+    public CarSetupEntity getCarSetup() {
+        return carSetup;
+    }
+
+    public void setCarSetup(CarSetupEntity carSetup) {
+        this.carSetup = carSetup;
     }
 
     public FinalClassificationEntity getFinalClassification() {

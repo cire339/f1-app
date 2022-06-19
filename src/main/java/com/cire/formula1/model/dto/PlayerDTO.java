@@ -2,7 +2,6 @@ package com.cire.formula1.model.dto;
 
 import com.cire.formula1.database.entity.PenaltyEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
-import com.cire.formula1.packet.model.data.CarSetupData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,7 +20,7 @@ public class PlayerDTO {
     @JsonProperty
     private Float fastestSpeed = 0F;
     @JsonProperty
-    private CarSetupData carSetup;
+    private CarSetupDTO carSetup;
     @JsonProperty
     private Set<PenaltyDTO> penalties = new HashSet<>();
     @JsonProperty
@@ -39,6 +38,9 @@ public class PlayerDTO {
         this.carIndex = playerEntity.getCarIndex();
         this.playerName = playerEntity.getPlayerName();
         this.fastestSpeed = playerEntity.getFastestSpeed();
+        if(playerEntity.getCarSetup() != null){
+            this.carSetup = new CarSetupDTO(playerEntity.getCarSetup());
+        }
         for(PenaltyEntity penalty: playerEntity.getPenalties()){
             //TODO: Verify that this is correct.
             if(Objects.equals(penalty.getCarIndex(), this.carIndex)){
@@ -96,11 +98,11 @@ public class PlayerDTO {
         this.fastestSpeed = fastestSpeed;
     }
 
-    public CarSetupData getCarSetup() {
+    public CarSetupDTO getCarSetup() {
         return carSetup;
     }
 
-    public void setCarSetup(CarSetupData carSetup) {
+    public void setCarSetup(CarSetupDTO carSetup) {
         this.carSetup = carSetup;
     }
 

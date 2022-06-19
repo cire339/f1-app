@@ -4,7 +4,6 @@ import com.cire.formula1.model.dto.*;
 import com.cire.formula1.packet.model.constants.InfringementType;
 import com.cire.formula1.packet.model.constants.PenaltyType;
 import com.cire.formula1.packet.model.constants.ResultStatus;
-import com.cire.formula1.packet.model.data.CarSetupData;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -82,8 +81,8 @@ public class DataUtils {
         return playerDTO;
     }
 
-    private static CarSetupData createCarSetupData(){
-        CarSetupData carSetupData = new CarSetupData();
+    private static CarSetupDTO createCarSetupData(){
+        CarSetupDTO carSetupData = new CarSetupDTO();
         carSetupData.setFrontWing((short)1);
         carSetupData.setRearWing((short)1);
         carSetupData.setOnThrottle((short)1);

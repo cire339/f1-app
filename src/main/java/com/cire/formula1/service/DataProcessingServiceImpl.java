@@ -6,7 +6,6 @@ import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import com.cire.formula1.packet.model.constants.SessionType;
 import com.cire.formula1.packet.model.data.*;
-import org.jfree.chart.JFreeChart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +112,6 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         LOGGER.debug("This is a participant data packet!");
         PacketParticipantsData data = (PacketParticipantsData) packet;
         raceSession.setNumberActiveCars(data.getNumActiveCars());
-        LOGGER.info("There is " + raceSession.getNumberActiveCars() + " active cars in this session.");
         for(short i=0; i<data.getNumActiveCars(); i++){
             if(!inBound(i, raceSession.getPlayers().size())){
                 raceSession.getPlayers().add(new PlayerDTO(i));
@@ -266,13 +264,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processCarSetups(Packet packet) {
+        //Only AI and current player car setup is visible.
         PacketCarSetupData carSetupDataPacket = (PacketCarSetupData) packet;
-        //Set car setup for each player.
-        for(int i = 0; i<raceSession.getPlayers().size(); i++){
-            CarSetupData carSetupData = carSetupDataPacket.getCarSetupData().get(i);
-            if(!carSetupData.isBlank()) {
-                raceSession.getPlayers().get(i).setCarSetup(carSetupData);
-            }
+        short playerIndex = packet.getHeader().getPlayerCarIndex();
+        CarSetupData carSetupData = carSetupDataPacket.getCarSetupData().get(playerIndex);
+        if(inBound(playerIndex, raceSession.getPlayers().size())) {
+            raceSession.getPlayers().get(playerIndex).setCarSetup(new CarSetupDTO(carSetupData));
         }
     }
 
