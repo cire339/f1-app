@@ -3,10 +3,15 @@ package com.cire.formula1.model.dto;
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.packet.model.data.FastestLap;
+import com.cire.formula1.packet.model.data.LapData;
 import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.UnknownKeyException;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -45,6 +50,8 @@ public class RaceSessionDTO {
     private boolean saveToDatabase = false;
     @JsonIgnore
     private short numberActiveCars;
+    @JsonIgnore
+    private XYSeriesCollection playerPositionDataSet = new XYSeriesCollection();
 
     @JsonProperty
     private List<PlayerDTO> players = new ArrayList<>(PacketConstants.CARS);
@@ -195,6 +202,14 @@ public class RaceSessionDTO {
         this.players = playerDTOS;
     }
 
+    public XYSeriesCollection getPlayerPositionDataSet() {
+        return playerPositionDataSet;
+    }
+
+    public void setPlayerPositionDataSet(XYSeriesCollection playerPositionDataSet) {
+        this.playerPositionDataSet = playerPositionDataSet;
+    }
+
     @Override
     public String toString() {
         return "RaceSessionDTO{" +
@@ -227,6 +242,22 @@ public class RaceSessionDTO {
                     this.getPlayers().set(i+1, temp);
                     sorted = false;
                 }
+            }
+        }
+    }
+
+    public void updatePlayerPositionDataSet(List<LapData> lapDataList) {
+        for(int i=0; i<lapDataList.size();i++){
+            LapData lapData = lapDataList.get(i);
+            XYSeries series;
+            try {
+                series = playerPositionDataSet.getSeries("Player " + i);
+                series.add( System.currentTimeMillis()/1000, lapData.getCarPosition());
+            }catch(UnknownKeyException ex){
+                //Key not found. Create new one.
+                series = new XYSeries("Player " + i);
+                series.add( System.currentTimeMillis()/1000, lapData.getCarPosition());
+                playerPositionDataSet.addSeries(series);
             }
         }
     }

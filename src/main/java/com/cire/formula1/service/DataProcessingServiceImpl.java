@@ -120,12 +120,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     }
 
     private void processMotion(Packet packet) {
-        short carIndex = packet.getHeader().getPlayerCarIndex();
         PacketMotionData data = (PacketMotionData) packet;
 
-        //TODO: for now to test, only trace first lap.
-        if(inBound(carIndex, raceSession.getPlayers().size()) && raceSession.getPlayers().get(carIndex).getCurrentLapNumber() == 1) {
-            //graphService.updateMotionDataSet(data.getCarMotionData(), packet.getHeader().getPlayerCarIndex(), raceSession.getPlayers().get(carIndex).getCurrentLapNumber());
+        for(short i=0; i<raceSession.getNumberActiveCars(); i++){
+            if(inBound(i, raceSession.getPlayers().size()) &&
+                    raceSession.getPlayers().get(i).getCurrentLapNumber() == 1){
+                raceSession.getPlayers().get(i).updateMotionDataSet(data.getCarMotionData(), packet.getHeader().getPlayerCarIndex(), raceSession.getPlayers().get(i).getCurrentLapNumber());
+            }
         }
     }
 

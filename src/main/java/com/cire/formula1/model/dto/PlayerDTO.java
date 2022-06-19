@@ -2,9 +2,14 @@ package com.cire.formula1.model.dto;
 
 import com.cire.formula1.database.entity.PenaltyEntity;
 import com.cire.formula1.database.entity.PlayerEntity;
+import com.cire.formula1.packet.model.data.CarMotionData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.UnknownKeyException;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import java.util.*;
 
@@ -32,6 +37,8 @@ public class PlayerDTO {
 
     @JsonIgnore
     private short currentLapNumber;
+    @JsonIgnore
+    XYSeriesCollection motionDataSet = new XYSeriesCollection();
 
     public PlayerDTO(PlayerEntity playerEntity) {
         this.id = playerEntity.getId();
@@ -146,6 +153,14 @@ public class PlayerDTO {
         this.currentLapNumber = currentLapNumber;
     }
 
+    public XYSeriesCollection getMotionDataSet() {
+        return motionDataSet;
+    }
+
+    public void setMotionDataSet(XYSeriesCollection motionDataSet) {
+        this.motionDataSet = motionDataSet;
+    }
+
     @Override
     public String toString() {
         return "PlayerDTO{" +
@@ -172,5 +187,19 @@ public class PlayerDTO {
         }
         this.finalClassification.updateFinalClassification(newPlayer.getFinalClassification());
         this.sessionHistory.updateSessionHistory(newPlayer.getSessionHistory());
+    }
+
+    public void updateMotionDataSet(List<CarMotionData> carMotionDataList, short carIndex, short lapNumber) {
+        CarMotionData carMotion = carMotionDataList.get(carIndex);
+        XYSeries series;
+        try {
+            series = motionDataSet.getSeries(carIndex + "_" + lapNumber);
+            series.add(carMotion.getWorldPositionZ(), carMotion.getWorldPositionX());
+        }catch(UnknownKeyException ex){
+            //Key not found. Create new one.
+            series = new XYSeries(carIndex + "_" + lapNumber);
+            series.add(carMotion.getWorldPositionZ(), carMotion.getWorldPositionX());
+            motionDataSet.addSeries(series);
+        }
     }
 }

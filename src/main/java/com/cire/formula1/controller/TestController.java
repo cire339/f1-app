@@ -4,6 +4,7 @@ import com.cire.formula1.database.FormulaOneDao;
 import com.cire.formula1.database.entity.RaceSessionEntity;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 import com.cire.formula1.service.GraphService;
+import com.cire.formula1.service.RaceSessionService;
 import com.cire.formula1.service.UdpClient;
 import com.cire.formula1.service.UdpClientImpl;
 import com.cire.formula1.utils.DataUtils;
@@ -36,12 +37,14 @@ class TestController {
 
     private final UdpClient udpClient;
     private final FormulaOneDao formulaOneDao;
+    private final RaceSessionService raceSessionService;
     private final GraphService graphService;
 
     @Autowired
-    public TestController(UdpClientImpl udpClient, FormulaOneDao formulaOneDao, GraphService graphService) {
+    public TestController(UdpClientImpl udpClient, FormulaOneDao formulaOneDao, RaceSessionService raceSessionService, GraphService graphService) {
         this.udpClient = udpClient;
         this.formulaOneDao = formulaOneDao;
+        this.raceSessionService = raceSessionService;
         this.graphService = graphService;
     }
 
@@ -71,13 +74,13 @@ class TestController {
         return new ResponseEntity<>(raceSession, HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/player-position-graph"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getTestPlayerPositionGraph() throws IOException {
+    @GetMapping(value = {"/{sessionUid}/player-position-graph"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getTestPlayerPositionGraph(@PathVariable BigInteger sessionUid) throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-disposition", "attachment; filename=PlayerPositions.svg");
 
-        JFreeChart chart = graphService.getPlayerPositionGraph();
+        JFreeChart chart = graphService.createPlayerPositionGraph(raceSessionService.getRaceSessionByUid(sessionUid).getPlayerPositionDataSet());
         SVGGraphics2D g2 = new SVGGraphics2D(1800, 1200);
         g2.setRenderingHint(JFreeChart.KEY_SUPPRESS_SHADOW_GENERATION, true);
         Rectangle r = new Rectangle(0, 0, 1800, 1200);
@@ -95,13 +98,14 @@ class TestController {
 
     }
 
-    @GetMapping(value = {"/car-motion-graph"}, produces = {APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getCarMotionGraph() throws IOException {
+    @GetMapping(value = {"/{sessionUid}/{carIndex}/car-motion-graph"}, produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getCarMotionGraph(@PathVariable BigInteger sessionUid,
+                                               @PathVariable Integer carIndex) throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-disposition", "attachment; filename=CarMotion.svg");
 
-        JFreeChart chart = graphService.getMotionGraph();
+        JFreeChart chart = graphService.createMotionGraph(raceSessionService.getRaceSessionByUid(sessionUid).getPlayers().get(carIndex).getMotionDataSet());
         SVGGraphics2D g2 = new SVGGraphics2D(1800, 1200);
         g2.setRenderingHint(JFreeChart.KEY_SUPPRESS_SHADOW_GENERATION, true);
         Rectangle r = new Rectangle(0, 0, 1800, 1200);
