@@ -49,6 +49,7 @@ public class RaceSessionDTO {
     @JsonIgnore
     private boolean saveToDatabase = false;
     @JsonIgnore
+    //TODO: Is this useful?
     private short numberActiveCars;
     @JsonIgnore
     private XYSeriesCollection playerPositionDataSet = new XYSeriesCollection();
@@ -57,7 +58,9 @@ public class RaceSessionDTO {
     private List<PlayerDTO> players = new ArrayList<>(PacketConstants.CARS);
 
     public RaceSessionDTO(){
-
+        for(short i=0; i<PacketConstants.CARS; i++){
+            this.getPlayers().add(new PlayerDTO(i));
+        }
     }
 
     public RaceSessionDTO(RaceSessionEntity entity){

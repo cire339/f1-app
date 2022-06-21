@@ -6,6 +6,7 @@ import com.cire.formula1.packet.model.*;
 import com.cire.formula1.packet.model.constants.PacketId;
 import com.cire.formula1.packet.model.constants.SessionType;
 import com.cire.formula1.packet.model.data.*;
+import com.cire.formula1.packet.util.PacketConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private final RaceSessionService raceSessionService;
     private final FormulaOneDao formulaOneDao;
-    private final GraphService graphService;
 
     private RaceSessionDTO raceSession = null;
 
     @Autowired
-    public DataProcessingServiceImpl(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao, GraphService graphService) {
+    public DataProcessingServiceImpl(RaceSessionService raceSessionService, FormulaOneDao formulaOneDao) {
         this.raceSessionService = raceSessionService;
         this.formulaOneDao = formulaOneDao;
-        this.graphService = graphService;
     }
 
     @Override
@@ -53,8 +52,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             default -> throw new IllegalArgumentException("PacketId=" + packetId + " unrecognized");
         }
 
-        //Update session in memory.
         if(raceSession != null) {
+            //Update session in memory.
             raceSession = raceSessionService.updateRaceSession(raceSession);
         }
     }
@@ -65,10 +64,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
         if(!sessionUid.equals(BigInteger.ZERO)){
             raceSession = raceSessionService.getRaceSessionByUid(sessionUid);
-            if(inBound(playerCarIndex, raceSession.getPlayers().size())) {
-                //TODO: Name handling in F1 2022
-                raceSession.getPlayers().get(playerCarIndex).setPlayerName("cirelol");
-            }
+            //TODO: Name handling in F1 2022
+            raceSession.getPlayers().get(playerCarIndex).setPlayerName("cirelol");
         }else{
             LOGGER.debug("Session UID is empty.. um..");
         }
@@ -78,17 +75,16 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //One final Session History packet is sent at the very end after the Final Classification packet is sent.
         //But it does not seem to be the case.. why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
         PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
-        if(inBound(data.getCarIdx(), raceSession.getPlayers().size())) {
-            SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
-            if (sessionHistory != null) {
-                sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
-            } else {
-                raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
-            }
+        SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
+        if (sessionHistory != null) {
+            sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
+        } else {
+            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
         }
-        //Only update the DB if the race has ended.
+        //Only update the DB if the race has ended (does not seem to work)
         if(raceSession.isRaceEnded()){
-            updateSessionInDatabase();
+            LOGGER.info("Final session history packet. Saving to DB");
+            saveSessionInDatabase();
         }
     }
 
@@ -112,19 +108,21 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         LOGGER.debug("This is a participant data packet!");
         PacketParticipantsData data = (PacketParticipantsData) packet;
         raceSession.setNumberActiveCars(data.getNumActiveCars());
-        for(short i=0; i<data.getNumActiveCars(); i++){
-            if(!inBound(i, raceSession.getPlayers().size())){
-                raceSession.getPlayers().add(new PlayerDTO(i));
+        for(short i=0; i<data.getNumActiveCars(); i++) {
+            //Only set name of non primary player.
+            //TODO: This will change in 2022
+            if(packet.getHeader().getPlayerCarIndex() != i) {
+                raceSession.getPlayers().get(i).setPlayerName(data.getParticipants().get(i).getName());
             }
         }
+        LOGGER.debug("Participant packet. Saving to DB");
+        saveSessionInDatabase();
     }
 
     private void processMotion(Packet packet) {
         PacketMotionData data = (PacketMotionData) packet;
-
-        for(short i=0; i<raceSession.getNumberActiveCars(); i++){
-            if(inBound(i, raceSession.getPlayers().size()) &&
-                    raceSession.getPlayers().get(i).getCurrentLapNumber() == 1){
+        for(short i = 0; i< PacketConstants.CARS; i++){
+            if(raceSession.getPlayers().get(i).getCurrentLapNumber() == 1){
                 raceSession.getPlayers().get(i).updateMotionDataSet(data.getCarMotionData(), packet.getHeader().getPlayerCarIndex(), raceSession.getPlayers().get(i).getCurrentLapNumber());
             }
         }
@@ -141,12 +139,9 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
         //Set current lap number.
         short currentLapNumber = data.getLapData().get(carIndex).getCurrentLapNum();
-        if(inBound(carIndex, raceSession.getPlayers().size())) {
-            raceSession.getPlayers().get(carIndex).setCurrentLapNumber(currentLapNumber);
-        }
+        raceSession.getPlayers().get(carIndex).setCurrentLapNumber(currentLapNumber);
 
-       //graphService.updatePlayerPositionDataSet(lapDataPacket.getLapData());
-
+        raceSession.updatePlayerPositionDataSet(data.getLapData());
     }
 
     private void processFinalClassification(Packet packet) {
@@ -164,7 +159,8 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         LOGGER.info("Highest speed: " + raceSession.getFastestSpeed() + " by " + getDriverName(raceSession.getFastestSpeedCarIndex()));
 
         //Update session in DB.
-        updateSessionInDatabase();
+        LOGGER.info("Final Classification packet. Saving to DB.");
+        saveSessionInDatabase();
     }
 
     private void processEvent(Packet packet) {
@@ -176,7 +172,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 LOGGER.info("Session Started.");
                 break;
             case SESSION_ENDED:
-                LOGGER.info("Session Ended.");
+                LOGGER.info("Session Ended. Saving to Database.");
                 raceSession.setRaceEnded(true);
                 saveSessionInDatabase();
                 break;
@@ -269,7 +265,9 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketCarSetupData carSetupDataPacket = (PacketCarSetupData) packet;
         short playerIndex = packet.getHeader().getPlayerCarIndex();
         CarSetupData carSetupData = carSetupDataPacket.getCarSetupData().get(playerIndex);
-        if(inBound(playerIndex, raceSession.getPlayers().size())) {
+        if(raceSession.getPlayers().get(playerIndex).getCarSetup() != null) {
+            raceSession.getPlayers().get(playerIndex).getCarSetup().updateCarSetup(new CarSetupDTO(carSetupData));
+        }else{
             raceSession.getPlayers().get(playerIndex).setCarSetup(new CarSetupDTO(carSetupData));
         }
     }
@@ -283,34 +281,24 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         String name = raceSession.getPlayers().get(carIndex).getPlayerName();
         //Default if the player has no name.
         if(name == null || name.isEmpty()){
-            return "Player " + carIndex;
+            return "Player (" + carIndex + ")";
         }
-        return name;
+        return name + " (" + carIndex + ")";
     }
 
     private synchronized void saveSessionInDatabase(){
         if(raceSession.isSaveToDatabase()) {
-            if (formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isEmpty()) {
-                LOGGER.info("Creating session " + raceSession.getSessionUid() + " in database..");
-                raceSession = new RaceSessionDTO(formulaOneDao.createRaceSession(raceSession));
-                raceSessionService.updateRaceSession(raceSession);
-                LOGGER.info("Session created successfully!");
-            }
-        }
-    }
-
-    private synchronized void updateSessionInDatabase(){
-        if(raceSession.isSaveToDatabase()) {
             if (formulaOneDao.getRaceSessionByUid(raceSession.getSessionUid()).isPresent()) {
-                LOGGER.info("Updating session " + raceSession.getSessionUid() + " in database..");
+                LOGGER.debug("Updating session " + raceSession.getSessionUid() + " in database..");
                 raceSession = new RaceSessionDTO(formulaOneDao.updateRaceSession(raceSession));
                 raceSessionService.updateRaceSession(raceSession);
-                LOGGER.info("Session updated successfully!");
+                LOGGER.debug("Session updated successfully!");
+            }else{
+                LOGGER.debug("Creating session " + raceSession.getSessionUid() + " in database..");
+                raceSession = new RaceSessionDTO(formulaOneDao.createRaceSession(raceSession));
+                raceSessionService.updateRaceSession(raceSession);
+                LOGGER.debug("Session created successfully!");
             }
         }
     }
-
-     private boolean inBound(short index, int arrayLength){
-         return (index >= 0) && (index < arrayLength);
-     }
 }

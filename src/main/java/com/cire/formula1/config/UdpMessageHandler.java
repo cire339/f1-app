@@ -33,7 +33,6 @@ public class UdpMessageHandler
         Packet packet = packetDecoder.decode(buffer);
 
         //2. Send packet for processing
-        //TODO: better player name handling. - 2022 will let us see player names.
         dataProcessingService.processData(packet);
     }
 

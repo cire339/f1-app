@@ -6,7 +6,6 @@ import com.cire.formula1.packet.model.data.CarMotionData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jfree.chart.JFreeChart;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;

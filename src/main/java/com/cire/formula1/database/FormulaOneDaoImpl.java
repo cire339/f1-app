@@ -62,8 +62,7 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
                 pe.getFinalClassification().setPlayerId(0);
             }
         }
-        raceSessionRepo.saveAndFlush(raceSessionEntity);
-        return raceSessionRepo.findBySessionUid(raceSessionEntity.getSessionUid()).get();
+        return raceSessionRepo.saveAndFlush(raceSessionEntity);
     }
 
     @Override
@@ -86,8 +85,7 @@ public class FormulaOneDaoImpl implements FormulaOneDao {
 
     @Override
     public RaceSessionEntity updateRaceSession(RaceSessionDTO session) {
-        raceSessionRepo.saveAndFlush(new RaceSessionEntity(session));
-        return raceSessionRepo.findBySessionUid(String.valueOf(session.getSessionUid())).get();
+        return raceSessionRepo.saveAndFlush(new RaceSessionEntity(session));
     }
 
     @Override

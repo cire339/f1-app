@@ -293,4 +293,29 @@ public class CarSetupDTO {
     public void setFuelLoad(float fuelLoad) {
         this.fuelLoad = fuelLoad;
     }
+
+    public void updateCarSetup(CarSetupDTO newCS){
+        this.frontWing = newCS.getFrontWing();
+        this.rearWing = newCS.getRearWing();
+        this.onThrottle = newCS.getOnThrottle();
+        this.offThrottle = newCS.getOffThrottle();
+        this.frontCamber = newCS.getFrontCamber();
+        this.rearCamber = newCS.getRearCamber();
+        this.frontToe = newCS.getFrontToe();
+        this.rearToe = newCS.getRearToe();
+        this.frontSuspension = newCS.getFrontSuspension();
+        this.rearSuspension = newCS.getRearSuspension();
+        this.frontAntiRollBar = newCS.getFrontAntiRollBar();
+        this.rearAntiRollBar = newCS.getRearAntiRollBar();
+        this.frontSuspensionHeight = newCS.getFrontSuspensionHeight();
+        this.rearSuspensionHeight = newCS.getRearSuspensionHeight();
+        this.brakePressure = newCS.getBrakePressure();
+        this.brakeBias = newCS.getBrakeBias();
+        this.rearLeftTyrePressure = newCS.getRearLeftTyrePressure();
+        this.rearRightTyrePressure = newCS.getRearRightTyrePressure();
+        this.frontLeftTyrePressure = newCS.getFrontLeftTyrePressure();
+        this.frontRightTyrePressure = newCS.getFrontRightTyrePressure();
+        this.ballast = newCS.getBallast();
+        this.fuelLoad = newCS.getFuelLoad();
+    }
 }
