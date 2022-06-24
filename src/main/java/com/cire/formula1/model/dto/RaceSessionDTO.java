@@ -8,7 +8,6 @@ import com.cire.formula1.packet.util.PacketConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jfree.chart.JFreeChart;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -249,7 +248,7 @@ public class RaceSessionDTO {
         }
     }
 
-    public void updatePlayerPositionDataSet(List<LapData> lapDataList) {
+    public synchronized void updatePlayerPositionDataSet(List<LapData> lapDataList) {
         for(int i=0; i<lapDataList.size();i++){
             LapData lapData = lapDataList.get(i);
             XYSeries series;

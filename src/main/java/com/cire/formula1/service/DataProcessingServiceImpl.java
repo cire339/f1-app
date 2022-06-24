@@ -32,7 +32,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     @Override
     public void processData(Packet packet) {
-
+        //Process header data
         processHeader(packet);
         PacketId packetId = packet.getHeader().getPacketId();
 
@@ -73,7 +73,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
     private void processSessionHistory(Packet packet) {
         //One final Session History packet is sent at the very end after the Final Classification packet is sent.
-        //But it does not seem to be the case.. why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
+        //But it does not seem to be the case, why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
         PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
         SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
         if (sessionHistory != null) {
@@ -172,7 +172,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 LOGGER.info("Session Started.");
                 break;
             case SESSION_ENDED:
-                LOGGER.info("Session Ended. Saving to Database.");
+                LOGGER.info("Session Ended.");
                 raceSession.setRaceEnded(true);
                 saveSessionInDatabase();
                 break;
@@ -222,13 +222,13 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                     raceSession.setFastestSpeed(speedCaptured);
                     raceSession.setFastestSpeedCarIndex(carIndex);
                 }
-                //Set player fastest speed
+                //Set each player fastest speed
                 if(speedCaptured > raceSession.getPlayers().get(carIndex).getFastestSpeed()){
                     raceSession.getPlayers().get(carIndex).setFastestSpeed(speedCaptured);
                 }
                 break;
             case LIGHTS_OUT:
-                LOGGER.info("Race " + raceSession.getSessionUid() + " has started!");
+                LOGGER.info("Start lights are out and the race " + raceSession.getSessionUid() + " on " + raceSession.getTrack() + " has started!");
                 raceSession.setRaceStarted(true);
                 break;
             case DRIVE_THROUGH_SERVED:
@@ -240,8 +240,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 LOGGER.info(getDriverName(sgPenServed.getCarIndex()) + " has served his stop go penalty.");
                 break;
             case TEAM_MATE_IN_PITS:
+                TeamMateInPits tmip = eventDataPacket.getEventDataDetails().getTeamMateInPits();
+                LOGGER.info(getDriverName(packet.getHeader().getPlayerCarIndex()) + "'s teammate, " + getDriverName(tmip.getCarIndex()) + ", is in the pits!");
             case CHEQUERED_FLAG:
+                LOGGER.info("Checkered flag has been waived!");
             case START_LIGHTS:
+                LOGGER.info("Start lights are on!");
             case FLASHBACK:
             case BUTTON_STATUS:
                 break;
@@ -299,6 +303,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
                 raceSessionService.updateRaceSession(raceSession);
                 LOGGER.debug("Session created successfully!");
             }
+            LOGGER.debug("Session saved successfully!");
         }
     }
 }

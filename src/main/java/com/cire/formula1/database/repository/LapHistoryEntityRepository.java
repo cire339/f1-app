@@ -1,13 +1,15 @@
 package com.cire.formula1.database.repository;
 
 import com.cire.formula1.database.entity.LapHistoryEntity;
-import com.cire.formula1.database.entity.PlayerEntity;
-import com.cire.formula1.database.entity.RaceSessionEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
-public interface LapHistoryEntityRepository extends CrudRepository<LapHistoryEntity, Long> {
+public interface LapHistoryEntityRepository extends JpaRepository<LapHistoryEntity, Long> {
+
+    Optional<List<LapHistoryEntity>> findBySessionHistoryData_Player_RaceSession_TrackName(String trackName);
 
 }
