@@ -93,10 +93,11 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //For now, I will only save the data that does not change.
         PacketSessionData sessionDataPacket = (PacketSessionData) packet;
 
+        raceSession.setSaveToDatabase(true);
         //Only save to DB the races.
-        if(sessionDataPacket.getSessionType().equals(SessionType.R)){
-            raceSession.setSaveToDatabase(true);
-        }
+        //if(sessionDataPacket.getSessionType().equals(SessionType.R)){
+        //    raceSession.setSaveToDatabase(true);
+        //}
         raceSession.setSessionType(sessionDataPacket.getSessionType().name());
         raceSession.setTrack(sessionDataPacket.getTrackId().name());
         raceSession.setTotalLaps(sessionDataPacket.getTotalLaps());
@@ -112,7 +113,12 @@ public class DataProcessingServiceImpl implements DataProcessingService {
             //Only set name of non primary player.
             //TODO: This will change in 2022
             if(packet.getHeader().getPlayerCarIndex() != i) {
-                raceSession.getPlayers().get(i).setPlayerName(data.getParticipants().get(i).getName());
+                String playerName = data.getParticipants().get(i).getName();
+                if(playerName.equalsIgnoreCase("Player")){
+                    raceSession.getPlayers().get(i).setPlayerName(playerName + packet.getHeader().getPlayerCarIndex());
+                }else {
+                    raceSession.getPlayers().get(i).setPlayerName(playerName);
+                }
             }
         }
         LOGGER.debug("Participant packet. Saving to DB");

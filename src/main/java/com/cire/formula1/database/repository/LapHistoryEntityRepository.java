@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface LapHistoryEntityRepository extends JpaRepository<LapHistoryEntity, Long> {
 
-    Optional<List<LapHistoryEntity>> findBySessionHistoryData_Player_RaceSession_TrackName(String trackName);
+    Optional<List<LapHistoryEntity>> findBySessionHistoryData_Player_RaceSession_TrackNameOrderByLapTimeAsc(String trackName);
 
 }

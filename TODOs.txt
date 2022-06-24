@@ -1,0 +1,2 @@
+- Filter out players in time trial (Rivals?)
+- Discard incomplete laps (any sector 0, valid byte != 15?)

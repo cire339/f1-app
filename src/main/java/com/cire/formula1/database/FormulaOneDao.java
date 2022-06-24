@@ -2,6 +2,7 @@ package com.cire.formula1.database;
 
 import com.cire.formula1.database.entity.PlayerEntity;
 import com.cire.formula1.database.entity.RaceSessionEntity;
+import com.cire.formula1.model.FastestLapInfo;
 import com.cire.formula1.model.dto.LapHistoryDTO;
 import com.cire.formula1.model.dto.RaceSessionDTO;
 
@@ -23,5 +24,5 @@ public interface FormulaOneDao {
 
     List<PlayerEntity> getPlayerByRaceSessionUid(BigInteger sessionUid);
 
-    LapHistoryDTO getFastestLapByTrackName(String trackName);
+    List<FastestLapInfo> getFastestLapsByTrackName(String trackName, Integer numberOfLaps);
 }

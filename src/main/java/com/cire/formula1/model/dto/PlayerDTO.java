@@ -188,7 +188,7 @@ public class PlayerDTO {
         this.sessionHistory.updateSessionHistory(newPlayer.getSessionHistory());
     }
 
-    public void updateMotionDataSet(List<CarMotionData> carMotionDataList, short carIndex, short lapNumber) {
+    public synchronized void updateMotionDataSet(List<CarMotionData> carMotionDataList, short carIndex, short lapNumber) {
         CarMotionData carMotion = carMotionDataList.get(carIndex);
         XYSeries series;
         try {
