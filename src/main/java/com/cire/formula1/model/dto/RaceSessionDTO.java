@@ -13,6 +13,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class RaceSessionDTO {
     private String track;
     @JsonProperty
     private short totalLaps;
+    @JsonProperty
+    private LocalDateTime startTime;
 
     @JsonIgnore
     private boolean saveToDatabase = false;
@@ -90,6 +93,7 @@ public class RaceSessionDTO {
         }
         //Set this to true since it's in the DB.
         this.saveToDatabase = true;
+        this.startTime = entity.getStartTime();
     }
 
     public int getId() {
@@ -180,6 +184,14 @@ public class RaceSessionDTO {
         this.totalLaps = totalLaps;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public boolean isSaveToDatabase() {
         return saveToDatabase;
     }
@@ -226,8 +238,10 @@ public class RaceSessionDTO {
                 ", sessionType='" + sessionType + '\'' +
                 ", track='" + track + '\'' +
                 ", totalLaps=" + totalLaps +
+                ", startTime=" + startTime +
                 ", saveToDatabase=" + saveToDatabase +
                 ", numberActiveCars=" + numberActiveCars +
+                ", playerPositionDataSet=" + playerPositionDataSet +
                 ", players=" + players +
                 '}';
     }

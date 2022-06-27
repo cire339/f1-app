@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -43,6 +44,9 @@ public class RaceSessionEntity {
     @Column(name = "fastest_lap_car_index")
     private Integer fastestLapCarIndex;
 
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "raceSession", cascade = CascadeType.ALL)
     private Set<PlayerEntity> players;
@@ -55,6 +59,7 @@ public class RaceSessionEntity {
         this.totalLaps = (int) raceSession.getTotalLaps();
         this.fastestSpeed = raceSession.getFastestSpeed();
         this.fastestSpeedCarIndex = (int) raceSession.getFastestSpeedCarIndex();
+        this.startTime = raceSession.getStartTime();
         if(raceSession.getFastestLap() != null) {
             this.fastestLap = raceSession.getFastestLap().getLapTime();
             this.fastestSpeedCarIndex = (int) raceSession.getFastestLap().getCarIndex();
@@ -145,6 +150,14 @@ public class RaceSessionEntity {
 
     public void setFastestLapCarIndex(Integer fastestLapCarIndex) {
         this.fastestLapCarIndex = fastestLapCarIndex;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public Set<PlayerEntity> getPlayers() {

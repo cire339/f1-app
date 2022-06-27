@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 @Service
 public class DataProcessingServiceImpl implements DataProcessingService {
@@ -74,12 +75,23 @@ public class DataProcessingServiceImpl implements DataProcessingService {
     private void processSessionHistory(Packet packet) {
         //One final Session History packet is sent at the very end after the Final Classification packet is sent.
         //But it does not seem to be the case, why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
-        PacketSessionHistoryData data = (PacketSessionHistoryData)packet;
+        PacketSessionHistoryData data = (PacketSessionHistoryData) packet;
         SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
-        if (sessionHistory != null) {
-            sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
-        } else {
-            raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+        if(raceSession.getSessionType().equals(SessionType.TIME_TRIAL.name())) {
+            //For time trial only save the data of the active player. We don't want to save the Rival / Ghosts data.
+            if(data.getCarIdx() == packet.getHeader().getPlayerCarIndex()){
+                if (sessionHistory != null) {
+                    sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
+                } else {
+                    raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+                }
+            }
+        }else{
+            if (sessionHistory != null) {
+                sessionHistory.updateSessionHistory(new SessionHistoryDTO(data));
+            } else {
+                raceSession.getPlayers().get(data.getCarIdx()).setSessionHistory(new SessionHistoryDTO(data));
+            }
         }
         //Only update the DB if the race has ended (does not seem to work)
         if(raceSession.isRaceEnded()){
@@ -176,6 +188,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         switch (eventDataPacket.getEventCode()) {
             case SESSION_STARTED:
                 LOGGER.info("Session Started.");
+                raceSession.setStartTime(LocalDateTime.now());
                 break;
             case SESSION_ENDED:
                 LOGGER.info("Session Ended.");

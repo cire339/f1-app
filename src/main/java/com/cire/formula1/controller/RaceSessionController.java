@@ -49,7 +49,7 @@ public class RaceSessionController {
         return new ResponseEntity<>(new RaceSessionDTO(raceSession.get()), HttpStatus.OK);
     }
 
-    /*
+
     @DeleteMapping(value = {"/{sessionUid}"}, produces = {APPLICATION_JSON_VALUE})
     public ResponseEntity<?> deleteSession(@PathVariable BigInteger sessionUid) {
 
@@ -59,6 +59,5 @@ public class RaceSessionController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    */
 
 }

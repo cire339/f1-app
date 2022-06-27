@@ -1,7 +1,5 @@
 package com.cire.formula1.packet.model.data;
 
-import com.cire.formula1.database.entity.CarSetupEntity;
-
 public class CarSetupData {
 
     private short frontWing;

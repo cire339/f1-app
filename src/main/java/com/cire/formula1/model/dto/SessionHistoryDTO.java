@@ -20,7 +20,7 @@ public class SessionHistoryDTO {
     private short bestSector2LapNum;
     private short bestSector3LapNum;
 
-    @JsonIgnore
+
     private Set<LapHistoryDTO> lapHistory = new LinkedHashSet<>(PacketConstants.LAPS);
 
     @JsonIgnore
