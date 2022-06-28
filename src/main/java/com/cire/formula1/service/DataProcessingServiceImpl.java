@@ -65,8 +65,16 @@ public class DataProcessingServiceImpl implements DataProcessingService {
 
         if(!sessionUid.equals(BigInteger.ZERO)){
             raceSession = raceSessionService.getRaceSessionByUid(sessionUid);
-            //TODO: Name handling in F1 2022
-            raceSession.getPlayers().get(playerCarIndex).setPlayerName("cirelol");
+
+            //Set version;
+            String gameVersion = packet.getHeader().getPacketFormat() + "_V" + packet.getHeader().getGameMajorVersion() + "." + packet.getHeader().getGameMinorVersion();
+            raceSession.setGameVersion(gameVersion);
+
+            //2021 does not give us the player names.. hardcoded my name for now.
+            if(gameVersion.startsWith("2021")){
+                raceSession.getPlayers().get(playerCarIndex).setPlayerName("cirelol");
+            }
+
         }else{
             LOGGER.debug("Session UID is empty.. um..");
         }
@@ -122,13 +130,23 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         PacketParticipantsData data = (PacketParticipantsData) packet;
         raceSession.setNumberActiveCars(data.getNumActiveCars());
         for(short i=0; i<data.getNumActiveCars(); i++) {
-            //Only set name of non primary player.
-            //TODO: This will change in 2022
-            if(packet.getHeader().getPlayerCarIndex() != i) {
+
+            //TODO: refactor this so it's better..
+            if(packet.getHeader().getPacketFormat() == 2021) {
+                //Only set name of non primary player.
+                if (packet.getHeader().getPlayerCarIndex() != i) {
+                    String playerName = data.getParticipants().get(i).getName();
+                    if (playerName.equalsIgnoreCase("Player")) {
+                        raceSession.getPlayers().get(i).setPlayerName(playerName + packet.getHeader().getPlayerCarIndex());
+                    } else {
+                        raceSession.getPlayers().get(i).setPlayerName(playerName);
+                    }
+                }
+            }else{
                 String playerName = data.getParticipants().get(i).getName();
-                if(playerName.equalsIgnoreCase("Player")){
+                if (playerName.equalsIgnoreCase("Player")) {
                     raceSession.getPlayers().get(i).setPlayerName(playerName + packet.getHeader().getPlayerCarIndex());
-                }else {
+                } else {
                     raceSession.getPlayers().get(i).setPlayerName(playerName);
                 }
             }

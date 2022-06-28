@@ -47,6 +47,9 @@ public class RaceSessionEntity {
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
+    @Column(name = "game_version")
+    private String gameVersion;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "raceSession", cascade = CascadeType.ALL)
     private Set<PlayerEntity> players;
@@ -60,6 +63,7 @@ public class RaceSessionEntity {
         this.fastestSpeed = raceSession.getFastestSpeed();
         this.fastestSpeedCarIndex = (int) raceSession.getFastestSpeedCarIndex();
         this.startTime = raceSession.getStartTime();
+        this.gameVersion = raceSession.getGameVersion();
         if(raceSession.getFastestLap() != null) {
             this.fastestLap = raceSession.getFastestLap().getLapTime();
             this.fastestSpeedCarIndex = (int) raceSession.getFastestLap().getCarIndex();
@@ -158,6 +162,14 @@ public class RaceSessionEntity {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public String getGameVersion() {
+        return gameVersion;
+    }
+
+    public void setGameVersion(String gameVersion) {
+        this.gameVersion = gameVersion;
     }
 
     public Set<PlayerEntity> getPlayers() {

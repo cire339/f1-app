@@ -47,6 +47,8 @@ public class RaceSessionDTO {
     private short totalLaps;
     @JsonProperty
     private LocalDateTime startTime;
+    @JsonProperty
+    private String gameVersion;
 
     @JsonIgnore
     private boolean saveToDatabase = false;
@@ -94,6 +96,7 @@ public class RaceSessionDTO {
         //Set this to true since it's in the DB.
         this.saveToDatabase = true;
         this.startTime = entity.getStartTime();
+        this.gameVersion = entity.getGameVersion();
     }
 
     public int getId() {
@@ -190,6 +193,14 @@ public class RaceSessionDTO {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public String getGameVersion() {
+        return gameVersion;
+    }
+
+    public void setGameVersion(String gameVersion) {
+        this.gameVersion = gameVersion;
     }
 
     public boolean isSaveToDatabase() {
