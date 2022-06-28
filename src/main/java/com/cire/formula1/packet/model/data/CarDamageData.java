@@ -16,6 +16,7 @@ public class CarDamageData {
     private short diffuserDamage;
     private short sidePodDamage;
     private short drsFault;
+    private short ersFault;
     private short gearBoxDamage;
     private short engineDamage;
     private short engineMGUHWear;
@@ -23,6 +24,8 @@ public class CarDamageData {
     private short engineCEWear;
     private short engineICEWear;
     private short engineTCWear;
+    private short engineBlown;
+    private short engineSeized;
 
     /**
      * @return Tyre wear percentage
@@ -134,6 +137,18 @@ public class CarDamageData {
         this.drsFault = drsFault;
     }
 
+
+    /**
+     * @return Indicator for ERS fault, 0 = OK, 1 = fault
+     */
+    public short getErsFault() {
+        return ersFault;
+    }
+
+    public void setErsFault(short ersFault) {
+        this.ersFault = ersFault;
+    }
+
     /**
      * @return Gear box damage (percentage)
      */
@@ -211,25 +226,51 @@ public class CarDamageData {
         this.engineTCWear = engineTCWear;
     }
 
+    /**
+     * @return Engine blown, 0 = OK, 1 = fault
+     */
+    public short getEngineBlown() {
+        return engineBlown;
+    }
+
+    public void setEngineBlown(short engineBlown) {
+        this.engineBlown = engineBlown;
+    }
+
+    /**
+     * @return Engine seized, 0 = OK, 1 = fault
+     */
+    public short getEngineSeized() {
+        return engineSeized;
+    }
+
+    public void setEngineSeized(short engineSeized) {
+        this.engineSeized = engineSeized;
+    }
+
     @Override
-    public String toString(){
-        return "CarDamageData[tyresWear=" + Arrays.toString(this.tyresWear) +
-                ",tyresDamage=" + Arrays.toString(this.tyresDamage) +
-                ",brakeDamage=" + Arrays.toString(this.brakeDamage) +
-                ",frontLeftWingDamage=" + this.frontLeftWingDamage +
-                ",frontRightWingDamage=" + this.frontRightWingDamage +
-                ",rearWingDamage=" + this.rearWingDamage +
-                ",floorDamage=" + this.floorDamage +
-                ",diffuserDamage=" + this.diffuserDamage +
-                ",sidePodDamage=" + this.sidePodDamage +
-                ",drsFault=" + this.drsFault +
-                ",gearBoxDamage=" + this.gearBoxDamage +
-                ",engineDamage=" + this.engineDamage +
-                ",engineMGUHWear=" + this.engineMGUHWear +
-                ",engineESWear=" + this.engineESWear +
-                ",engineCEWear=" + this.engineCEWear +
-                ",engineICEWear=" + this.engineICEWear +
-                ",engineTCWear=" + this.engineTCWear +
-                "]";
+    public String toString() {
+        return "CarDamageData{" +
+                "tyresWear=" + Arrays.toString(tyresWear) +
+                ", tyresDamage=" + Arrays.toString(tyresDamage) +
+                ", brakeDamage=" + Arrays.toString(brakeDamage) +
+                ", frontLeftWingDamage=" + frontLeftWingDamage +
+                ", frontRightWingDamage=" + frontRightWingDamage +
+                ", rearWingDamage=" + rearWingDamage +
+                ", floorDamage=" + floorDamage +
+                ", diffuserDamage=" + diffuserDamage +
+                ", sidePodDamage=" + sidePodDamage +
+                ", drsFault=" + drsFault +
+                ", ersFault=" + ersFault +
+                ", gearBoxDamage=" + gearBoxDamage +
+                ", engineDamage=" + engineDamage +
+                ", engineMGUHWear=" + engineMGUHWear +
+                ", engineESWear=" + engineESWear +
+                ", engineCEWear=" + engineCEWear +
+                ", engineICEWear=" + engineICEWear +
+                ", engineTCWear=" + engineTCWear +
+                ", engineBlown=" + engineBlown +
+                ", engineSeized=" + engineSeized +
+                '}';
     }
 }

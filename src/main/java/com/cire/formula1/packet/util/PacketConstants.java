@@ -23,4 +23,10 @@ public class PacketConstants {
     public static final int BRAKES = 4;
     // max number of laps
     public static final int LAPS = 100;
+
+    //TODO: Maybe create ENUM?
+    //F1 2021 packet format
+    public static final int FORMAT_2021 = 2021;
+    //F1 2022 packet format
+    public static final int FORMAT_2022 = 2022;
 }

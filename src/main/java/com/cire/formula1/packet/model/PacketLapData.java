@@ -15,6 +15,8 @@ import java.util.List;
 public class PacketLapData extends Packet {
     
     private List<LapData> lapData = new ArrayList<>(PacketConstants.CARS);
+    private short timeTrialPBCarIdx;
+    private short timeTrialRivalCarIdx;
 
     /**
      * @return Lap data for all cars on track
@@ -27,16 +29,34 @@ public class PacketLapData extends Packet {
         this.lapData = lapData;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("LapData[");
-        sb.append(super.toString());
-        sb.append(",lapData=");
-        for (LapData l : lapData) {
-            sb.append(l.toString()).append(",");
-        }
-        sb.replace(sb.length() - 1, sb.length() - 1, "]");
-        return sb.toString();
+    /**
+     * @return Index of Personal Best car in time trial (255 if invalid)
+     */
+    public short getTimeTrialPBCarIdx() {
+        return timeTrialPBCarIdx;
     }
 
+    public void setTimeTrialPBCarIdx(short timeTrialPBCarIdx) {
+        this.timeTrialPBCarIdx = timeTrialPBCarIdx;
+    }
+
+    /**
+     * @return Index of Rival car in time trial (255 if invalid)
+     */
+    public short getTimeTrialRivalCarIdx() {
+        return timeTrialRivalCarIdx;
+    }
+
+    public void setTimeTrialRivalCarIdx(short timeTrialRivalCarIdx) {
+        this.timeTrialRivalCarIdx = timeTrialRivalCarIdx;
+    }
+
+    @Override
+    public String toString() {
+        return "PacketLapData{" +
+                "lapData=" + lapData +
+                ", timeTrialPBCarIdx=" + timeTrialPBCarIdx +
+                ", timeTrialRivalCarIdx=" + timeTrialRivalCarIdx +
+                '}';
+    }
 }

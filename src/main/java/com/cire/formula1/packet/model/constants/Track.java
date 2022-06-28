@@ -37,7 +37,8 @@ public enum Track {
     ZANDVOORT(26),
     IMOLA(27),
     PORTIMAO(28),
-    JEDDAH(29);
+    JEDDAH(29),
+    MIAMI(30);
 
     private static final Map<Integer, Track> map = new HashMap<>();
 

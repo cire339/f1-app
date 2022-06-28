@@ -54,7 +54,10 @@ public class PacketSessionData extends Packet {
     private short drsAssist;
     private short dynamicRacingLine;
     private short dynamicRacingLineType;
-
+    private short gameMode;
+    private short ruleSet;
+    private long timeOfDay;
+    private short sessionLength;
 
     /**
      * @return Weather
@@ -129,7 +132,7 @@ public class PacketSessionData extends Packet {
 
     /**
      * @return Track ID
-     * -1 for unknown, 0-21 for tracks, see appendix
+     * -1 for unknown, see appendix
      */
     public Track getTrackId() {
         return trackId;
@@ -141,7 +144,7 @@ public class PacketSessionData extends Packet {
 
     /**
      * @return Formula
-     * Formula, 0 = F1 Modern, 1 = F1 Classic, 2 = F2, 3 = F1 Generic
+     * Formula, 0 = F1 Modern, 1 = F1 Classic, 2 = F2, 3 = F1 Generic, 4 = Beta, 5 = Supercars
      */
     public Formula getFormula() {
         return formula;
@@ -185,7 +188,7 @@ public class PacketSessionData extends Packet {
     }
 
     /**
-     * @return Whether the game is paused
+     * @return Whether the game is paused – network game only
      */
     public short getGamePaused() {
         return gamePaused;
@@ -496,55 +499,95 @@ public class PacketSessionData extends Packet {
         this.dynamicRacingLineType = dynamicRacingLineType;
     }
 
+    /**
+     * @return Game mode id - see appendix
+     */
+    public short getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(short gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    /**
+     * @return Ruleset - see appendix
+     */
+    public short getRuleSet() {
+        return ruleSet;
+    }
+
+    public void setRuleSet(short ruleSet) {
+        this.ruleSet = ruleSet;
+    }
+
+    /**
+     * @return Local time of day - minutes since midnight
+     */
+    public long getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public void setTimeOfDay(long timeOfDay) {
+        this.timeOfDay = timeOfDay;
+    }
+
+    /**
+     * @return 0 = None, 2 = Very Short, 3 = Short, 4 = Medium, 5 = Medium Long, 6 = Long, 7 = Full
+     */
+    public short getSessionLength() {
+        return sessionLength;
+    }
+
+    public void setSessionLength(short sessionLength) {
+        this.sessionLength = sessionLength;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Session[");
-        sb.append(super.toString());
-        sb.append(",weather=").append(this.weather);
-        sb.append(",trackTemperature=").append(this.trackTemperature);
-        sb.append(",airTemperature=").append(this.airTemperature);
-        sb.append(",totalLaps=").append(this.totalLaps);
-        sb.append(",trackLength=").append(this.trackLength);
-        sb.append(",sessionType=").append(this.sessionType);
-        sb.append(",trackId=").append(this.trackId);
-        sb.append(",formula=").append(this.formula);
-        sb.append(",sessionTimeLeft=").append(this.sessionTimeLeft);
-        sb.append(",sessionDuration=").append(this.sessionDuration);
-        sb.append(",pitSpeedLimit=").append(this.pitSpeedLimit);
-        sb.append(",gamePaused=").append(this.gamePaused);
-        sb.append(",isSpectating=").append(this.isSpectating);
-        sb.append(",spectatorCarIndex").append(this.spectatorCarIndex);
-        sb.append(",sliProNativeSupport=").append(this.sliProNativeSupport);
-        sb.append(",numMarshalZones=").append(this.numMarshalZones);
-        sb.append(",marshalZones=");
-        for (MarshalZone mz: marshalZones) {
-            sb.append(mz.toString()).append(",");
-        }
-        sb.append("safetyCarStatus=").append(this.safetyCarStatus);
-        sb.append(",networkGame=").append(this.networkGame);
-        sb.append(",numWeatherForecastSamples=").append(this.numWeatherForecastSamples);
-        sb.append(",weatherForecastSamples=");
-        for (WeatherForecastSample wfs : weatherForecastSamples) {
-            sb.append(wfs.toString()).append(",");
-        }
-        sb.append("forecastAccuracy=").append(this.forecastAccuracy);
-        sb.append(",aiDifficulty").append(this.aiDifficulty);
-        sb.append(",seasonLinkIdentifier").append(this.seasonLinkIdentifier);
-        sb.append(",weekendLinkIdentifier").append(this.weekendLinkIdentifier);
-        sb.append(",sessionLinkIdentifier").append(this.sessionLinkIdentifier);
-        sb.append(",pitStopWindowIdealLap").append(this.pitStopWindowIdealLap);
-        sb.append(",pitStopWindowLatestLap").append(this.pitStopWindowLatestLap);
-        sb.append(",pitStopRejoinPosition").append(this.pitStopRejoinPosition);
-        sb.append(",steeringAssist").append(this.steeringAssist);
-        sb.append(",brakingAssist").append(this.brakingAssist);
-        sb.append(",gearboxAssist").append(this.gearboxAssist);
-        sb.append(",pitAssist").append(this.pitAssist);
-        sb.append(",pitReleaseAssist").append(this.pitReleaseAssist);
-        sb.append(",ersAssist").append(this.ersAssist);
-        sb.append(",drsAssist").append(this.drsAssist);
-        sb.append(",dynamicRacingLine").append(this.dynamicRacingLine);
-        sb.append(",dynamicRacingLineType").append(this.dynamicRacingLineType);
-        sb.append("]");
-        return sb.toString();
+        return "PacketSessionData{" +
+                "weather=" + weather +
+                ", trackTemperature=" + trackTemperature +
+                ", airTemperature=" + airTemperature +
+                ", totalLaps=" + totalLaps +
+                ", trackLength=" + trackLength +
+                ", sessionType=" + sessionType +
+                ", trackId=" + trackId +
+                ", formula=" + formula +
+                ", sessionTimeLeft=" + sessionTimeLeft +
+                ", sessionDuration=" + sessionDuration +
+                ", pitSpeedLimit=" + pitSpeedLimit +
+                ", gamePaused=" + gamePaused +
+                ", isSpectating=" + isSpectating +
+                ", spectatorCarIndex=" + spectatorCarIndex +
+                ", sliProNativeSupport=" + sliProNativeSupport +
+                ", numMarshalZones=" + numMarshalZones +
+                ", marshalZones=" + marshalZones +
+                ", safetyCarStatus=" + safetyCarStatus +
+                ", networkGame=" + networkGame +
+                ", numWeatherForecastSamples=" + numWeatherForecastSamples +
+                ", weatherForecastSamples=" + weatherForecastSamples +
+                ", forecastAccuracy=" + forecastAccuracy +
+                ", aiDifficulty=" + aiDifficulty +
+                ", seasonLinkIdentifier=" + seasonLinkIdentifier +
+                ", weekendLinkIdentifier=" + weekendLinkIdentifier +
+                ", sessionLinkIdentifier=" + sessionLinkIdentifier +
+                ", pitStopWindowIdealLap=" + pitStopWindowIdealLap +
+                ", pitStopWindowLatestLap=" + pitStopWindowLatestLap +
+                ", pitStopRejoinPosition=" + pitStopRejoinPosition +
+                ", steeringAssist=" + steeringAssist +
+                ", brakingAssist=" + brakingAssist +
+                ", gearboxAssist=" + gearboxAssist +
+                ", pitAssist=" + pitAssist +
+                ", pitReleaseAssist=" + pitReleaseAssist +
+                ", ersAssist=" + ersAssist +
+                ", drsAssist=" + drsAssist +
+                ", dynamicRacingLine=" + dynamicRacingLine +
+                ", dynamicRacingLineType=" + dynamicRacingLineType +
+                ", gameMode=" + gameMode +
+                ", ruleSet=" + ruleSet +
+                ", timeOfDay=" + timeOfDay +
+                ", sessionLength=" + sessionLength +
+                '}';
     }
 }

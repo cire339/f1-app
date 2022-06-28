@@ -141,6 +141,13 @@ public class PacketDecoder {
         packet.setDynamicRacingLine(packetBuffer.readByte());
         packet.setDynamicRacingLineType(packetBuffer.readByte());
 
+        if(is2022Format(header)){
+            packet.setGameMode(packetBuffer.readUnsignedByte());
+            packet.setRuleSet(packetBuffer.readUnsignedByte());
+            packet.setTimeOfDay(packetBuffer.readUnsignedByte());
+            packet.setSessionLength(packetBuffer.readUnsignedByte());
+        }
+
         return packet;
     }
 
@@ -275,6 +282,10 @@ public class PacketDecoder {
             ld.setPitStopShouldServePen(packetBuffer.readUnsignedByte());
             lapDataList.add(ld);
         }
+        if(is2022Format(header)){
+            packet.setTimeTrialPBCarIdx(packetBuffer.readUnsignedByte());
+            packet.setTimeTrialRivalCarIdx(packetBuffer.readUnsignedByte());
+        }
         packet.setLapData(lapDataList);
         return packet;
     }
@@ -297,11 +308,17 @@ public class PacketDecoder {
             fcd.setPenaltiesTime(packetBuffer.readUnsignedByte());
             fcd.setNumPenalties(packetBuffer.readUnsignedByte());
             fcd.setNumTyreStints(packetBuffer.readUnsignedByte());
+
             for (int j = 0; j < PacketConstants.TYRE_STINTS; j++) {
                 fcd.getTyreStintsActual()[j] = packetBuffer.readUnsignedByte();
             }
             for (int j = 0; j < PacketConstants.TYRE_STINTS; j++) {
                 fcd.getTyreStintsVisual()[j] = packetBuffer.readUnsignedByte();
+            }
+            if(is2022Format(header)){
+                for (int j = 0; j < PacketConstants.TYRE_STINTS; j++) {
+                    fcd.getTyreStintsEndLaps()[j] = packetBuffer.readUnsignedByte();
+                }
             }
             finalClassificationDataList.add(fcd);
         }
@@ -351,8 +368,12 @@ public class PacketDecoder {
                 SpeedTrap st = new SpeedTrap();
                 st.setCarIndex(packetBuffer.readUnsignedByte());
                 st.setSpeed(packetBuffer.readFloatLE());
-                st.setOverallFastestInSession(packetBuffer.readUnsignedByte());
-                st.setDriverFastestInSession(packetBuffer.readUnsignedByte());
+                st.setIsOverallFastestInSession(packetBuffer.readUnsignedByte());
+                st.setIsDriverFastestInSession(packetBuffer.readUnsignedByte());
+                if(is2022Format(header)){
+                    st.setFastestVehicleIdxInSession(packetBuffer.readUnsignedByte());
+                    st.setFastestSpeedInSession(packetBuffer.readFloatLE());
+                }
                 edd.setSpeedTrap(st);
                 break;
             case START_LIGHTS:
@@ -533,6 +554,9 @@ public class PacketDecoder {
             cdd.setDiffuserDamage(packetBuffer.readUnsignedByte());
             cdd.setSidePodDamage(packetBuffer.readUnsignedByte());
             cdd.setDrsFault(packetBuffer.readUnsignedByte());
+            if(is2022Format(header)){
+                cdd.setErsFault(packetBuffer.readUnsignedByte());
+            }
             cdd.setGearBoxDamage(packetBuffer.readUnsignedByte());
             cdd.setEngineDamage(packetBuffer.readUnsignedByte());
             cdd.setEngineMGUHWear(packetBuffer.readUnsignedByte());
@@ -540,6 +564,10 @@ public class PacketDecoder {
             cdd.setEngineCEWear(packetBuffer.readUnsignedByte());
             cdd.setEngineICEWear(packetBuffer.readUnsignedByte());
             cdd.setEngineTCWear(packetBuffer.readUnsignedByte());
+            if(is2022Format(header)){
+                cdd.setEngineBlown(packetBuffer.readUnsignedByte());
+                cdd.setEngineSeized(packetBuffer.readUnsignedByte());
+            }
 
             carDamageDataList.add(cdd);
         }
@@ -560,5 +588,12 @@ public class PacketDecoder {
         packetHeader.setPlayerCarIndex(packetBuffer.readUnsignedByte());
         packetHeader.setSecondaryPlayerCarIndex(packetBuffer.readUnsignedByte());
         return packetHeader;
+    }
+
+    private boolean is2022Format(PacketHeader header){
+        if(header.getPacketFormat() == PacketConstants.FORMAT_2021){
+            return true;
+        }
+        return false;
     }
 }
