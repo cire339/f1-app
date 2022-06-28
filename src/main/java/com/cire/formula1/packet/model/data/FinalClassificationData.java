@@ -20,6 +20,7 @@ public class FinalClassificationData {
     private short numTyreStints;
     private short[] tyreStintsActual = new short[PacketConstants.TYRE_STINTS];
     private short[] tyreStintsVisual = new short[PacketConstants.TYRE_STINTS];
+    private short[] tyreStintsEndLaps = new short[PacketConstants.TYRE_STINTS];
 
     /**
      * @return Finishing position
@@ -167,22 +168,34 @@ public class FinalClassificationData {
         this.tyreStintsVisual = tyreStintsVisual;
     }
 
+    public short[] getTyreStintsEndLaps() {
+        return tyreStintsEndLaps;
+    }
+
+    /**
+     * @return The lap number stints end on
+     */
+    public void setTyreStintsEndLaps(short[] tyreStintsEndLaps) {
+        this.tyreStintsEndLaps = tyreStintsEndLaps;
+    }
+
     @Override
     public String toString() {
-        return "FinalClassificationData[" +
-                ",position=" + this.position +
-                ",numLaps=" + this.numLaps +
-                ",gridPosition=" + this.gridPosition +
-                ",points=" + this.points +
-                ",numPitStops=" + this.numPitStops +
-                ",resultStatus=" + this.resultStatus +
-                ",bestLapTimeInMS=" + this.bestLapTimeInMS +
-                ",totalRaceTime=" + this.totalRaceTime +
-                ",penaltiesTime=" + this.penaltiesTime +
-                ",numPenalties=" + this.numPenalties +
-                ",numTyreStints=" + this.numTyreStints +
-                ",tyreStintsActual=" + Arrays.toString(tyreStintsActual) +
-                ",tyreStintsVisual=" + Arrays.toString(this.tyreStintsVisual) +
-                "]";
+        return "FinalClassificationData{" +
+                "position=" + position +
+                ", numLaps=" + numLaps +
+                ", gridPosition=" + gridPosition +
+                ", points=" + points +
+                ", numPitStops=" + numPitStops +
+                ", resultStatus=" + resultStatus +
+                ", bestLapTimeInMS=" + bestLapTimeInMS +
+                ", totalRaceTime=" + totalRaceTime +
+                ", penaltiesTime=" + penaltiesTime +
+                ", numPenalties=" + numPenalties +
+                ", numTyreStints=" + numTyreStints +
+                ", tyreStintsActual=" + Arrays.toString(tyreStintsActual) +
+                ", tyreStintsVisual=" + Arrays.toString(tyreStintsVisual) +
+                ", tyreStintsEndLaps=" + Arrays.toString(tyreStintsEndLaps) +
+                '}';
     }
 }

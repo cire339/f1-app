@@ -4,8 +4,10 @@ public class SpeedTrap {
 
     private short carIndex;
     private float speed;
-    private short overallFastestInSession;
-    private short driverFastestInSession;
+    private short isOverallFastestInSession;
+    private short isDriverFastestInSession;
+    private short fastestVehicleIdxInSession;
+    private float fastestSpeedInSession;
 
     /**
      * @return Car index of the car triggering speed trap
@@ -32,31 +34,56 @@ public class SpeedTrap {
     /**
      * @return Overall fastest speed in session = 1, otherwise 0
      */
-    public short getOverallFastestInSession() {
-        return overallFastestInSession;
+    public short getIsOverallFastestInSession() {
+        return isOverallFastestInSession;
     }
 
-    public void setOverallFastestInSession(short overallFastestInSession) {
-        this.overallFastestInSession = overallFastestInSession;
+    public void setIsOverallFastestInSession(short isOverallFastestInSession) {
+        this.isOverallFastestInSession = isOverallFastestInSession;
     }
 
     /**
      * @return Fastest speed for driver in session = 1, otherwise 0
      */
-    public short getDriverFastestInSession() {
-        return driverFastestInSession;
+    public short getIsDriverFastestInSession() {
+        return isDriverFastestInSession;
     }
 
-    public void setDriverFastestInSession(short driverFastestInSession) {
-        this.driverFastestInSession = driverFastestInSession;
+    public void setIsDriverFastestInSession(short isDriverFastestInSession) {
+        this.isDriverFastestInSession = isDriverFastestInSession;
+    }
+
+    /**
+     * @return Vehicle index of the vehicle that is the fastest in this session
+     */
+    public short getFastestVehicleIdxInSession() {
+        return fastestVehicleIdxInSession;
+    }
+
+    public void setFastestVehicleIdxInSession(short fastestVehicleIdxInSession) {
+        this.fastestVehicleIdxInSession = fastestVehicleIdxInSession;
+    }
+
+    /**
+     * @return Speed of the vehicle that is the fastest in this session
+     */
+    public float getFastestSpeedInSession() {
+        return fastestSpeedInSession;
+    }
+
+    public void setFastestSpeedInSession(float fastestSpeedInSession) {
+        this.fastestSpeedInSession = fastestSpeedInSession;
     }
 
     @Override
     public String toString() {
-        return "SpeedTrap[carIndex=" + this.carIndex +
-                ",speed=" + this.speed +
-                ",overallFastestInSession=" + this.overallFastestInSession +
-                ",driverFastestInSession=" + this.driverFastestInSession +
-                "]";
+        return "SpeedTrap{" +
+                "carIndex=" + carIndex +
+                ", speed=" + speed +
+                ", isOverallFastestInSession=" + isOverallFastestInSession +
+                ", isDriverFastestInSession=" + isDriverFastestInSession +
+                ", fastestVehicleIdxInSession=" + fastestVehicleIdxInSession +
+                ", fastestSpeedInSession=" + fastestSpeedInSession +
+                '}';
     }
 }
