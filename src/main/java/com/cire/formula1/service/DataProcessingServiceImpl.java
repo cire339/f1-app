@@ -85,7 +85,7 @@ public class DataProcessingServiceImpl implements DataProcessingService {
         //But it does not seem to be the case, why? It's a bug - confirmed on CodeMasters forums. We may need to use LapData to calculate this stuff instead.
         PacketSessionHistoryData data = (PacketSessionHistoryData) packet;
         SessionHistoryDTO sessionHistory = raceSession.getPlayers().get(data.getCarIdx()).getSessionHistory();
-        if(raceSession.getSessionType().equals(SessionType.TIME_TRIAL.name())) {
+        if(raceSession.getSessionType() != null && raceSession.getSessionType().equals(SessionType.TIME_TRIAL.name())) {
             //For time trial only save the data of the active player. We don't want to save the Rival / Ghosts data.
             if(data.getCarIdx() == packet.getHeader().getPlayerCarIndex()){
                 if (sessionHistory != null) {
